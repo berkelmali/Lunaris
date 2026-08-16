@@ -402,3 +402,9 @@ B) `window.LunarisWall` (Topluluk Duvarı & Canlı Akış):
 3. Makine Öğrenmesi Doğrulama:
    - Node.js kurulu ortamda `lunaris-ml.js` motoru doğrudan test edilebilir.
    - Tüm matematiksel hesaplamalar deterministiktir ve sıfır dış bağımlılıkla çalışır.
+
+4. 📱 Mobil Uygulama (Android & iOS) Çalıştırma:
+   - `npm run sync`         → Web dosyalarını Android/iOS projelerine aktarır.
+   - `npm run open:android` → Android Studio'da açar (.apk / .aab derlemek için).
+   - `npm run open:ios`     → Xcode'da açar (iOS simülatör/cihaz için).
+

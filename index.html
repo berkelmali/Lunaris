@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>LUNARIS — Tarot, Astroloji & Burç Yorumları</title>
 <meta name="description" content="LUNARIS'te tarot kartlarını çek, günlük burç yorumunu oku, burç uyumuna bak, mistik blog yazılarını keşfet ve topluluk duvarında herkesle enerjini paylaş.">
 <meta name="theme-color" content="#0B0714">
@@ -656,6 +656,7 @@
 
 <script src="main.js"></script>
 <script src="lunaris-ml.js"></script>
+<script src="mobile-bridge.js"></script>
 <script>
 /* ==========================================================
    LUNARIS — index.html page logic
@@ -1481,6 +1482,7 @@ function saveActiveHoroscope() {
 }
 
 function drawSpread() {
+  if (window.LunarisMobile) window.LunarisMobile.hapticImpact('MEDIUM');
   const shuffled = TAROT.slice().sort(function(){ return Math.random()-0.5; });
   state.spread = shuffled.slice(0,3);
   renderSpread(true);

@@ -23,9 +23,19 @@
   --sp-5: 2.5rem; --sp-6: 4rem; --sp-7: 6rem;
 
   --radius-sm: 8px; --radius-md: 16px; --radius-lg: 28px; --radius-full: 999px;
+  
+  /* Mobile Safe Area Insets */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 }
 
-html { scroll-behavior: smooth; }
+html { 
+  scroll-behavior: smooth; 
+  padding: 0;
+  margin: 0;
+}
 
 body {
   background: var(--void);
@@ -34,6 +44,10 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  padding-top: var(--sat);
+  padding-bottom: max(1rem, var(--sab));
+  padding-left: var(--sal);
+  padding-right: var(--sar);
 }
 
 body::before {

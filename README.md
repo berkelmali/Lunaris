@@ -148,6 +148,42 @@ firebase deploy
 
 ---
 
+## 📱 Mobil Uygulama (Android & iOS)
+
+Lunaris, **Capacitor** altyapısıyla hem **Android** hem de **iOS** için yerel (native) proje olarak derlenmeye hazırdır. Haptic dokunma titreşimleri, koyu temalı status bar ve çentik (safe-area) optimizasyonları tam entegredir.
+
+### Gereksinimler
+- **Android için:** [Android Studio](https://developer.android.com/studio) ve JDK 17+
+- **iOS için:** macOS & [Xcode 15+](https://developer.apple.com/xcode/)
+
+### Mobil Projeyi Senkronize Etme
+```bash
+# Bağımlılıkları yükleyin
+npm install
+
+# Web değişikliklerini Android ve iOS projelerine aktarın
+npm run sync
+```
+
+### Android Uygulamasını Açma & Derleme
+```bash
+# Android Studio'da açın
+npm run open:android
+
+# Veya doğrudan bağlı cihaza/emülatöre derleyip çalıştırın
+npm run run:android
+```
+> **APK Üretimi:** Android Studio açıldığında `Build` $\rightarrow$ `Build Bundle(s) / APK(s)` $\rightarrow$ `Build APK(s)` seçeneğiyle doğrudan `.apk` çıktısı alabilirsiniz.
+
+### iOS Uygulamasını Açma & Derleme (macOS)
+```bash
+# Xcode'da açın
+npm run open:ios
+
+# Veya bağlı iPhone / Simülatörde çalıştırın
+npm run run:ios
+```
+
 ## 🧠 ML Motoru Mimarisi (v2.0)
 
 Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`), **sıfır dış bağımlılık** ile çalışan 16 katmanlı saf JavaScript deterministik bir yapay zeka sistemidir.

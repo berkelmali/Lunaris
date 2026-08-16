@@ -1,0 +1,42 @@
+{
+  "name": "lunaris",
+  "version": "2.0.0",
+  "description": "Lunaris — Tarot, Astroloji & ML Tabanlı Kozmik Portal",
+  "main": "main.js",
+  "scripts": {
+    "build": "node copy-web.js",
+    "sync": "npm run build && npx cap sync",
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "open:android": "npm run build && npx cap open android",
+    "open:ios": "npm run build && npx cap open ios",
+    "run:android": "npm run build && npx cap run android",
+    "run:ios": "npm run build && npx cap run ios"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berkelmali/Lunaris.git"
+  },
+  "keywords": [
+    "astrology",
+    "tarot",
+    "machine-learning",
+    "horoscope",
+    "capacitor",
+    "android",
+    "ios"
+  ],
+  "author": "Berk Elmalı",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/cli": "^7.0.1",
+    "@capacitor/core": "^7.0.1",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/ios": "^7.0.1",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0"
+  }
+}
