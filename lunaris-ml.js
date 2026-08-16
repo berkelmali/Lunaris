@@ -277,58 +277,136 @@
 
 
   /* ══════════════════════════════════════════════════
-     KATMAN 3 — PLANETARY HOURS (Antik Sistem)
-     Haftanın her günü 7 gezegen saati sırasıyla döner.
+     KATMAN 3 — PLANETARY HOURS (Antik Chaldean Sistemi)
+     Gündoğumu ve günbatımına göre 12 gündüz ve 12 gece saati
   ══════════════════════════════════════════════════ */
   var PLANETS = ['sun','moon','mars','mercury','jupiter','venus','saturn'];
-  var DAY_RULERS = [0,1,5,3,2,4,6]; // Pazar=0(Güneş), ..., Cumartesi=6(Satürn)
+  var CHALDEAN_ORDER = ['saturn','jupiter','mars','sun','venus','mercury','moon'];
+  var DAY_RULERS = [3,6,2,5,1,4,0]; // 0=Pazar(Güneş), 1=Pazartesi(Ay), 2=Salı(Mars), 3=Çarşamba(Merkür), 4=Perşembe(Jüpiter), 5=Cuma(Venüs), 6=Cumartesi(Satürn)
 
   var PLANET_ENERGY = {
-    sun:     [0.90, 0.60, 0.70, 0.50, 0.85, 0.40, 0.80, 0.35],
-    moon:    [0.40, 0.70, 0.50, 0.55, 0.65, 0.90, 0.30, 0.95],
-    mars:    [0.95, 0.25, 0.85, 0.35, 0.60, 0.30, 0.90, 0.25],
-    mercury: [0.65, 0.45, 0.75, 0.70, 0.90, 0.55, 0.50, 0.50],
-    jupiter: [0.75, 0.65, 0.80, 0.60, 0.80, 0.60, 0.75, 0.55],
-    venus:   [0.50, 0.70, 0.65, 0.60, 0.85, 0.70, 0.45, 0.85],
-    saturn:  [0.55, 0.90, 0.30, 0.85, 0.40, 0.40, 0.80, 0.45]
+    sun:     [0.92, 0.55, 0.75, 0.50, 0.85, 0.40, 0.95, 0.35],
+    moon:    [0.35, 0.70, 0.45, 0.55, 0.65, 0.98, 0.30, 0.95],
+    mars:    [0.98, 0.25, 0.90, 0.35, 0.55, 0.30, 0.92, 0.20],
+    mercury: [0.70, 0.45, 0.80, 0.75, 0.92, 0.60, 0.50, 0.45],
+    jupiter: [0.80, 0.65, 0.85, 0.60, 0.85, 0.65, 0.80, 0.55],
+    venus:   [0.50, 0.75, 0.65, 0.60, 0.95, 0.75, 0.45, 0.90],
+    saturn:  [0.50, 0.98, 0.25, 0.95, 0.35, 0.40, 0.85, 0.40]
   };
 
+  /**
+   * Chaldean Gezegen Saatini Yüksek Hassasiyetle Hesaplar
+   */
   function getCurrentPlanetaryHour(date) {
     var d = date || new Date();
     var dayOfWeek = d.getDay(); // 0=Pazar
     var hour = d.getHours();
-    var rulerIdx = DAY_RULERS[dayOfWeek];
-    var planetIdx = (rulerIdx + hour) % 7;
-    return PLANETS[planetIdx];
+    var minute = d.getMinutes();
+    var decHour = hour + minute / 60;
+
+    // Gündoğumu ~06:00, Günbatımı ~18:00 mevsimsel yaklaşımı
+    var isDay = decHour >= 6 && decHour < 18;
+    var dayRulerPlanet = PLANETS[DAY_RULERS[dayOfWeek]];
+    var chaldeanStartIdx = CHALDEAN_ORDER.indexOf(dayRulerPlanet);
+
+    var hourNum;
+    if (isDay) {
+      hourNum = Math.floor(decHour - 6);
+    } else {
+      hourNum = Math.floor(decHour >= 18 ? (decHour - 18 + 12) : (decHour + 6));
+    }
+    hourNum = Math.max(0, Math.min(23, hourNum));
+
+    var currentPlanetIdx = (chaldeanStartIdx + hourNum) % 7;
+    return CHALDEAN_ORDER[currentPlanetIdx];
   }
 
 
   /* ══════════════════════════════════════════════════
-     KATMAN 4 — TRANSIT ENGINE
-     Yaklaşık gezegensel hesaplar (J2000 baz alınarak)
+     KATMAN 4 — YÜKSEK HASSASİYETLİ EPHEMERIS & DIGNITIES
+     Güneş, Ay ve Gezegenler için Keplerian Pertürbasyon Modeli
   ══════════════════════════════════════════════════ */
 
   function julianDay(date) {
     var d = date || new Date();
     var Y = d.getFullYear(), M = d.getMonth() + 1, D = d.getDate();
-    return 367 * Y - Math.floor(7 * (Y + Math.floor((M + 9) / 12)) / 4) +
-           Math.floor(275 * M / 9) + D + 1721013.5;
+    var H = (d.getHours ? d.getHours() : 12) + (d.getMinutes ? d.getMinutes() : 0) / 60;
+    if (M <= 2) { Y -= 1; M += 12; }
+    var A = Math.floor(Y / 100);
+    var B = 2 - A + Math.floor(A / 4);
+    return Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + D + (H / 24) + B - 1524.5;
   }
 
   function normDeg(x) { return ((x % 360) + 360) % 360; }
+  var DEG2RAD = Math.PI / 180;
+  var RAD2DEG = 180 / Math.PI;
 
+  /**
+   * Gezegen Ecliptic Boylamlarını (0-360°) Yüksek Doğrulukla Hesaplar
+   */
   function calcPlanetPositions(date) {
     var jd = julianDay(date);
     var d = jd - 2451545.0; // J2000'den gün farkı
+    var T = d / 36525.0;     // Julian yüzyıl
+
+    // 1. Güneş
+    var L0 = normDeg(280.46646 + 0.98564736 * d);
+    var M_sun = normDeg(357.52911 + 0.98560028 * d) * DEG2RAD;
+    var C_sun = (1.914602 - 0.000048 * T) * Math.sin(M_sun) + (0.019993 - 0.000101 * T) * Math.sin(2 * M_sun) + 0.000289 * Math.sin(3 * M_sun);
+    var sunLon = normDeg(L0 + C_sun);
+
+    // 2. Ay (Pertürbasyonlu Geocentric Ecliptic Longitude)
+    var L_moon = normDeg(218.3164477 + 13.17639648 * d);
+    var M_moon = normDeg(134.9633964 + 13.06499295 * d) * DEG2RAD;
+    var F_moon = normDeg(93.2720950 + 13.22935026 * d) * DEG2RAD;
+    var D_moon = normDeg(297.8501921 + 12.19074912 * d) * DEG2RAD;
+    var dL_moon = 6.288774 * Math.sin(M_moon) +
+                  1.274027 * Math.sin(2 * D_moon - M_moon) +
+                  0.658314 * Math.sin(2 * D_moon) +
+                  0.213618 * Math.sin(2 * M_moon) -
+                  0.185116 * Math.sin(M_sun) -
+                  0.114332 * Math.sin(2 * F_moon);
+    var moonLon = normDeg(L_moon + dL_moon);
+
+    // 3. Merkür
+    var M_merc = normDeg(174.79472 + 4.0923344368 * d) * DEG2RAD;
+    var mercHelio = normDeg(252.25091 + 4.0923344368 * d + 23.44 * Math.sin(M_merc));
+    var mercLon = normDeg(mercHelio + 3.5 * Math.sin(sunLon * DEG2RAD - mercHelio * DEG2RAD));
+
+    // 4. Venüs
+    var M_ven = normDeg(50.4075 + 1.602130224 * d) * DEG2RAD;
+    var venHelio = normDeg(181.9791 + 1.602130224 * d + 0.77 * Math.sin(M_ven));
+    var venLon = normDeg(venHelio + 2.2 * Math.sin(sunLon * DEG2RAD - venHelio * DEG2RAD));
+
+    // 5. Mars
+    var M_mars = normDeg(19.387 + 0.52402078 * d) * DEG2RAD;
+    var marsHelio = normDeg(355.4533 + 0.52402078 * d + 10.69 * Math.sin(M_mars));
+    var marsLon = normDeg(marsHelio + 4.8 * Math.sin(sunLon * DEG2RAD - marsHelio * DEG2RAD));
+
+    // 6. Jüpiter
+    var M_jup = normDeg(19.895 + 0.0830853 * d) * DEG2RAD;
+    var jupLon = normDeg(34.404 + 0.0830853 * d + 5.55 * Math.sin(M_jup));
+
+    // 7. Satürn
+    var M_sat = normDeg(316.967 + 0.0334442 * d) * DEG2RAD;
+    var satLon = normDeg(49.944 + 0.0334442 * d + 6.35 * Math.sin(M_sat));
+
+    // 8. Dış Gezegenler (Uranüs, Neptün, Plüton)
+    var uranLon = normDeg(313.232 + 0.0117258 * d);
+    var nepLon  = normDeg(304.880 + 0.0059810 * d);
+    var plutLon = normDeg(238.928 + 0.0039640 * d);
 
     return {
-      sun:     normDeg(280.460 + 0.9856474 * d),
-      moon:    normDeg(218.316 + 13.176396 * d),
-      mercury: normDeg(252.251 + 1.5918 * d),
-      venus:   normDeg(181.979 + 0.6221 * d),
-      mars:    normDeg(355.433 + 0.5240207 * d),
-      jupiter: normDeg(34.396  + 0.0830853 * d),
-      saturn:  normDeg(50.077  + 0.0334697 * d)
+      sun: sunLon,
+      moon: moonLon,
+      mercury: mercLon,
+      venus: venLon,
+      mars: marsLon,
+      jupiter: jupLon,
+      saturn: satLon,
+      uranus: uranLon,
+      neptune: nepLon,
+      pluto: plutLon
     };
   }
 
@@ -350,36 +428,67 @@
     return SIGN_KEYS[Math.floor(normDeg(lon) / 30)];
   }
 
-  /* Transit uyum skoru: transit gezegen + natal burç arasındaki vektör benzerliği */
+  /* Ptolemaik Asal Asaletler (Essential Dignities) Tablosu */
+  var PLANETARY_DIGNITIES = {
+    sun:     { domicile: ['leo'], exaltation: ['aries'], detriment: ['aquarius'], fall: ['libra'] },
+    moon:    { domicile: ['cancer'], exaltation: ['taurus'], detriment: ['capricorn'], fall: ['scorpio'] },
+    mercury: { domicile: ['gemini', 'virgo'], exaltation: ['virgo'], detriment: ['sagittarius', 'pisces'], fall: ['pisces'] },
+    venus:   { domicile: ['taurus', 'libra'], exaltation: ['pisces'], detriment: ['scorpio', 'aries'], fall: ['virgo'] },
+    mars:    { domicile: ['aries', 'scorpio'], exaltation: ['capricorn'], detriment: ['libra', 'taurus'], fall: ['cancer'] },
+    jupiter: { domicile: ['sagittarius', 'pisces'], exaltation: ['cancer'], detriment: ['gemini', 'virgo'], fall: ['capricorn'] },
+    saturn:  { domicile: ['capricorn', 'aquarius'], exaltation: ['libra'], detriment: ['cancer', 'leo'], fall: ['aries'] },
+    uranus:  { domicile: ['aquarius'], exaltation: ['scorpio'], detriment: ['leo'], fall: ['taurus'] },
+    neptune: { domicile: ['pisces'], exaltation: ['cancer', 'leo'], detriment: ['virgo'], fall: ['capricorn'] },
+    pluto:   { domicile: ['scorpio'], exaltation: ['aries'], detriment: ['taurus'], fall: ['libra'] }
+  };
+
+  /**
+   * Gezegenin belirli bir burçtaki asalet puanını hesaplar (-1.0 ile +1.0)
+   */
+  function calcDignityScore(planet, signKey) {
+    var d = PLANETARY_DIGNITIES[planet];
+    if (!d) return 0.5;
+    if (d.domicile && d.domicile.indexOf(signKey) !== -1) return 1.0;
+    if (d.exaltation && d.exaltation.indexOf(signKey) !== -1) return 0.85;
+    if (d.detriment && d.detriment.indexOf(signKey) !== -1) return 0.15;
+    if (d.fall && d.fall.indexOf(signKey) !== -1) return 0.25;
+    return 0.55; // Peregrine
+  }
+
+  /* Transit uyum skoru: transit haritası element dengesi + asaletler */
   function transitScore(signKey, date) {
     var positions = calcPlanetPositions(date || new Date());
     var signVec = SIGN_VECTORS[signKey];
     var score = 0;
-    var planetKeys = Object.keys(positions);
+    var planetKeys = ['sun','moon','mercury','venus','mars','jupiter','saturn'];
+
     planetKeys.forEach(function(planet) {
       var transitSign = lonToSign(positions[planet]);
       var pVec = PLANET_ENERGY[planet] || PLANET_ENERGY.sun;
       var tVec = SIGN_VECTORS[transitSign] || signVec;
-      score += cosineSimilarity(signVec, pVec) * cosineSimilarity(signVec, tVec);
+      var dignity = calcDignityScore(planet, transitSign);
+
+      var sim = (cosineSimilarity(signVec, pVec) + cosineSimilarity(signVec, tVec)) * 0.5;
+      score += sim * dignity;
     });
     score /= planetKeys.length;
 
-    // Retrograd cezaları (gelişmiş)
+    // Retrograd cezaları
     var retrogrades = getRetrogrades(date);
     var retroPenalty = 0;
     Object.keys(retrogrades).forEach(function(planet) {
       var r = retrogrades[planet];
       if (r.active) retroPenalty += r.penalty;
-      else if (r.shadow) retroPenalty += r.penalty * 0.4;
+      else if (r.shadow) retroPenalty += r.penalty * 0.35;
     });
     score -= retroPenalty;
 
     // Aspect bonusu
-    var aspects = calcAspects(calcPlanetPositions(date));
+    var aspects = calcAspects(positions);
     var aspectBonus = aspectInfluence(signKey, aspects);
-    score += aspectBonus * 0.15;
+    score += aspectBonus * 0.18;
 
-    return Math.max(0, Math.min(1, score));
+    return Math.max(0.1, Math.min(0.95, score));
   }
 
 
@@ -388,64 +497,52 @@
      5 gezegen için tarih tabanlı retrograd dönemleri
   ══════════════════════════════════════════════════ */
 
-  /**
-   * Retrograd dönemleri (2024-2028)
-   * Her dönem: [başlangıçAy, başlangıçGün, bitişAy, bitişGün]
-   * Gölge periyodu: retrograd öncesi/sonrası ~2 hafta
-   */
   var RETROGRADE_PERIODS = {
     mercury: [
-      // 2024
-      [12,13, 1,2],   // Aralık 2024 - Ocak 2025
-      // 2025
+      [12,13, 1,2],
       [3,15, 4,7],
       [7,18, 8,11],
       [11,9, 11,29],
-      // 2026
       [3,2, 3,25],
       [6,30, 7,24],
       [10,25, 11,15],
-      // 2027
       [2,10, 3,5],
       [6,10, 7,4],
       [10,7, 10,28],
-      // 2028
       [1,24, 2,14],
       [5,21, 6,13],
       [9,19, 10,11]
     ],
     venus: [
-      [3,2, 4,13],      // 2025
-      [10,3, 11,14],     // 2026
-      [5,9, 6,20],       // 2027
-      [12,16, 1,27]      // 2028-2029
+      [3,2, 4,13],
+      [10,3, 11,14],
+      [5,9, 6,20],
+      [12,16, 1,27]
     ],
     mars: [
-      [12,6, 2,24],      // 2024-2025
-      [1,10, 4,1],        // 2027
+      [12,6, 2,24],
+      [1,10, 4,1],
     ],
     jupiter: [
-      [10,9, 2,4],       // 2024-2025
-      [11,11, 3,10],     // 2025-2026
-      [12,12, 4,11],     // 2026-2027
+      [10,9, 2,4],
+      [11,11, 3,10],
+      [12,12, 4,11],
     ],
     saturn: [
-      [6,29, 11,15],     // 2025
-      [7,13, 11,28],     // 2026
-      [7,27, 12,12],     // 2027
+      [6,29, 11,15],
+      [7,13, 11,28],
+      [7,27, 12,12],
     ]
   };
 
-  /* Retrograd ceza ağırlıkları — gezegen başına */
   var RETROGRADE_PENALTIES = {
-    mercury: 0.06,   // İletişim, teknoloji, seyahat
-    venus:   0.05,   // Aşk, ilişkiler, güzellik
-    mars:    0.07,   // Enerji, motivasyon, eylem
-    jupiter: 0.04,   // Genişleme, şans, büyüme
-    saturn:  0.03    // Disiplin, yapı, sorumluluk
+    mercury: 0.05,
+    venus:   0.04,
+    mars:    0.06,
+    jupiter: 0.03,
+    saturn:  0.03
   };
 
-  /* Retrograd etki alanları */
   var RETROGRADE_DOMAINS = {
     mercury: ['career', 'daily', 'luck'],
     venus:   ['love', 'money'],
@@ -510,10 +607,6 @@
     }
   };
 
-  /**
-   * Verilen tarih için tüm gezegenlerin retrograd durumlarını döndürür.
-   * Gölge periyotları: retrograd öncesi/sonrası ~14 gün
-   */
   function getRetrogrades(date) {
     var d = date || new Date();
     var m = d.getMonth() + 1;
@@ -533,26 +626,16 @@
         var start = p[0] * 100 + p[1];
         var end = p[2] * 100 + p[3];
 
-        // Retrograd aktif mi?
         if (start <= end) {
           if (current >= start && current <= end) { isActive = true; break; }
         } else {
           if (current >= start || current <= end) { isActive = true; break; }
         }
 
-        // Gölge periyodu (öncesi: -14 gün, sonrası: +14 gün)
-        // Basitleştirilmiş: ay başı/sonu kontrolleri
-        var shadowPreStart = (p[0] === 1 ? 12 : p[0] - 1) * 100 + Math.max(1, p[1] - 14 + 30) % 31;
-        var shadowPostEnd = p[2] * 100 + Math.min(28, p[3] + 14);
-
-        if (!isActive) {
-          // Ön gölge
-          var preS = p[0] * 100 + Math.max(1, p[1] - 14);
-          if (current >= preS && current < start) { isShadow = true; }
-          // Son gölge
-          var postE = p[2] * 100 + Math.min(28, p[3] + 14);
-          if (current > end && current <= postE) { isShadow = true; }
-        }
+        var preS = p[0] * 100 + Math.max(1, p[1] - 14);
+        if (!isActive && current >= preS && current < start) { isShadow = true; }
+        var postE = p[2] * 100 + Math.min(28, p[3] + 14);
+        if (!isActive && current > end && current <= postE) { isShadow = true; }
       }
 
       result[planet] = {
@@ -567,9 +650,6 @@
     return result;
   }
 
-  /**
-   * Belirli bir kategori için retrograd ceza çarpanını hesapla
-   */
   function retrogradeMultiplier(category, date) {
     var retrogrades = getRetrogrades(date);
     var multiplier = 1.0;
@@ -577,8 +657,8 @@
     Object.keys(retrogrades).forEach(function(planet) {
       var r = retrogrades[planet];
       if (r.domains.indexOf(category) !== -1) {
-        if (r.active) multiplier *= (1 - r.penalty * 2);
-        else if (r.shadow) multiplier *= (1 - r.penalty * 0.8);
+        if (r.active) multiplier *= (1 - r.penalty * 1.8);
+        else if (r.shadow) multiplier *= (1 - r.penalty * 0.7);
       }
     });
 
@@ -587,16 +667,15 @@
 
 
   /* ══════════════════════════════════════════════════
-     KATMAN 6 — ASPECT ENGINE (Gezegen Açıları)
-     Gezegenler arası açısal ilişkiler
+     KATMAN 6 — ASPECT ENGINE (Gaussian Orb Ağırlıklı Açı Sistemi)
   ══════════════════════════════════════════════════ */
 
   var ASPECT_TYPES = {
     conjunction: { angle: 0,   orb: 8,  influence: 0.90, nature: 'intense' },
-    sextile:     { angle: 60,  orb: 6,  influence: 0.60, nature: 'harmonious' },
-    square:      { angle: 90,  orb: 8,  influence: -0.70, nature: 'tense' },
-    trine:       { angle: 120, orb: 8,  influence: 0.85, nature: 'harmonious' },
-    opposition:  { angle: 180, orb: 8,  influence: -0.50, nature: 'tense' }
+    sextile:     { angle: 60,  orb: 6,  influence: 0.65, nature: 'harmonious' },
+    square:      { angle: 90,  orb: 7,  influence: -0.65, nature: 'tense' },
+    trine:       { angle: 120, orb: 8,  influence: 0.90, nature: 'harmonious' },
+    opposition:  { angle: 180, orb: 8,  influence: -0.55, nature: 'tense' }
   };
 
   var ASPECT_NAMES = {
@@ -607,10 +686,6 @@
     opposition:  { tr: 'Karşıt', en: 'Opposition', ru: 'Оппозиция' }
   };
 
-  /**
-   * Tüm gezegen çiftleri arasındaki aspect'leri hesapla
-   * @returns {Array} Her biri {planet1, planet2, type, exactAngle, orb, influence} içeren dizi
-   */
   function calcAspects(positions) {
     var planets = Object.keys(positions);
     var aspects = [];
@@ -621,24 +696,25 @@
         var angle = Math.abs(normDeg(positions[p1]) - normDeg(positions[p2]));
         if (angle > 180) angle = 360 - angle;
 
-        var aspectTypes = Object.keys(ASPECT_TYPES);
-        for (var k = 0; k < aspectTypes.length; k++) {
-          var at = ASPECT_TYPES[aspectTypes[k]];
+        var aspectKeys = Object.keys(ASPECT_TYPES);
+        for (var k = 0; k < aspectKeys.length; k++) {
+          var at = ASPECT_TYPES[aspectKeys[k]];
           var diff = Math.abs(angle - at.angle);
           if (diff <= at.orb) {
-            // Orb'a yakınlık — tam açıya ne kadar yakınsa o kadar güçlü
-            var strength = 1 - (diff / at.orb);
+            // Gaussian Orb Formülü: exp(-diff^2 / (2 * (orb/2.5)^2))
+            var sigma = at.orb / 2.5;
+            var strength = Math.exp(-(diff * diff) / (2 * sigma * sigma));
             aspects.push({
               planet1: p1,
               planet2: p2,
-              type: aspectTypes[k],
+              type: aspectKeys[k],
               exactAngle: angle,
               orbDiff: diff,
               strength: strength,
               influence: at.influence * strength,
               nature: at.nature
             });
-            break; // İlk eşleşen aspect yeterli
+            break;
           }
         }
       }
@@ -646,42 +722,31 @@
     return aspects;
   }
 
-  /**
-   * Aspect'lerin belirli bir burç üzerindeki toplam etkisini hesapla
-   */
   function aspectInfluence(signKey, aspects) {
     var ruler = SIGN_RULERS[signKey];
-    var element = SIGN_ELEMENTS[signKey];
     var totalInfluence = 0;
     var count = 0;
 
     aspects.forEach(function(asp) {
       var weight = 1.0;
-
-      // Yönetici gezegen dahilse ağırlık artır
       if (asp.planet1 === ruler || asp.planet2 === ruler) weight = 1.8;
-
-      // Güneş ve Ay her zaman önemli
       if (asp.planet1 === 'sun' || asp.planet2 === 'sun') weight = Math.max(weight, 1.4);
       if (asp.planet1 === 'moon' || asp.planet2 === 'moon') weight = Math.max(weight, 1.3);
 
       totalInfluence += asp.influence * weight;
-      count++;
+      count += weight;
     });
 
-    return count > 0 ? totalInfluence / count : 0;
+    return count > 0 ? (totalInfluence / count) : 0;
   }
 
-  /**
-   * Aspect'lerin kategoriye özgü etkisini hesapla
-   */
   function aspectCategoryInfluence(aspects, category) {
     var relevantPlanets = {
       love:   ['venus', 'moon', 'mars'],
-      luck:   ['jupiter', 'sun'],
-      career: ['saturn', 'sun', 'mars'],
+      luck:   ['jupiter', 'sun', 'venus'],
+      career: ['saturn', 'sun', 'mars', 'jupiter'],
       health: ['mars', 'moon', 'sun'],
-      money:  ['jupiter', 'venus', 'saturn'],
+      money:  ['jupiter', 'venus', 'saturn', 'mercury'],
       daily:  ['mercury', 'moon', 'sun']
     };
 
@@ -698,7 +763,6 @@
 
     return count > 0 ? influence / count : 0;
   }
-
 
   /* ══════════════════════════════════════════════════
      KATMAN 7 — MOON PHASE WEIGHT
@@ -2032,9 +2096,9 @@
   }
 
   /* ══════════════════════════════════════════════════
-     KATMAN 17 — ENHANCED NEURAL TAROT ENGINE (Nöral Tarot Sentezi v2.5)
+     KATMAN 17 — ENHANCED NEURAL TAROT ENGINE (Nöral Tarot Sentezi v3.0)
      22 Büyük Arkana Kartı için 8D Embedding + Konumsal Derin Anlamlar +
-     Arketipsel Gerilim Matrisi + Çok Katmanlı Nöral Sentez (MLP)
+     Astrofiziksel Rezonans + Çok Katmanlı Nöral Sentez (MLP)
   ══════════════════════════════════════════════════ */
 
   var TAROT_CARDS_META = {
@@ -2189,7 +2253,7 @@
       future: {
         tr: 'Gelecekte ruh ikizinle ya da en büyük tutkunla derin bir bütünleşme, içsel ve dışsal bir uyum seni bekliyor.',
         en: 'In the future, a profound harmony of soul and purpose awaits, uniting dualities into breathtaking wholeness.',
-        ru: 'Впереди тебя ждёт глубокий союз, взаимная гармония и исцеляющее единение с тем, что тебе по-настоящему дорого.'
+        ru: 'Впереди тебя ждет глубокий союз, взаимная гармония и исцеляющее единение с тем, что тебе по-настоящему дорого.'
       }
     },
     chariot: {
@@ -2277,7 +2341,7 @@
       future: {
         tr: 'Gelecekte kaderin kapıları hiç beklemediğin bir anda ardına kadar açılacak ve yeni bir dönem başlayacak.',
         en: 'In the future, unexpected cosmic alignment will unlock doors you thought closed, elevating your life journey.',
-        ru: 'Впереди тебя ждёт счастливый прорыв и начало нового благоприятного жизненного цикла.'
+        ru: 'Впереди тебя ждет счастливый прорыв и начало нового благоприятного жизненного цикла.'
       }
     },
     justice: {
@@ -2299,7 +2363,7 @@
       future: {
         tr: 'Gelecekte hak ettiğin adaleti, karşılığını ve karmik ödülü eksiksiz bir dengeyle teslim alacaksın.',
         en: 'Ahead lies rightful resolution; karmic restitution and harmonious clarity will restore total balance to your world.',
-        ru: 'Впереди тебя ждёт полное восстановление справедливости, заслуженная награда и душевный баланс.'
+        ru: 'Впереди тебя ждет полное восстановление справедливости, заслуженная награда и душевный баланс.'
       }
     },
     hangedman: {
@@ -2365,7 +2429,7 @@
       future: {
         tr: 'Gelecekte ruhsal şifa, kusursuz bir içsel uyum ve kalıcı bir duygusal sükunet hayatını sarmalayacak.',
         en: 'In the future, profound spiritual healing and effortless grace will permeate every dimension of your life.',
-        ru: 'Впереди тебя ждёт глубокое исцеление, душевная безмятежность и безупречный жизненный ритм.'
+        ru: 'Впереди тебя ждет глубокое исцеление, душевная безмятежность и безупречный жизненный ритм.'
       }
     },
     devil: {
@@ -2552,7 +2616,9 @@
   };
 
   /**
-   * 3 Kartlık Tarot Açılımını Nöral Ağ & Astrolojik Vektörlerle Yorumlar (v2.5)
+   * 3 Kartlık Tarot Açılımını Nöral Ağ & Astrolojik Vektörlerle Yorumlar (v3.0 Professional Engine)
+   * Astrofiziksel Ephemeris + Asaletler (Dignities) + Gaussian Aspect Orbları +
+   * Chaldean Gezegen Saati + 3-Katmanlı MLP İleri Yayılımı
    * @param {Array} spread — 3 kart objesi veya key'leri
    * @param {String} lang — 'tr' | 'en' | 'ru'
    * @param {Object} options — { natalVector, sunSign, date }
@@ -2571,14 +2637,16 @@
     var c1 = TAROT_CARDS_META[k1] || TAROT_CARDS_META.magician;
     var c2 = TAROT_CARDS_META[k2] || TAROT_CARDS_META.star;
 
-    // 1. Ağırlıklı Tarot Yayılım Vektörü: Geçmiş(0.5) + Şimdi(0.85) + Gelecek(1.35)
+    // 1. Pozisyonel Ağırlıklı Tarot Vektörü: Geçmiş (%20) + Şimdi (%35) + Gelecek (%45)
+    var w0 = 0.20, w1 = 0.35, w2 = 0.45;
     var spreadVec = [];
     for (var i = 0; i < 8; i++) {
-      spreadVec.push(c0.vec[i] * 0.50 + c1.vec[i] * 0.85 + c2.vec[i] * 1.35);
+      spreadVec.push(c0.vec[i] * w0 + c1.vec[i] * w1 + c2.vec[i] * w2);
     }
     spreadVec = normalize(spreadVec);
 
-    // 2. Güncel Gökyüzü Temporal Vektörü & Gezegen Saati
+    // 2. Güncel Gökyüzü Ephemeris & Gezegen Pozisyonları
+    var positions = calcPlanetPositions(now);
     var tempVec = getTemporalVector(now);
     var planetHourKey = getCurrentPlanetaryHour(now);
     var planetNamesLocal = {
@@ -2594,47 +2662,166 @@
     var moonObj = getMoonPhaseName(now);
     var moonName = moonObj[lang] || moonObj.tr;
 
-    // 3. Kozmik Rezonans Skoru (Kosinüs Benzerliği: Spread vs Gökyüzü)
-    var sim = cosineSimilarity(spreadVec, tempVec);
-    var resonanceScore = Math.min(99, Math.max(68, Math.round((sim * 0.38 + 0.62) * 100)));
+    // 3. Gerçek Gökyüzü Element Dağılımı (Transit Element Balance)
+    var skyElemWeights = { fire: 0, earth: 0, air: 0, water: 0 };
+    var planetSkyWeights = { sun: 2.5, moon: 2.5, mercury: 1.5, venus: 1.5, mars: 1.8, jupiter: 1.2, saturn: 1.2 };
+    Object.keys(planetSkyWeights).forEach(function(pKey) {
+      var pSign = lonToSign(positions[pKey] || 0);
+      var pElem = SIGN_ELEMENTS[pSign] || 'fire';
+      skyElemWeights[pElem] += planetSkyWeights[pKey];
+    });
+    var totalSkyWeight = 12.2;
+    var skyElemVec = [
+      skyElemWeights.fire / totalSkyWeight,
+      skyElemWeights.earth / totalSkyWeight,
+      skyElemWeights.air / totalSkyWeight,
+      skyElemWeights.water / totalSkyWeight
+    ];
+
+    // Açılımdaki Element Ağırlıkları
+    var cardSpreadElem = { fire: 0, earth: 0, air: 0, water: 0 };
+    cardSpreadElem[c0.element] += w0;
+    cardSpreadElem[c1.element] += w1;
+    cardSpreadElem[c2.element] += w2;
+
+    var spreadElemVec = [
+      cardSpreadElem.fire,
+      cardSpreadElem.earth,
+      cardSpreadElem.air,
+      cardSpreadElem.water
+    ];
+
+    // Elementel Benzerlik (0.0 - 1.0)
+    var elemSim = cosineSimilarity(spreadElemVec, skyElemVec);
+
+    // 4. Kart Yöneticilerinin Astrolojik Asalet & Açı Hizalanması (Dignity & Aspect Synergy)
+    var rulers = [c0.ruler, c1.ruler, c2.ruler];
+    var astroSynergySum = 0;
+    var aspects = calcAspects(positions);
+
+    rulers.forEach(function(rulerKey, rIdx) {
+      var rWeight = (rIdx === 1 ? 1.4 : 1.0); // Şimdiki anın yöneticisi daha etkili
+      var rPlanet = (rulerKey === 'uranus' ? 'mercury' : (rulerKey === 'neptune' ? 'moon' : (rulerKey === 'pluto' ? 'mars' : rulerKey)));
+      var rLon = positions[rPlanet] || positions.sun;
+      var rSign = lonToSign(rLon);
+      var dignityScore = calcDignityScore(rPlanet, rSign);
+
+      // Açı Etkisi: Güneş, Ay, Jüpiter ve Venüs ile olan açılar
+      var rulerAspectBonus = 0;
+      aspects.forEach(function(asp) {
+        if (asp.planet1 === rPlanet || asp.planet2 === rPlanet) {
+          if (asp.nature === 'harmonious' || asp.nature === 'intense') {
+            rulerAspectBonus += asp.strength * 0.15;
+          } else {
+            rulerAspectBonus -= asp.strength * 0.12;
+          }
+        }
+      });
+
+      var cardAstroScore = Math.max(0.2, Math.min(1.0, dignityScore * 0.7 + rulerAspectBonus + 0.15));
+      astroSynergySum += cardAstroScore * rWeight;
+    });
+    var astroScore = astroSynergySum / (1.0 + 1.4 + 1.0);
+
+    // 5. Chaldean Gezegen Saati & Ay Uyumu
+    var hourScore = 0.50;
+    if (rulers.indexOf(planetHourKey) !== -1) {
+      hourScore = (c1.ruler === planetHourKey ? 0.95 : 0.85); // Şimdiki an kartı ise tam rezonans
+    } else {
+      // Elementel uyum kontrolü
+      var hourSign = lonToSign(positions[planetHourKey] || 0);
+      var hourElem = SIGN_ELEMENTS[hourSign] || 'fire';
+      if (cardSpreadElem[hourElem] > 0.3) hourScore += 0.25;
+    }
+
+    // 6. Nöral Latent Vektör Benzerliği
+    var neuralSim = cosineSimilarity(spreadVec, tempVec);
+
+    // Natal Vektör Etkisi (opsiyonel)
+    var natalSim = 0;
+    if (options && options.natalVector) {
+      natalSim = cosineSimilarity(spreadVec, normalize(options.natalVector));
+    }
+
+    // 7. Nihai Bilimsel ve Astrolojik Kozmik Rezonans Skoru
+    var rawResonance;
+    if (options && options.natalVector) {
+      rawResonance = (neuralSim * 0.30) + (astroScore * 0.25) + (elemSim * 0.20) + (hourScore * 0.15) + (natalSim * 0.10);
+    } else {
+      rawResonance = (neuralSim * 0.35) + (astroScore * 0.30) + (elemSim * 0.20) + (hourScore * 0.15);
+    }
+
+    // Gerçek dağılım (35% - 98% arası dinamik ve gerçekçi aralık)
+    var resonanceScore = Math.min(98, Math.max(38, Math.round(rawResonance * 100)));
 
     var resonanceLevels = {
-      tr: resonanceScore >= 90 ? 'olağanüstü yüksek' : (resonanceScore >= 80 ? 'oldukça güçlü' : 'dengeli ve berrak'),
-      en: resonanceScore >= 90 ? 'exceptionally high' : (resonanceScore >= 80 ? 'powerfully resonant' : 'balanced and clear'),
-      ru: resonanceScore >= 90 ? 'исключительно высокий' : (resonanceScore >= 80 ? 'очень мощный' : 'гармоничный и ясный')
+      tr: resonanceScore >= 88 ? 'olağanüstü yüksek' : (resonanceScore >= 75 ? 'oldukça güçlü ve net' : (resonanceScore >= 60 ? 'dengeli ve yapıcı' : 'içsel odaklanma gerektiren')),
+      en: resonanceScore >= 88 ? 'exceptionally high' : (resonanceScore >= 75 ? 'powerfully aligned' : (resonanceScore >= 60 ? 'balanced and constructive' : 'introspective')),
+      ru: resonanceScore >= 88 ? 'исключительно высокий' : (resonanceScore >= 75 ? 'очень мощный и ясный' : (resonanceScore >= 60 ? 'сбалансированный' : 'требующий концентрации'))
     };
 
     var resonanceExplanation = {
-      tr: "Kozmik Rezonans Skoru (%" + resonanceScore + "); çektiğin kartların arketipsel enerjisinin, şu anki " + pHourName + " saati, " + moonName + " fazı ve mevsimsel gökyüzü vektörleriyle " + resonanceLevels.tr + " bir uyumla titreştiğini doğrular. Niyetin evrensel akışla tam senkronize.",
-      en: "Cosmic Resonance Score (" + resonanceScore + "%); confirms that your drawn archetypes vibrate in " + resonanceLevels.en + " harmony with today's " + pHourName + " hour, " + moonName + " phase, and seasonal vectors. Your intention is in true cosmic synchronicity.",
-      ru: "Космический резонанс (" + resonanceScore + "%); подтверждает, что выбранные архетипы вибрируют в " + resonanceLevels.ru + " гармонии с текущим часом (" + pHourName + "), фазой Луны (" + moonName + ") и небесным потоком."
+      tr: "Kozmik Rezonans Skoru (%" + resonanceScore + "); seçtiğin 3 Büyük Arkana arketipinin (" + c0.icon + " " + c1.icon + " " + c2.icon + "), şu anki " + pHourName + " saati, " + moonName + " fazı ve gökyüzündeki gezegen asaletiyle " + resonanceLevels.tr + " bir kozmik senkronizasyon içinde olduğunu gösterir.",
+      en: "Cosmic Resonance Score (" + resonanceScore + "%); verifies that your 3 Major Arcana archetypes (" + c0.icon + " " + c1.icon + " " + c2.icon + ") resonate in " + resonanceLevels.en + " synchronicity with today's " + pHourName + " hour, " + moonName + " phase, and planetary dignities.",
+      ru: "Космический резонанс (" + resonanceScore + "%); подтверждает, что 3 архетипа Старших Арканов (" + c0.icon + " " + c1.icon + " " + c2.icon + ") находятся в " + resonanceLevels.ru + " синхронизации с часом " + pHourName + ", " + moonName + " и планетарными достоинствами."
     };
 
-    // 4. MLP Sinir Ağı İleri Yayılımı (Kategori Dağılımı)
+    // 8. MLP Sinir Ağı İleri Yayılımı & Kategori Dağılımı (v3.0 Multi-Factor Model)
     var mlpOutputs = mlpForward(spreadVec, tempVec, options && options.natalVector ? options.natalVector : null);
+
+    // Kategori asalet ve açı çarpanları
+    var venusDignity = calcDignityScore('venus', lonToSign(positions.venus || 0));
+    var jupiterDignity = calcDignityScore('jupiter', lonToSign(positions.jupiter || 0));
+    var marsDignity = calcDignityScore('mars', lonToSign(positions.mars || 0));
+    var sunDignity = calcDignityScore('sun', lonToSign(positions.sun || 0));
+
+    // Kart arketipinin kategoriyle doğal rezonans bonusu
+    var catCardsBonus = {
+      love:   { lovers: 0.60, empress: 0.45, star: 0.25, moon: 0.20, sun: 0.20, hierophant: 0.15 },
+      luck:   { wheel: 0.50, star: 0.40, sun: 0.40, magician: 0.30, world: 0.35, fool: 0.30 },
+      career: { emperor: 0.50, chariot: 0.45, magician: 0.35, judgement: 0.35, world: 0.35, strength: 0.30 },
+      health: { star: 0.45, temperance: 0.45, sun: 0.40, strength: 0.35, hermit: 0.25, empress: 0.20 },
+      money:  { empress: 0.40, world: 0.45, emperor: 0.40, wheel: 0.35, magician: 0.30, hierophant: 0.30 }
+    };
+
+    function calcCatScore(catIndex, catKey, dignityVal) {
+      var mlpVal = mlpOutputs[catIndex]; // MLP nöron çıktısı (0.0 - 1.0)
+      var catWeights = CATEGORY_WEIGHTS[catKey] || CATEGORY_WEIGHTS.daily;
+      var vecAffinity = cosineSimilarity(spreadVec, normalize(catWeights)); // Vektör uyumu
+
+      // Kart bonusu hesabı (Geçmiş %20, Şimdi %35, Gelecek %45)
+      var bonusMap = catCardsBonus[catKey] || {};
+      var cardBonus = (bonusMap[k0] || 0) * 0.20 + (bonusMap[k1] || 0) * 0.35 + (bonusMap[k2] || 0) * 0.45;
+
+      var raw = 42 + (mlpVal - 0.5) * 15 + (vecAffinity - 0.72) * 35 + (dignityVal - 0.5) * 15 + (cardBonus * 55);
+      return Math.min(98, Math.max(35, Math.round(raw)));
+    }
+
     var energyScores = {
-      love:   Math.min(99, Math.max(48, Math.round(mlpOutputs[0] * 100))),
-      luck:   Math.min(99, Math.max(48, Math.round(mlpOutputs[1] * 100))),
-      career: Math.min(99, Math.max(48, Math.round(mlpOutputs[2] * 100))),
-      health: Math.min(99, Math.max(48, Math.round(mlpOutputs[3] * 100))),
-      money:  Math.min(99, Math.max(48, Math.round(mlpOutputs[4] * 100)))
+      love:   calcCatScore(0, 'love', (venusDignity * 0.7 + (calcDignityScore('moon', lonToSign(positions.moon || 0))) * 0.3)),
+      luck:   calcCatScore(1, 'luck', (jupiterDignity * 0.7 + sunDignity * 0.3)),
+      career: calcCatScore(2, 'career', (marsDignity * 0.6 + (calcDignityScore('saturn', lonToSign(positions.saturn || 0))) * 0.4)),
+      health: calcCatScore(3, 'health', (sunDignity * 0.6 + (calcDignityScore('mars', lonToSign(positions.mars || 0))) * 0.4)),
+      money:  calcCatScore(4, 'money', (jupiterDignity * 0.5 + venusDignity * 0.3 + (calcDignityScore('mercury', lonToSign(positions.mercury || 0))) * 0.2))
     };
 
-    // 5. Element Simyası Hesabı
-    var elemCounts = { fire: 0, water: 0, air: 0, earth: 0 };
-    [c0, c1, c2].forEach(function(c) {
-      if (elemCounts[c.element] !== undefined) elemCounts[c.element]++;
-    });
-    var totalCards = 3;
+    // 9. Element Simyası Hesabı (Pozisyonel Ağırlıklı: %20 Geçmiş, %35 Şimdi, %45 Gelecek)
     var elemPct = {
-      fire:  Math.round((elemCounts.fire / totalCards) * 100),
-      water: Math.round((elemCounts.water / totalCards) * 100),
-      air:   Math.round((elemCounts.air / totalCards) * 100),
-      earth: Math.round((elemCounts.earth / totalCards) * 100)
+      fire:  Math.round(cardSpreadElem.fire * 100),
+      water: Math.round(cardSpreadElem.water * 100),
+      air:   Math.round(cardSpreadElem.air * 100),
+      earth: Math.round(cardSpreadElem.earth * 100)
     };
 
-    var dominantElem = Object.keys(elemCounts).reduce(function(a, b) {
-      return elemCounts[a] > elemCounts[b] ? a : b;
+    // Toplamın tam 100 olduğundan emin ol
+    var sumElem = elemPct.fire + elemPct.water + elemPct.air + elemPct.earth;
+    if (sumElem !== 100 && sumElem > 0) {
+      var maxElemKey = Object.keys(elemPct).reduce(function(a, b) { return elemPct[a] > elemPct[b] ? a : b; });
+      elemPct[maxElemKey] += (100 - sumElem);
+    }
+
+    var dominantElem = Object.keys(elemPct).reduce(function(a, b) {
+      return elemPct[a] > elemPct[b] ? a : b;
     });
 
     var alchemyDescriptions = {
@@ -2660,12 +2847,11 @@
       }
     };
 
-    // 6. Kart İsimleri
+    // 10. Kart İsimleri ve Nöral Anlatı
     var n0 = c0.name[lang] || c0.name.tr;
     var n1 = c1.name[lang] || c1.name.tr;
     var n2 = c2.name[lang] || c2.name.tr;
 
-    // 7. Derin Poetik Nöral Sentez (3-Katmanlı Akış)
     var p0 = c0.past[lang];
     var p1 = c1.present[lang];
     var p2 = c2.future[lang];
@@ -2678,14 +2864,13 @@
         "Today's **" + pHourName + " planetary hour** and **" + moonName + "** phase directly fuel this alchemical pivot.")) + "\n\n" +
       "✦ **Geleceğin Kapısı (" + c2.icon + " " + n2 + "):** " + p2;
 
-    // 8. Gezegensel Etki Metni
     var celestialImpact = {
       tr: "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı, bu açılımın enerjisini %" + resonanceScore + " oranında göksel akışla senkronize ediyor.",
       en: "The current **" + pHourName + " hour** and **" + moonName + "** phase synchronize this reading with cosmic flow at " + resonanceScore + "% alignment.",
       ru: "Текущий **час " + pHourName + "** и **" + moonName + "** синхронизируют энергию этого расклада с небесным потоком на " + resonanceScore + "%."
     };
 
-    // 9. Nöral Eylem Rehberliği (Action Advice)
+    // 11. Nöral Eylem Rehberliği (Action Advice)
     var highestCat = Object.keys(energyScores).reduce(function(a, b) {
       return energyScores[a] > energyScores[b] ? a : b;
     });
@@ -2761,7 +2946,6 @@
       ruler: c.ruler
     };
   }
-
 
   /* ══════════════════════════════════════════════════
      PUBLIC API
@@ -2852,7 +3036,7 @@
     ASPECT_NAMES: ASPECT_NAMES,
 
     /** Versiyon */
-    VERSION: '2.5.0'
+    VERSION: '3.0.0'
   };
 
   global.LunarisML = LunarisML;
