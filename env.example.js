@@ -1,0 +1,13 @@
+// Firebase yapılandırma şablonu
+// Bu dosyayı kopyalayıp 'env.js' olarak kaydedin ve kendi bilgilerinizi girin
+const ENV = {
+  FIREBASE_API_KEY: "BURAYA_API_KEY",
+  FIREBASE_AUTH_DOMAIN: "BURAYA_AUTH_DOMAIN",
+  FIREBASE_PROJECT_ID: "BURAYA_PROJECT_ID",
+  FIREBASE_STORAGE_BUCKET: "BURAYA_STORAGE_BUCKET",
+  FIREBASE_MESSAGING_SENDER_ID: "BURAYA_SENDER_ID",
+  FIREBASE_APP_ID: "BURAYA_APP_ID",
+  FIREBASE_MEASUREMENT_ID: "BURAYA_MEASUREMENT_ID"
+};
+
+export default ENV;

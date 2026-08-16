@@ -1,0 +1,438 @@
+================================================================================
+  🌕 LUNARIS — KAPSAMLI TEKNİK DOKÜMANTASYON & FONKSİYON REFERANS KILAVUZU 🌕
+================================================================================
+
+Bu doküman, LUNARIS projesindeki tüm mimariyi, makine öğrenmesi algoritmalarını,
+Firebase servislerini, matematiksel modelleri ve JavaScript fonksiyonlarını
+en ince ayrıntısına kadar açıklar.
+
+────────────────────────────────────────────────────────────────────────────────
+📁 1. PROJE DOSYA MİMARİSİ VE ROLLERİ
+────────────────────────────────────────────────────────────────────────────────
+
+Klasörde yer alan 7 dosya birbiriyle entegre olarak çalışır:
+
+1. `index.html` (Ana Portal)
+   - Tarot 3'lü Açılım (Geçmiş-Şimdi-Gelecek)
+   - 12 Burç İnteraktif Zodyak Çarkı & Günlük Yorum Paneli
+   - 🧠 ML Tabanlı Derin Astroloji & Doğum Haritası (Natal Harita + Radar Grafik)
+   - Günün Yıldız Haritası & Gerçek Astronomi Fotoğrafları
+   - İki Burç Arası Sinerji ve Uyum Hesaplayıcı
+   - Kolektif Yıldız Tarlası & Dilek Feneri (Canvas tabanlı)
+   - Gerçek Zamanlı Topluluk Duvarı
+
+2. `lunaris-ml.js` (Makine Öğrenmesi & Astroloji Motoru)
+   - Dış kütüphanesiz, saf JavaScript deterministik sinir ağı simülasyonu
+   - 8 boyutlu Zodyak Feature Vector uzayı
+   - Keldani Gezegensel Saat matrisi
+   - J2000 referanslı Gezegen Transit ve Retrograd motoru
+   - Güneş, Ay ve Yükselen Burç hesaplayan Natal Harita algoritması
+   - Dot-Product ve Sigmoid aktivasyonlu çoklu kategori skorlayıcı
+   - 12 Aylık Gelecek Enerji Zaman Çizelgesi simülatörü
+   - Çok dilli (TR / EN / RU) ağırlıklı metin havuzu
+
+3. `araclar.html` (Ezoterik & Kozmik Araçlar)
+   - Kutsal Numeroloji (Yaşam Yolu Sayısı & Usta Sayılar 11, 22, 33)
+   - Doğu Astrolojisi (12 Hayvan Totemi & 5 Element Mührü)
+   - Batı Zodyak Dekanları & 3D Enerji Dengesi
+   - 2026 Astronomik Takvimi (Merkür Retroları & Güneş/Ay Tutulmaları)
+   - Dinamik Aylık Ay Evresi Takvimi
+
+4. `blog.html` (Mistik Notlar)
+   - Kozmik makaleler, Ay ritüelleri ve kristal rehberleri
+   - Tam ekran okuma modalleri ve dinamik etiket filtreleme
+
+5. `style.css` (Kozmik Tasarım Sistemi & Animasyonlar)
+   - Glassmorphic (buzlu cam) koyu tema paleti
+   - SVG Radar Grafik, Dairesel Enerji Barları ve 3D Kart Tilt Efektleri
+   - Altın ve ametist ışıltılı parçacık animasyonları
+
+6. `main.js` (Ortak Arayüz, Dil & Çekirdek Kütüphane)
+   - TR / EN / RU çoklu dil motoru ve localStorage kalıcılığı
+   - Mistik Preloader açılış yöneticisi
+   - 40+ vektörel SVG ikon ve takımyıldız çizim motoru
+   - Toast bildirim sistemi ve genel modal yöneticileri
+
+7. `firebase-config.js` (Merkezi Firebase & Offline Demo Servisi)
+   - Firebase Auth (E-posta/Şifre, Google ile Giriş, Şifre Sıfırlama)
+   - Cloud Firestore (Gerçek zamanlı duvar akışı, tarot/burç/dilek geçmişi)
+   - Firebase olmadan da tam çalışan Akıllı Demo/Misafir Modu
+
+
+================================================================================
+🧠 2. MAKİNE ÖĞRENMESİ & ALGORİTMA MOTORU (`lunaris-ml.js`)
+================================================================================
+
+Tüm fonksiyonlar `window.LunarisML` küresel nesnesi üzerinden erişilebilir durumdadır.
+
+--------------------------------------------------------------------------------
+A) Matematiksel Çekirdek Fonksiyonlar (Dahili Yardımcılar):
+--------------------------------------------------------------------------------
+• `sigmoid(x)`
+  - Formül: 1 / (1 + e^(-x))
+  - Görevi: Ham ağırlıklı skorları 0.0 ile 1.0 arasında olasılıksal enerjiye normalize eder.
+
+• `dot(vectorA, vectorB)`
+  - Formül: ∑ (A[i] * B[i])
+  - Görevi: Burç vektörü ile zamansal/kategori ağırlık vektörünün skaler çarpımını alır.
+
+• `normalize(vector)`
+  - Formül: V / ||V|| (Öklid normu ile birim vektöre dönüştürme)
+
+• `cosineSimilarity(a, b)`
+  - Formül: dot(normalize(a), normalize(b))
+  - Görevi: İki astrolojik enerji vektörünün uzamsal benzerliğini hesaplar (-1 ile +1 arası).
+
+• `hashStr(seedString)`
+  - Deterministik DJB2 tabanlı hash algoritması. Aynı tarih + burç girdisinde her zaman
+    aynı kararlı sonucu üretir; gün değiştiğinde ise tamamen yeni yorum seçer.
+
+• `julianDay(date)`
+  - Verilen miladi tarihi Jülyen Gün Sayısına (Astronomical Julian Date) çevirir.
+
+--------------------------------------------------------------------------------
+B) Vektör Uzayı & Katman Mimarisi:
+--------------------------------------------------------------------------------
+1. 8 Boyutlu Burç Vektörü (`SIGN_VECTORS`):
+   Boyutlar: [0: Enerji, 1: İstikrar, 2: Macera, 3: Pratiklik, 4: Sosyallik, 5: Sezgi, 6: Liderlik, 7: Duyarlılık]
+   Örnekler:
+   - Koç (Aries):    [0.95, 0.20, 0.90, 0.30, 0.65, 0.25, 0.95, 0.20] (Yüksek enerji & liderlik)
+   - Boğa (Taurus):  [0.30, 0.95, 0.20, 0.95, 0.55, 0.40, 0.40, 0.65] (Yüksek istikrar & pratiklik)
+   - Akrep (Scorpio):[0.85, 0.75, 0.65, 0.55, 0.40, 0.95, 0.75, 0.85] (Yüksek sezgi & derinlik)
+   - Balık (Pisces): [0.40, 0.45, 0.55, 0.30, 0.70, 0.95, 0.30, 0.95] (Maksimum duyarlılık & sezgi)
+
+2. Kategori Ağırlık Matrisi (`CATEGORY_WEIGHTS`):
+   Aşk (Love), Şans (Luck), Kariyer (Career), Sağlık (Health), Günlük (Daily) ve Para (Money)
+   alanlarının her biri için 8 boyutlu özel katsayılar tanımlanmıştır.
+
+--------------------------------------------------------------------------------
+C) Dışa Açık API Fonksiyonları (`LunarisML`):
+--------------------------------------------------------------------------------
+
+1. `LunarisML.generateDeepReading(signKey, lang, birthDate, birthHour)`
+   - Parametreler:
+     * `signKey` (string): 'aries', 'taurus', ... 'pisces'
+     * `lang` (string): 'tr' | 'en' | 'ru'
+     * `birthDate` (Date nesnesi): Kullanıcının doğum tarihi
+     * `birthHour` (number, opsiyonel): Doğum saati (0-23.99)
+   - İşleyiş:
+     1. `calcNatalScores()` ile Güneş, Ay ve Yükselen burçları ile natal vektör hesaplanır.
+     2. `getTemporalVector()` ile günün gezegen saati, Ay fazı, mevsim ve gün katsayısı çıkarılır.
+     3. Her kategori için Dot-Product + Sigmoid ile 0-1 arası normalize skorlar üretilir.
+     4. `pickTextByScore()` ile skor dilimine göre en uygun zengin metin seçilir.
+     5. Retrograd analizi yapılarak aktif uyarılar eklenir.
+   - Dönüş Değeri (Object):
+     {
+       scores: { love, luck, career, health, money, daily },
+       texts: { love, luck, career, health },
+       luckyNum: 1-9 arası sayı,
+       luckyColor: "Altın Sarısı" vb.,
+       totalEnergy: 0-100 arası genel yüzde,
+       retrogradWarning: "Merkür Retrosu Uyarısı" veya null,
+       moonPhase: { tr, en, ru, fraction },
+       planetaryHour: "sun" | "moon" | "mars" vb.,
+       natal: { sunSign, moonSign, ascSign, profile, natalVector },
+       transits: { positions, mercRetro, venusRetro }
+     }
+
+2. `LunarisML.calcNatalScores(birthDate, birthHour)`
+   - Parametreler: `birthDate` (Date), `birthHour` (number)
+   - İşleyiş:
+     * Güneş Burcu: Doğum gün/ay aralığına göre belirlenir.
+     * Ay Burcu: Jülyen gün farkı üzerinden 29.53 günlük Ay döngüsünün hangi 12'lik evrede olduğu hesaplanır.
+     * Yükselen Burç: Doğum saati 2 saatlik bloklara bölünerek Güneş burcundan itibaren ötelenir.
+     * Natal Vektör: %50 Güneş + %30 Ay + %20 Yükselen ağırlıklı ortalamasıyla 8 boyutlu profil oluşturulur.
+   - Dönüş Değeri:
+     {
+       sunSign: string,
+       moonSign: string,
+       ascSign: string,
+       natalVector: Array(8),
+       profile: { energy, stability, adventure, practicality, social, intuition, leadership, sensitivity } (0-100 değerleri)
+     }
+
+3. `LunarisML.generateEnergyTimeline(signKey, natalVector)`
+   - Parametreler: `signKey` (string), `natalVector` (Array(8) veya null)
+   - İşleyiş: Mevcut aydan başlayarak gelecek 12 ayın her biri için ay ortası tarihi baz alınır.
+     O ayın mevsimsel vektörü ve burç vektörü çarpılarak aylık Enerji, Aşk, Kariyer ve Şans skorları üretilir.
+   - Dönüş Değeri:
+     Array of 12 objects: [ { month, label: {tr,en,ru}, energy, love, career, luck, isCurrent } ]
+
+4. `LunarisML.getCategoryScores(signKey, date, natalVector)`
+   - Parametreler: `signKey` (string), `date` (Date), `natalVector` (Array)
+   - Belirtilen gün için burcun 6 kategorideki matematiksel skorlarını döner.
+
+5. `LunarisML.getProfileInsight(profile, lang)`
+   - Parametreler: `profile` (8 boyutlu obje), `lang` ('tr'|'en'|'ru')
+   - En yüksek puana sahip boyutu tespit ederek `strength` (Doğal Güç),
+     en düşük puana sahip boyutu tespit ederek `challenge` (Gelişim Alanı) rehberlik metnini döner.
+
+6. `LunarisML.getCurrentPlanetaryHour(date)`
+   - Parametre: `date` (Date)
+   - Haftanın günü ve saatin toplamından Keldani sırasına göre o anki yönetici gezegeni bulur.
+   - Dönüş Değeri: 'sun' | 'moon' | 'mars' | 'mercury' | 'jupiter' | 'venus' | 'saturn'
+
+7. `LunarisML.calcTransits(date)`
+   - J2000 efemeris yaklaşımıyla Güneş, Ay, Merkür, Venüs, Mars, Jüpiter ve Satürn'ün
+     gök boylamlarını (0-360°) ve retrograd durumlarını hesaplar.
+
+8. `LunarisML.getMoonPhaseName(date)`
+   - Güncel Ay döngüsünün 8 evresinden birini döner (Yeni Ay, Büyüyen Hilal, İlk Dördün,
+     Büyüyen Ay, Dolunay, Küçülen Ay, Son Dördün, Küçülen Hilal).
+
+
+================================================================================
+🌐 3. MERKEZİ FIREBASE & KİMLİK SERVİSLERİ (`firebase-config.js`)
+================================================================================
+
+Tüm servisler `window.LunarisAuth` ve `window.LunarisWall` nesneleri üzerinden sunulur.
+
+--------------------------------------------------------------------------------
+A) `window.LunarisAuth` (Kullanıcı & Hesap Yönetimi):
+--------------------------------------------------------------------------------
+
+• `LunarisAuth.isLoggedIn()`
+  - Kullanıcının oturum açmış olup olmadığını döner (boolean).
+
+• `LunarisAuth.getUser()`
+  - Aktif kullanıcı nesnesini döner:
+    { uid, email, displayName, username, photoURL, isDemo, preferredLang }
+
+• `LunarisAuth.login(email, password)`
+  - Firebase Authentication ile e-posta/şifre girişi yapar.
+  - Hata yakalama: `auth/wrong-password`, `auth/user-not-found`, `auth/too-many-requests`.
+
+• `LunarisAuth.signup(email, password, username)`
+  - Yeni kullanıcı oluşturur, Firestore `users/{uid}` koleksiyonuna kullanıcı adı ve profilini yazar.
+
+• `LunarisAuth.loginWithGoogle()`
+  - `GoogleAuthProvider` ve `signInWithPopup` ile tek tıkla Google girişi sağlar.
+
+• `LunarisAuth.loginDemo()`
+  - Firebase yapılandırılmamış olsa dahi rastgele kullanıcı kimliği ile yerel demo oturumu açar.
+  - Verileri tarayıcının LocalStorage hafızasında tutar.
+
+• `LunarisAuth.sendPasswordReset(email)`
+  - Firebase üzerinden şifre sıfırlama e-postası yollar.
+
+• `LunarisAuth.logout()`
+  - Oturumu kapatır, yerel hafızayı temizler ve arayüzü misafir moduna geçirir.
+
+• `LunarisAuth.updatePhoto(photoURL)`
+  - Kullanıcının profil fotoğrafı URL'sini Firebase Auth ve Firestore `users/{uid}` üzerinde günceller.
+
+• `LunarisAuth.saveReading(cardKeys, comboText, lang)`
+  - Yapılan tarot açılımını Firestore `readings` koleksiyonuna kaydeder.
+  - Demo modunda ise `lunaris_local_readings` LocalStorage dizisine ekler.
+
+• `LunarisAuth.getHistory()`
+  - Kullanıcının geçmiş tarot fallarını tarihe göre azalan sırada getirir.
+
+• `LunarisAuth.saveHoroscope(horoData)`
+  - Seçilen burç yorumunu (aşk, şans, para metinleri ve şanslı sayılarıyla birlikte) kaydeder.
+
+• `LunarisAuth.getHoroscopeHistory()`
+  - Kullanıcının kaydettiği tüm burç yorumlarını listeler.
+
+• `LunarisAuth.saveWish(wishText, category)`
+  - Dilek Feneri'ne bırakılan niyeti Firestore `wishes` koleksiyonuna veya yerel hafızaya kaydeder.
+
+• `LunarisAuth.getMyWishes()`
+  - Kullanıcının kendi fırlattığı dilekleri ve toplanan ışık/enerji sayılarını getirir.
+
+--------------------------------------------------------------------------------
+B) `window.LunarisWall` (Topluluk Duvarı & Canlı Akış):
+--------------------------------------------------------------------------------
+
+• `LunarisWall.isConfigured()`
+  - Firestore bağlantısının hazır olup olmadığını kontrol eder.
+
+• `LunarisWall.loadMessages()`
+  - Duvardaki son 50 mesajı Firestore'dan tarihe göre sıralayarak çeker.
+
+• `LunarisWall.subscribeMessages(callback)`
+  - Firestore `onSnapshot` gerçek zamanlı dinleyicisini kurar. Duvarda biri yeni mesaj
+    paylaştığında veya beğendiğinde sayfayı yenilemeden arayüzü anlık günceller.
+
+• `LunarisWall.postMessage(text, mood)`
+  - Yeni duvar mesajı oluşturur (Yazar adı, profil resmi, ruh hali ikonu ve zaman damgasıyla).
+
+• `LunarisWall.likeMessage(id)`
+  - Firestore `increment(1)` atomik işlemi ile gönderinin beğeni sayısını artırır.
+
+• `LunarisWall.deleteMessage(id)`
+  - Kullanıcının sadece kendi paylaştığı duvar mesajlarını silmesini sağlar.
+
+
+================================================================================
+🛠️ 4. ORTAK ARAYÜZ, DİL & YARDIMCI FONKSİYONLAR (`main.js`)
+================================================================================
+
+• `setLang(lang)`
+  - Parametre: `'tr'` | `'en'` | `'ru'`
+  - Dil değişiminde tüm sayfadaki metinleri, zodyak çarkını, açılmış olan tarot kartlarını,
+    ML derin analiz sonuçlarını ve topluluk duvarını anında seçilen dile çevirir.
+
+• `applyLangToDOM(lang)`
+  - `data-i18n` (metin içeriği) ve `data-i18n-ph` (placeholder) etiketlerini `UI[lang]` sözlüğü ile eşleştirir.
+
+• `getInitialLang()`
+  - LocalStorage veya tarayıcı varsayılanından kullanıcının dilini tespit eder.
+
+• `showToast(message)`
+  - Ekranın alt kısmında beliren, altın parıltılı, 3 saniye sonra kaybolan toast uyarısı gösterir.
+
+• `icon(name, size, className)`
+  - 40'tan fazla vektörel SVG simgesini (Tarot kartları, gezegenler, elementler, çakralar) üretir.
+
+• `renderConstellationSVG(signKey, className)`
+  - 12 Zodyak burcunun mitolojik takımyıldız yıldız-çizgi haritalarını SVG olarak çizer.
+
+• `moonIconSVG(phaseIndex, idPrefix)`
+  - Ay'ın 8 farklı evresini aydınlanma açısına göre gölgeli SVG olarak üretir.
+
+• `createStars(count)`
+  - Canvas ve DOM üzerinde rastgele boyut ve parlaklıkta yıldız tarlası (Starfield) inşa eder.
+
+• `spawnShootingStar()`
+  - Belirli aralıklarla gökyüzünden çapraz açıyla kayan parlak kuyruklu yıldız animasyonu tetikler.
+
+• `spawnSparkleBurst(x, y)`
+  - Tıklanan koordinatta altın ve mor mikro-parçacık patlaması animasyonu oluşturur.
+
+• `initSparkleTrail()`
+  - Fare imlecinin arkasında süzülen sihirli toz izi efektini başlatır.
+
+• `initScrollReveal(selector)`
+  - IntersectionObserver API ile sayfa aşağı kaydırıldıkça kartların yumuşakça parlamasını sağlar.
+
+• `initNavSpy(sectionIds)`
+  - Kullanıcının ekranda gördüğü bölüme göre üst menüdeki linki otomatik aktif (highlight) yapar.
+
+• `openAuthModal(tab)` / `closeAuthModal()`
+  - 'login', 'signup' veya 'forgot' sekmeleriyle giriş modalını açar/kapatır.
+
+• `openAccountModal()` / `closeAccountModal()`
+  - Profil kartını, avatar seçicisini ve Tarot/Burç/Dilek geçmiş sekmelerini yönetir.
+
+• `setProfilePhoto(url)` / `handleCustomPhotoUpload(event)`
+  - Hazır kozmik avatarları seçmeyi veya kullanıcının cihazından özel fotoğraf yüklemesini sağlar.
+
+
+================================================================================
+🌟 5. ANA SAYFA FONKSİYONLARI (`index.html`)
+================================================================================
+
+[A. ML Derin Astroloji & Doğum Haritası]:
+• `runDeepReading()`
+  - Doğum tarihi ve saatini alıp `LunarisML.generateDeepReading()` fonksiyonunu çalıştırır.
+  - Radar grafiği, enerji halkası, derin yorum kartları ve 12 aylık zaman çizelgesini doldurur.
+
+• `drawRadarChart(profile, lang)`
+  - 8 boyutlu kişilik profilini matematiksel trigonometrik açılarla (2π/8) hesaplar,
+    SVG poligon ve eksen çizgileri olarak çizer.
+
+• `renderEnergyTimelineUI(timeline, lang)`
+  - Gelecek 12 ayın Enerji, Aşk, Kariyer ve Şans çubuk grafiğini ve lejantını oluşturur.
+
+• `renderDeepReadingUI(data)`
+  - Tüm ML analiz sonuçlarını, retrograd uyarılarını ve içgörü panellerini arayüze basar.
+
+• `quickFillDeepSign(signKey)`
+  - Burç çarkından tıklanan burcun yaklaşık doğum tarihini forma otomatik yazar ve
+    sayfayı pürüzsüz kaydırarak (smooth scroll) analizi anında başlatır.
+
+[B. Burç Yorumları & Zodyak Çarkı]:
+• `buildWheel()`
+  - 36 derecelik açılarla 12 burç butonunu ve dönen gezegen yörüngelerini inşa eder.
+
+• `selectSign(key)`
+  - Seçilen burcun aktif durumunu günceller ve ML destekli burç detay panelini açar.
+
+• `renderHoroPanel()`
+  - Aşk, Şans, Günlük Hayat ve Para yorumlarını, şanslı rengi, sayıyı ve
+    ML Kozmik Titreşim skorunu (`LunarisML.getCategoryScores`) panele basar.
+
+• `saveActiveHoroscope()`
+  - Görüntülenen burç yorumunu kullanıcının profil geçmişine kaydeder.
+
+[C. Tarot Açılımı]:
+• `drawSpread()`
+  - 22 kartlık desteyi rastgele karıştırır ve 3 kart seçer.
+
+• `renderSpread(animate)`
+  - Kartları 3D çevirme (flip) animasyonuyla açar, ses/parıltı efektleri verir ve
+    `renderComboReading()` ile birleşik kehanet metnini üretir.
+
+[D. Burç Uyumu & Yıldız Haritası]:
+• `buildCompatSelectors()` → 1. ve 2. burç açılır menülerini doldurur.
+• `checkCompatibility()` → İki burcun element ve modalite sinerjisini hesaplayıp yüzde halkasını çizer.
+• `updateMoonDisplay()` & `updateStarMap()` → Günün Ay evresini ve gökyüzü fotoğrafını günceller.
+
+[E. Dilek Feneri & Topluluk]:
+• `submitWish()` → HTML5 Canvas üzerine yeni dilek yıldızı fırlatır ve veritabanına kaydeder.
+• `submitWallPost()` → Topluluk duvarına mesaj paylaşır (10 saniyelik spam korumasıyla).
+• `likeWallPost(id)` & `deleteWallPost(id)` → Duvar mesajı etkileşimlerini yönetir.
+
+
+================================================================================
+🔮 6. KOZMİK ARAÇLAR SAYFASI FONKSİYONLARI (`araclar.html`)
+================================================================================
+
+• `calculateBirthMatrix()`
+  - Doğum tarihini alarak Numeroloji, Çin Burcu ve Güneş İmzası analizlerini tek tıkla çalıştırır.
+
+• `lifePathNumber(day, month, year)`
+  - Doğum tarihinin tüm basamaklarını toplayıp tek haneye veya 11, 22, 33 usta sayılarına indirger.
+
+• `renderNumerologyResult(num, day, month, year)`
+  - Yaşam yolu sayısını, arketip unvanını, Solfeggio titreşim frekansını (Hz),
+    çakrasını ve yönetici gezegenini gösterir.
+
+• `getChineseZodiac(year)`
+  - Ay takvimi döngüsüne göre 12 Hayvan Totemini ve 5 Element (Ahşap, Ateş, Toprak, Metal, Su) mührünü bulur.
+
+• `renderChineseResult(animalIdx, elementKey)`
+  - Çin burcu totem görselini, Yin/Yang polaritesini ve element simyasını çizer.
+
+• `renderWesternResult(day, month)`
+  - Güneş burcunun dekanlarını, zihinsel odak, ruhsal sezgi ve manyetik çekim oranlarını gösterir.
+
+• `renderCosmicCalendar()`
+  - 2026 yılındaki tüm Merkür Retrosu dönemlerini ve Güneş/Ay tutulmalarını listeler.
+
+• `getMercuryStatus(date)`
+  - Şu anda Merkür retrosu olup olmadığını, bitimine veya bir sonraki retroya kaç gün kaldığını hesaplar.
+
+• `renderMoonCalendar()` & `navigateMoonMonth(dir)`
+  - Ayın her günü için o günkü Ay evresi simgesini içeren aylık interaktif takvimi çizer.
+
+
+================================================================================
+📖 7. BLOG SAYFASI FONKSİYONLARI (`blog.html`)
+================================================================================
+
+• `renderBlogList()`
+  - Ay evreleri, kristal enerjisi, gezegen hareketleri ve tarot sırları konulu
+    tüm makaleleri kartlar halinde listeler.
+
+• `openBlogModal(articleKey)` / `closeBlogModal()`
+  - Seçilen makalenin tam metnini, okuma süresini ve kozmik tavsiyelerini cam efektli okuma penceresinde açar.
+
+
+================================================================================
+🚀 8. ÇALIŞTIRMA & TEST KILAVUZU
+================================================================================
+
+1. Yerel Çalıştırma:
+   - `index.html` dosyasına çift tıklayarak tarayıcınızda (Chrome, Edge, Safari, Firefox)
+     doğrudan açabilirsiniz. Herhangi bir sunucu veya kurulum gerektirmez.
+
+2. Firebase Yapılandırması (Opsiyonel):
+   - Firebase bağlamak için `firebase-config.js` dosyasındaki `firebaseConfig`
+     nesnesine kendi projenizin API anahtarlarını yazmanız yeterlidir.
+   - Firebase bağlanmasa dahi site Akıllı Demo Modu ile tüm özellikleriyle kusursuz çalışır.
+
+3. Makine Öğrenmesi Doğrulama:
+   - Node.js kurulu ortamda `lunaris-ml.js` motoru doğrudan test edilebilir.
+   - Tüm matematiksel hesaplamalar deterministiktir ve sıfır dış bağımlılıkla çalışır.

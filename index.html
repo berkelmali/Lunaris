@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNARIS — Tarot, Astroloji & Burç Yorumları</title>
+<meta name="description" content="LUNARIS'te tarot kartlarını çek, günlük burç yorumunu oku, burç uyumuna bak, mistik blog yazılarını keşfet ve topluluk duvarında herkesle enerjini paylaş.">
+<meta name="theme-color" content="#0B0714">
+<meta property="og:title" content="LUNARIS — Tarot, Astroloji & Burç Yorumları">
+<meta property="og:description" content="Kartların sırrı, yıldızların rehberliği. Tarot, günlük burç yorumu, burç uyumu, mistik blog ve topluluk duvarı bir arada.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%99%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Yeseva+One&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ==========================================================
+     LUNARIS PRELOADER (AÇILIŞ ANİMASYONU)
+     ========================================================== -->
+<div id="lunarisPreloader">
+  <div class="preloader-inner">
+    <div class="preloader-emblem-wrap">
+      <div class="preloader-glow-ring"></div>
+      <div class="preloader-orbit-outer"><div class="preloader-orbit-dot"></div></div>
+      <svg class="preloader-emblem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pLogoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--amethyst)"/>
+            <stop offset="1" stop-color="var(--gold-bright)"/>
+          </linearGradient>
+        </defs>
+        <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+        <circle class="logo-ring-inner" cx="20" cy="20" r="14.5"/>
+        <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z" fill="url(#pLogoGrad)"/>
+        <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z" fill="var(--gold-bright)"/>
+        <circle class="logo-spark" cx="27.5" cy="26" r="1" fill="#FFF"/>
+      </svg>
+    </div>
+    <div class="preloader-title">LUNARIS</div>
+    <div class="preloader-bar-wrap"><div class="preloader-bar"></div></div>
+    <div class="preloader-quote" id="preloaderQuote">Kozmik enerjiler yükleniyor...</div>
+  </div>
+</div>
+
+<div class="bg-photo" id="bgPhoto"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+<div class="starfield" id="starfield"></div>
+<svg class="bg-constellation" id="bgConstellation" xmlns="http://www.w3.org/2000/svg"></svg>
+<div class="shooting-stars" id="shootingStars"></div>
+<div class="vignette"></div>
+
+<header class="site-header">
+  <a href="index.html" class="brand">
+    <span class="brand-emblem" aria-hidden="true">
+      <svg class="logo-emblem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoMoonGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--amethyst)"/>
+            <stop offset="1" stop-color="var(--gold)"/>
+          </linearGradient>
+        </defs>
+        <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+        <circle class="logo-ring-inner" cx="20" cy="20" r="14.5"/>
+        <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z"/>
+        <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z"/>
+        <circle class="logo-spark" cx="27.5" cy="26" r="1"/>
+      </svg>
+    </span>
+    <span class="brand-wordmark">
+      <span class="brand-name">LUNARIS</span>
+      <span class="brand-tag" data-i18n="brandTag">Tarot & Astroloji</span>
+    </span>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false" onclick="toggleNav()">
+    <svg class="icon-svg" viewBox="0 0 40 40"><line x1="6" y1="12" x2="34" y2="12"/><line x1="6" y1="20" x2="34" y2="20"/><line x1="6" y1="28" x2="34" y2="28"/></svg>
+  </button>
+  <nav class="site-nav" id="siteNav">
+    <a href="#tarot" data-i18n="navTarot" onclick="closeNav()">Tarot</a>
+    <a href="#horoscope" data-i18n="navHoro" onclick="closeNav()">Burçlar</a>
+    <a href="#deepreading" data-i18n="navDeep" onclick="closeNav()">Derin Analiz</a>
+    <a href="#compat" data-i18n="navCompat" onclick="closeNav()">Uyum</a>
+    <a href="araclar.html" data-i18n="navTools" onclick="closeNav()">Araçlar</a>
+    <a href="blog.html" data-i18n="navBlog" onclick="closeNav()">Blog</a>
+    <a href="#wall" data-i18n="navWall" onclick="closeNav()">Topluluk</a>
+  </nav>
+  <div class="header-right">
+    <button class="account-btn" id="accountBtn" onclick="handleAccountClick()">
+      <svg class="icon-svg" width="18" height="18" viewBox="0 0 40 40"><circle cx="20" cy="15" r="8"/><path d="M6,35 C6,25 13,20 20,20 C27,20 34,25 34,35"/></svg>
+      <span id="accountBtnLabel" data-i18n="loginBtn">Giriş Yap</span>
+    </button>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="tr" onclick="setLang('tr')">TR</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+    </div>
+  </div>
+</header>
+
+<!-- ==========================================================
+     YENİLENMİŞ KOZMİK GİRİŞ / KAYIT MODALI
+     ========================================================== -->
+<div class="modal-overlay" id="authModalOverlay" style="display:none;" onclick="if(event.target===this) closeAuthModal();">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAuthModal()" aria-label="Kapat">×</button>
+    
+    <div class="auth-modal-header">
+      <div class="auth-modal-icon">
+        <svg class="logo-emblem" viewBox="0 0 40 40" style="width:34px;height:34px;">
+          <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+          <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z" fill="url(#logoMoonGrad)"/>
+          <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z" fill="var(--gold-bright)"/>
+        </svg>
+      </div>
+      <h3 class="auth-modal-title" data-i18n="authModalTitle">Kozmik Portal</h3>
+      <p class="auth-modal-sub" data-i18n="authModalSub">Yıldızların rehberliğine adım at</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')" data-i18n="authTabLogin">Giriş Yap</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')" data-i18n="authTabSignup">Kayıt Ol</button>
+    </div>
+
+    <!-- Giriş Formu -->
+    <div class="auth-form" id="authFormLogin">
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <input type="email" id="loginEmail" class="auth-input" data-i18n-ph="authEmailPh" placeholder="E-posta adresin" autocomplete="email">
+      </div>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <input type="password" id="loginPassword" class="auth-input" data-i18n-ph="authPasswordPh" placeholder="Şifren" autocomplete="current-password">
+        <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Şifreyi Göster/Gizle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
+      <a class="auth-forgot-link" onclick="switchAuthTab('forgot')" data-i18n="authTabForgot">Şifremi Unuttum</a>
+      <button class="btn-primary auth-submit" onclick="doLogin()" data-i18n="authTabLogin">Giriş Yap</button>
+      
+      <div class="auth-divider">veya</div>
+      <button class="btn-auth-google" onclick="doGoogleLogin()">
+        <svg class="google-icon-svg" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        <span data-i18n="authGoogleBtn">Google ile Devam Et</span>
+      </button>
+
+      <button class="btn-auth-demo" onclick="doDemoLogin()" data-i18n="authDemoBtn">✨ Demo / Misafir Moduyla Giriş Yap</button>
+    </div>
+
+    <!-- Kayıt Formu -->
+    <div class="auth-form" id="authFormSignup" style="display:none;">
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <input type="text" id="signupUsername" class="auth-input" data-i18n-ph="authUsernamePh" placeholder="Kullanıcı Adın" required autocomplete="username">
+      </div>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <input type="email" id="signupEmail" class="auth-input" data-i18n-ph="authEmailPh" placeholder="E-posta adresin" autocomplete="email">
+      </div>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <input type="password" id="signupPassword" class="auth-input" data-i18n-ph="authPasswordMinPh" placeholder="Şifre (en az 6 karakter)" autocomplete="new-password">
+        <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility('signupPassword', this)" aria-label="Şifreyi Göster/Gizle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
+      <button class="btn-primary auth-submit" onclick="doSignup()" data-i18n="authCreateBtn">Hesap Oluştur</button>
+      
+      <div class="auth-divider">veya</div>
+      <button class="btn-auth-google" onclick="doGoogleLogin()">
+        <svg class="google-icon-svg" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        <span data-i18n="authGoogleBtn">Google ile Devam Et</span>
+      </button>
+    </div>
+
+    <!-- Şifremi Unuttum Formu -->
+    <div class="auth-form" id="authFormForgot" style="display:none;">
+      <p style="color:var(--mist); font-size:0.88rem; line-height:1.5; text-align:center;" data-i18n="authForgotSub">Kayıtlı e-posta adresini gir, sıfırlama bağlantısını hemen gönderelim.</p>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <input type="email" id="forgotEmail" class="auth-input" data-i18n-ph="authEmailPh" placeholder="E-posta adresin">
+      </div>
+      <button class="btn-primary auth-submit" onclick="doForgotPassword()" data-i18n="authSendResetBtn">Sıfırlama Bağlantısı Gönder</button>
+      <button type="button" class="btn-auth-demo" onclick="switchAuthTab('login')" data-i18n="authBackToLogin">Giriş Ekranına Dön</button>
+    </div>
+
+    <div class="auth-success-badge" id="authSuccess"></div>
+    <p class="auth-error" id="authError"></p>
+    <p class="auth-note" id="authNote" data-i18n="authNotConfiguredNote">Firebase yapılandırması henüz girilmedi. İstersen Demo Modu ile hemen test edebilirsin.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="accountModalOverlay" style="display:none;" onclick="if(event.target===this) closeAccountModal();">
+  <div class="modal-box account-box">
+    <button class="modal-close" onclick="closeAccountModal()" aria-label="Kapat">×</button>
+    <div class="account-profile-header">
+      <div class="account-avatar-wrapper" title="Profil fotoğrafını değiştir" onclick="document.getElementById('avatarFileInput').click();">
+        <div class="account-avatar-large" id="accountAvatarLarge">✦</div>
+        <div class="avatar-edit-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        </div>
+      </div>
+      <div class="account-profile-details">
+        <div class="account-username-title" id="accountUsername">@Gezgin</div>
+        <div class="account-email-sub" id="accountEmail"></div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()" data-i18n="logoutBtn">Çıkış Yap</button>
+    </div>
+
+    <!-- Profil Fotoğrafı Yükleme & Mistik İkon Seçimi -->
+    <div class="avatar-picker-wrap">
+      <div class="avatar-picker-title">
+        <span data-i18n="changeAvatarLabel">Profil Fotoğrafı:</span>
+        <label class="file-upload-btn">
+          <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleCustomPhotoUpload(event)">
+          <span data-i18n="uploadPhotoBtn">📷 Fotoğraf Yükle</span>
+        </label>
+      </div>
+      <div style="font-size:0.75rem; color:var(--mist); margin-bottom:6px;" data-i18n="presetAvatarsLabel">Veya Mistik İkon Seç:</div>
+      <div class="avatar-presets-row">
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Luna')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Luna" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Orion')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Orion" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Selena')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Selena" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Astra')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Astra" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Zenith')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Zenith" alt="Preset"></button>
+      </div>
+    </div>
+
+    <div class="account-pref-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-4); padding-bottom:var(--sp-3); border-bottom:1px solid rgba(212,175,106,0.15);">
+      <span style="font-size:0.85rem; color:var(--mist);" data-i18n="prefLangLabel">Tercih Edilen Dil:</span>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="tr" onclick="setLang('tr')">TR</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+      </div>
+    </div>
+    <div class="account-subtabs">
+      <button class="account-subtab-btn active" id="tabAccountTarot" onclick="switchAccountTab('tarot')" data-i18n="tabTarotHist">🃏 Tarot Fallarım</button>
+      <button class="account-subtab-btn" id="tabAccountHoro" onclick="switchAccountTab('horoscope')" data-i18n="tabHoroHist">⭐ Burç Yorumlarım</button>
+      <button class="account-subtab-btn" id="tabAccountWishes" onclick="switchAccountTab('wishes')" data-i18n="tabWishesHist">🌟 Dileklerim</button>
+    </div>
+    <div class="reading-history" id="readingHistoryList"></div>
+    <div class="reading-history" id="horoHistoryList" style="display:none;"></div>
+    <div class="reading-history" id="wishesHistoryList" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow" data-i18n="heroEyebrow">Kartlar & Yıldızlar</div>
+    <h1 data-i18n="heroTitle">Kartların Sırrı, Yıldızların Rehberliği</h1>
+    <p class="hero-text" data-i18n="heroText">Kadim tarot kartları ve gökyüzünün dilini bir araya getirdik. Bugün kartlarını çek, burcunun ne fısıldadığını dinle.</p>
+    <a href="#tarot" class="btn-primary" data-i18n="heroCta">Falına Bak</a>
+    <div class="today-strip">
+      <div class="today-item">
+        <span class="ti-icon"><svg class="icon-svg" width="22" height="22" viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="24" rx="2.5"/><line x1="6" y1="17" x2="34" y2="17"/><line x1="13" y1="5" x2="13" y2="13"/><line x1="27" y1="5" x2="27" y2="13"/></svg></span>
+        <div class="ti-text"><span class="ti-label" data-i18n="todayLabel">Bugün</span><strong id="todayDateText"></strong></div>
+      </div>
+      <div class="today-item">
+        <span class="ti-icon" id="todaySignIcon"></span>
+        <div class="ti-text"><span class="ti-label" data-i18n="nowLabel">Şu An</span><strong id="todaySignText"></strong></div>
+      </div>
+      <div class="today-item">
+        <span class="ti-icon" id="todayMoonIcon"></span>
+        <div class="ti-text"><span class="ti-label" data-i18n="moonLabel">Ay Evresi</span><strong id="todayMoonText"></strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="halo-ring"></div>
+    <div class="halo-glyphs" id="haloGlyphs"></div>
+    <div class="hero-card-parallax" id="heroParallax">
+      <div class="hero-card">
+        <div class="tcard-content">
+          <div class="hc-label" data-i18n="heroCardLabel">Bugünün Yıldızı</div>
+          <div class="hc-icon" id="heroStarIcon"></div>
+          <div class="hc-name" id="heroStarName"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="features">
+  <h2 class="section-title" data-i18n="featTitle">Neler Sunuyoruz</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon"><svg class="icon-svg" viewBox="0 0 40 40"><rect x="10" y="6" width="20" height="28" rx="3"/><path d="M20,14 L22.3,18.8 L27.5,19.5 L23.7,23 L24.7,28.3 L20,25.7 L15.3,28.3 L16.3,23 L12.5,19.5 L17.7,18.8 Z"/></svg></div>
+      <h3 data-i18n="feat1Title">22 Kartlık Büyük Arkana</h3>
+      <p data-i18n="feat1Desc">Özenle tasarlanmış benzersiz desteden geçmiş-şimdi-gelecek açılımı çek, her kartın anlamını keşfet.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg class="icon-svg" viewBox="0 0 40 40"><path d="M20,4 L23.4,16.6 L36,20 L23.4,23.4 L20,36 L16.6,23.4 L4,20 L16.6,16.6 Z"/></svg></div>
+      <h3 data-i18n="feat2Title">Her Gün Yenilenen Burç Yorumu</h3>
+      <p data-i18n="feat2Desc">12 burç için aşk, şans, günlük hayat ve para yorumları her gün değişiyor, hep taze hep senin için.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg class="icon-svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><ellipse cx="20" cy="20" rx="6" ry="14"/><line x1="6" y1="20" x2="34" y2="20"/></svg></div>
+      <h3 data-i18n="feat3Title">3 Dilde Kesintisiz Deneyim</h3>
+      <p data-i18n="feat3Desc">Türkçe, İngilizce ve Rusça arasında tek tıkla geç, hangi dilde rahatsan o dilde fal baktır.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><svg class="icon-svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><circle cx="14" cy="17" r="1.9"/><circle cx="26" cy="17" r="1.9"/><path d="M12,24 Q20,30.5 28,24"/></svg></div>
+      <h3 data-i18n="feat4Title">Sıkıcı Değil, Esprili</h3>
+      <p data-i18n="feat4Desc">Klasik kehanet dilinden sıkıldıysan doğru yerdesin, her burç için özgün ve gülümseten yorumlar burada.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="tarot">
+  <h2 class="section-title" data-i18n="tarotTitle">Kartlarını Çek</h2>
+  <p class="section-text" data-i18n="tarotText">Zihnini boşalt, aklındaki soruyu düşün ve üç kartlık açılımını gör: geçmişin, şimdin ve geleceğin.</p>
+  <div class="tarot-controls">
+    <button class="btn-primary" id="drawBtn" onclick="drawSpread()" data-i18n="drawBtn">Kartları Çek</button>
+  </div>
+  <div class="tarot-spread" id="tarotSpread"></div>
+  <div class="combo-reading" id="comboReading" style="display:none;">
+    <div class="combo-title" data-i18n="comboTitle">Kartlarının Birleşik Yorumu</div>
+    <p class="combo-text" id="comboText"></p>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="starmap">
+  <h2 class="section-title" data-i18n="starmapTitle">Bugünün Yıldız Haritası</h2>
+  <p class="section-text" data-i18n="starmapText">Evrenin gerçek görüntüleri eşliğinde, bu gecenin enerjisini keşfet.</p>
+  <div class="starmap-card">
+    <div class="starmap-photo-wrap">
+      <img class="starmap-photo" id="starmapPhoto" src="" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://www.publicdomainpictures.net/pictures/190000/velka/milky-way.jpg';">
+      <div class="starmap-credit" id="starmapCredit"></div>
+    </div>
+    <div class="starmap-info">
+      <div class="starmap-stats">
+        <div class="today-item">
+          <span class="ti-icon"><svg class="icon-svg" width="22" height="22" viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="24" rx="2.5"/><line x1="6" y1="17" x2="34" y2="17"/><line x1="13" y1="5" x2="13" y2="13"/><line x1="27" y1="5" x2="27" y2="13"/></svg></span>
+          <div class="ti-text"><span class="ti-label" data-i18n="todayLabel">Bugün</span><strong id="starmapDateText"></strong></div>
+        </div>
+        <div class="today-item">
+          <span class="ti-icon" id="starmapSignIcon"></span>
+          <div class="ti-text"><span class="ti-label" data-i18n="nowLabel">Şu An</span><strong id="starmapSignText"></strong></div>
+        </div>
+        <div class="today-item">
+          <span class="ti-icon" id="starmapMoonIcon"></span>
+          <div class="ti-text"><span class="ti-label" data-i18n="moonLabel">Ay Evresi</span><strong id="starmapMoonText"></strong></div>
+        </div>
+      </div>
+      <p class="starmap-commentary" id="starmapCommentary"></p>
+    </div>
+  </div>
+  <div class="starmap-poster">
+    <div class="poster-eyebrow" data-i18n="posterLabel">Gökyüzü Haritası</div>
+    <div id="posterSvgContainer"></div>
+    <div class="poster-caption">
+      <div class="pc-name" id="posterSignName"></div>
+      <div class="pc-sub" id="posterSubText"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="horoscope">
+  <h2 class="section-title" data-i18n="horoTitle">Bugünün Burç Yorumları</h2>
+  <p class="section-text" data-i18n="horoText">Burcunu seç, evrenin bugün senin için ne hazırladığına bak.</p>
+  <div class="wheel-wrap">
+    <div class="zodiac-wheel" id="zodiacWheel">
+      <div class="orbit" style="--r:calc(var(--radius) * 0.5); animation-duration:18s;"><div class="orbit-dot"></div></div>
+      <div class="orbit" style="--r:calc(var(--radius) * 0.72); animation-duration:26s; animation-direction:reverse;"><div class="orbit-dot" style="background:var(--rose);box-shadow:0 0 10px 2px rgba(201,107,138,0.7);"></div></div>
+      <div class="orbit" style="--r:calc(var(--radius) * 0.92); animation-duration:34s;"><div class="orbit-dot" style="background:var(--jade);box-shadow:0 0 10px 2px rgba(95,168,138,0.7);"></div></div>
+      <div class="wheel-center">
+        <div class="wc-emoji" id="wheelCenterEmoji"></div>
+        <div class="wc-date" id="wheelCenterDate"></div>
+      </div>
+    </div>
+  </div>
+  <div class="hpanel" id="horoPanel">
+    <p class="hpanel-empty" data-i18n="selectPrompt">Yukarıdan burcunu seç</p>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<!-- ML DERİN ASTROLOJİ BÖLÜMÜ -->
+<section id="deepreading">
+  <span class="section-eyebrow" data-i18n="deepEyebrow">ML Astroloji Motoru</span>
+  <h2 class="section-title" data-i18n="deepTitle">Derin Astroloji &amp; Doğum Haritası</h2>
+  <p class="section-text" data-i18n="deepText">Doğum tarihinle astrolojik DNA'nı çöz.</p>
+
+  <!-- GiRiŞ FORMU -->
+  <div class="deep-form-card" id="deepFormCard">
+    <div class="deep-form-grid">
+      <div class="deep-field">
+        <label class="deep-label" for="deepBirthDate" data-i18n="deepBirthLabel">Doğum Tarihin</label>
+        <input type="date" id="deepBirthDate" class="deep-input"
+               min="1920-01-01" max="2015-12-31">
+      </div>
+      <div class="deep-field">
+        <label class="deep-label" for="deepBirthHour" data-i18n="deepHourLabel">Doğum Saatin (opsiyonel)</label>
+        <input type="time" id="deepBirthHour" class="deep-input" data-i18n-ph="deepHourPh" placeholder="ör. 14:30">
+      </div>
+    </div>
+    <button class="btn-primary deep-calc-btn" id="deepCalcBtn" onclick="runDeepReading()" data-i18n="deepCalcBtn">✦ Kozmik DNA'mı Çöz</button>
+    <p class="deep-error" id="deepError" style="display:none;"></p>
+  </div>
+
+  <!-- SONUÇ PANELİ -->
+  <div class="deep-result" id="deepResult" style="display:none;">
+
+    <!-- NATAL ÜÇ SÜTUN -->
+    <div class="deep-natal-row">
+      <div class="deep-natal-pill" id="dnSun">
+        <div class="dnp-icon">☉</div>
+        <div class="dnp-label" data-i18n="deepSunLabel">Güneş Burcu</div>
+        <div class="dnp-val" id="dnSunVal"></div>
+      </div>
+      <div class="deep-natal-pill" id="dnMoon">
+        <div class="dnp-icon">☽</div>
+        <div class="dnp-label" data-i18n="deepMoonLabel">Ay Burcu</div>
+        <div class="dnp-val" id="dnMoonVal"></div>
+      </div>
+      <div class="deep-natal-pill" id="dnAsc">
+        <div class="dnp-icon">↑</div>
+        <div class="dnp-label" data-i18n="deepAscLabel">Yükselen Burç</div>
+        <div class="dnp-val" id="dnAscVal"></div>
+      </div>
+    </div>
+
+    <!-- KİŞİLİK RADARI + KOZMIK DURUM -->
+    <div class="deep-mid-grid">
+
+      <!-- Radar Chart -->
+      <div class="deep-radar-card">
+        <div class="deep-card-title" data-i18n="deepProfileTitle">Kişilik Profil Radarı</div>
+        <div class="deep-radar-wrap">
+          <svg id="deepRadarSvg" viewBox="0 0 260 260" class="deep-radar-svg"></svg>
+          <div class="deep-radar-labels" id="deepRadarLabels"></div>
+        </div>
+      </div>
+
+      <!-- Kozmik Anlık Durum -->
+      <div class="deep-stats-card">
+        <div class="deep-card-title" data-i18n="deepStatsTitle">Kozmik Anlık Durum</div>
+        <div class="deep-stat-item">
+          <span class="dsi-icon">♈</span>
+          <div class="dsi-body">
+            <span class="dsi-label" data-i18n="deepPlanetHourLabel">Şu Anki Gezegen Saati</span>
+            <span class="dsi-val" id="deepPlanetHour"></span>
+          </div>
+        </div>
+        <div class="deep-stat-item">
+          <span class="dsi-icon">🌙</span>
+          <div class="dsi-body">
+            <span class="dsi-label" data-i18n="deepMoonPhaseLabel">Ay Fazı</span>
+            <span class="dsi-val" id="deepMoonPhase"></span>
+          </div>
+        </div>
+        <div class="deep-stat-item">
+          <span class="dsi-icon">↺</span>
+          <div class="dsi-body">
+            <span class="dsi-label" data-i18n="deepRetrogradLabel">Retrograd Durumu</span>
+            <span class="dsi-val" id="deepRetrograd"></span>
+          </div>
+        </div>
+        <div class="deep-energy-ring">
+          <svg viewBox="0 0 120 120" class="deep-energy-svg">
+            <circle cx="60" cy="60" r="52" class="energy-ring-bg"/>
+            <circle cx="60" cy="60" r="52" class="energy-ring-fg" id="deepEnergyRingFg"
+                    stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+          </svg>
+          <div class="deep-energy-val">
+            <span id="deepEnergyPct">0</span><span>%</span>
+            <div class="deep-energy-lbl" data-i18n="deepEnergyScore">Genel Enerji</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DERIN YORUMLAR -->
+    <div class="deep-readings">
+      <div class="deep-card-title" data-i18n="deepReadingTitle">ML ile Üretilmiş Günlük Derin Yorum</div>
+      <div class="deep-cats" id="deepCats"></div>
+    </div>
+
+    <!-- ŞANSLI VE RENK -->
+    <div class="deep-lucky-row">
+      <div class="deep-lucky-item">
+        <div class="dli-icon">🔢</div>
+        <div class="dli-label" data-i18n="deepLuckyNum">Bugünkü Şanslı Sayı</div>
+        <div class="dli-val" id="deepLuckyNum"></div>
+      </div>
+      <div class="deep-lucky-item">
+        <div class="dli-icon" id="deepColorDot">●</div>
+        <div class="dli-label" data-i18n="deepLuckyColor">Bugünkü Şanslı Renk</div>
+        <div class="dli-val" id="deepLuckyColor"></div>
+      </div>
+    </div>
+
+    <!-- RETROGRAD UYARISI -->
+    <div class="deep-retrograd-warn" id="deepRetrogradWarn" style="display:none;"></div>
+
+    <!-- 12 AYLIK ENERJi TIMELINE -->
+    <div class="deep-timeline-card">
+      <div class="deep-card-title" data-i18n="deepTimelineTitle">12 Aylık Enerji Tahmini</div>
+      <div class="deep-timeline-legend" id="deepTimelineLegend"></div>
+      <div class="deep-timeline" id="deepTimeline"></div>
+    </div>
+
+    <!-- GÜÇLÜ YÖNLER & ZORLUKLAR -->
+    <div class="deep-insight-row">
+      <div class="deep-insight-item strength">
+        <div class="dii-icon">★</div>
+        <div class="dii-label" data-i18n="deepStrengthLabel">Doğal Güçün</div>
+        <div class="dii-val" id="deepStrength"></div>
+      </div>
+      <div class="deep-insight-item challenge">
+        <div class="dii-icon">➤</div>
+        <div class="dii-label" data-i18n="deepChallengeLabel">Geliştirme Alanın</div>
+        <div class="dii-val" id="deepChallenge"></div>
+      </div>
+    </div>
+
+    <!-- ML BADGE -->
+    <div class="deep-ml-badge">
+      <span class="deep-ml-icon">✨</span>
+      <span class="deep-ml-tag" data-i18n="deepMlBadge">ML Motoru</span>
+      <span class="deep-ml-note" data-i18n="deepMlNote">Bu yorum algoritma tarafından üretilmiştir.</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="compat">
+  <h2 class="section-title" data-i18n="compatTitle">Burç Uyumu</h2>
+  <p class="section-text" data-i18n="compatText">İki burcu seç, evrenin aranızdaki bağ hakkında ne söylediğine bak.</p>
+  <div class="compat-box">
+    <div class="compat-selectors">
+      <div class="compat-select-wrap">
+        <label data-i18n="compatLabel1">1. Burç</label>
+        <select id="compatSign1" class="compat-select"></select>
+      </div>
+      <div class="compat-glyph-mid">✦</div>
+      <div class="compat-select-wrap">
+        <label data-i18n="compatLabel2">2. Burç</label>
+        <select id="compatSign2" class="compat-select"></select>
+      </div>
+    </div>
+    <div class="compat-btn-wrap">
+      <button class="btn-primary" id="compatBtn" onclick="checkCompatibility()" data-i18n="compatBtn">Uyumu Gör</button>
+    </div>
+    <div class="compat-result" id="compatResult" style="display:none;"></div>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<!-- 5. KOLEKTİF YILDIZ GALAKSİSİ & DİLEK FENERİ -->
+<section id="wishfield">
+  <span class="section-eyebrow" data-i18n="wishEyebrow">Kolektif Gökyüzü</span>
+  <h2 class="section-title" data-i18n="wishTitle">Dilek Feneri & Yıldız Tarlası</h2>
+  <p class="section-text" data-i18n="wishText">Niyetini evrene fısılda, parlayan bir yıldıza dönüşsün. Yıldızlara dokunarak kozmik ışık ve sevgi gönder.</p>
+
+  <div class="wishfield-wrap">
+    <canvas id="wishStarfield"></canvas>
+    <div class="wish-composer">
+      <div class="wish-input-row">
+        <select id="wishCategory" class="wish-select">
+          <option value="love" data-i18n="wishCatLove">💖 Aşk & Ruh İkizi</option>
+          <option value="peace" data-i18n="wishCatPeace">🕊️ Huzur & Dinginlik</option>
+          <option value="wealth" data-i18n="wishCatWealth">✨ Bereket & Bolluk</option>
+          <option value="health" data-i18n="wishCatHealth">🌿 Sağlık & Şifa</option>
+          <option value="future" data-i18n="wishCatFuture">🚀 Gelecek & Başarı</option>
+        </select>
+        <input type="text" id="wishInput" class="wish-input" maxlength="120" data-i18n-ph="wishInputPh" placeholder="Evrene niyetini fısılda...">
+        <button class="btn-primary" onclick="submitWish()" data-i18n="wishSendBtn">Dileği Göğe Fırlat</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="wall">
+  <span class="section-eyebrow" data-i18n="wallEyebrow">Herkese Açık</span>
+  <h2 class="section-title" data-i18n="wallTitle">Topluluk Duvarı</h2>
+  <p class="section-text" data-i18n="wallText">Bugün enerjini seç, birkaç kelimeyle paylaş; aynı gökyüzünün altındaki herkes görsün.</p>
+  <div class="wall-wrap">
+    <div class="wall-composer">
+      <!-- Giriş yapmamış kullanıcı için kilit ekranı -->
+      <div class="wall-auth-gate" id="wallAuthGate">
+        <div class="wall-auth-gate-icon">✦</div>
+        <h3 class="wall-auth-gate-title" data-i18n="wallGateTitle">Topluluk Duvarına Katıl</h3>
+        <p class="wall-auth-gate-text" data-i18n="wallGateText">Duvarda fısıltı paylaşmak ve topluluk enerjisine katılmak için lütfen giriş yapın veya ücretsiz hesap oluşturun.</p>
+        <button class="btn-primary" onclick="openAuthModal('signup')" data-i18n="wallGateBtn">Giriş Yap / Kayıt Ol</button>
+      </div>
+
+      <!-- Giriş yapmış kullanıcı için paylaşım kutusu (takma ad inputu YOK) -->
+      <div class="wall-composer-inner" id="wallComposerInner" style="display:none;">
+        <div class="wall-user-badge">
+          <div class="wall-user-avatar" id="wallUserAvatar">✦</div>
+          <span class="wall-user-name" id="wallAuthorDisplay">Gezgin</span>
+          <span class="wall-user-tag" data-i18n="wallAuthorTag">Kozmik Gezgin</span>
+        </div>
+        <textarea id="wallText" class="wall-textarea" maxlength="280" data-i18n-ph="wallMessagePh" placeholder="Bugün evren sana ne fısıldıyor?" oninput="updateWallCharCount()"></textarea>
+        <div class="wall-mood-row" id="wallMoodRow"></div>
+        <div class="wall-composer-foot">
+          <span class="wall-char-count" id="wallCharCount">0 / 280</span>
+          <button class="btn-primary" id="wallSubmitBtn" onclick="submitWallPost()" data-i18n="wallSubmitBtn">Paylaş</button>
+        </div>
+        <p class="wall-composer-note" id="wallComposerNote" data-i18n="wallLocalNote">Bu site için henüz Firebase yapılandırılmadı, mesajlar şimdilik yalnızca bu tarayıcıda saklanıyor.</p>
+      </div>
+    </div>
+    <div class="wall-refresh-row">
+      <button class="wall-refresh-btn" onclick="loadWallPosts(true)">
+        <svg class="icon-svg" viewBox="0 0 40 40"><path d="M32,20 A12,12 0 1 1 28,11.5"/><path d="M32,7 L32,15 L24,15"/></svg>
+        <span data-i18n="wallRefreshBtn">Duvarı Yenile</span>
+      </button>
+    </div>
+    <div class="wall-feed" id="wallFeed"><p class="wall-loading" data-i18n="wallLoading">Fısıltılar yükleniyor...</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-emblem-wrap">
+    <svg class="footer-logo-emblem" viewBox="0 0 40 40">
+      <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+      <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z" fill="url(#logoMoonGrad)"/>
+      <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z" fill="var(--gold-bright)"/>
+    </svg>
+    <div class="footer-brand">LUNARIS</div>
+  </div>
+  <nav class="footer-nav">
+    <a href="#tarot" data-i18n="navTarot">Tarot</a>
+    <a href="#horoscope" data-i18n="navHoro">Burçlar</a>
+    <a href="#deepreading" data-i18n="navDeep">Derin Analiz</a>
+    <a href="#compat" data-i18n="navCompat">Uyum</a>
+    <a href="araclar.html" data-i18n="navTools">Araçlar</a>
+    <a href="blog.html" data-i18n="navBlog">Blog</a>
+    <a href="#wall" data-i18n="navWall">Topluluk</a>
+  </nav>
+  <p data-i18n="footerText">LUNARIS eğlence amaçlıdır, kararlarını yıldızlara değil kendi sezgine bırak.</p>
+  <p class="footer-credit" data-i18n="footerCredit">✨ ile hazırlandı</p>
+</footer>
+
+<button class="to-top-btn" id="toTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Yukarı çık">
+  <svg class="icon-svg" viewBox="0 0 40 40"><line x1="20" y1="30" x2="20" y2="10"/><path d="M11,19 L20,10 L29,19"/></svg>
+</button>
+
+
+<script src="main.js"></script>
+<script src="lunaris-ml.js"></script>
+<script>
+/* ==========================================================
+   LUNARIS — index.html page logic
+   Tarot draw, daily horoscope, star map, sign compatibility and
+   the community wall. Requires main.js to be loaded first (i18n,
+   icons, nav, account/auth UI).
+   ========================================================== */
+
+const ZODIAC = [
+  {key:"aries", glyph:"♈", range:[[3,21],[4,19]], name:{tr:"Koç",en:"Aries",ru:"Овен"}, dates:{tr:"21 Mart – 19 Nisan",en:"Mar 21 – Apr 19",ru:"21 марта – 19 апреля"}, element:{tr:"Ateş",en:"Fire",ru:"Огонь"}, planet:{tr:"Mars",en:"Mars",ru:"Марс"}},
+  {key:"taurus", glyph:"♉", range:[[4,20],[5,20]], name:{tr:"Boğa",en:"Taurus",ru:"Телец"}, dates:{tr:"20 Nisan – 20 Mayıs",en:"Apr 20 – May 20",ru:"20 апреля – 20 мая"}, element:{tr:"Toprak",en:"Earth",ru:"Земля"}, planet:{tr:"Venüs",en:"Venus",ru:"Венера"}},
+  {key:"gemini", glyph:"♊", range:[[5,21],[6,20]], name:{tr:"İkizler",en:"Gemini",ru:"Близнецы"}, dates:{tr:"21 Mayıs – 20 Haziran",en:"May 21 – Jun 20",ru:"21 мая – 20 июня"}, element:{tr:"Hava",en:"Air",ru:"Воздух"}, planet:{tr:"Merkür",en:"Mercury",ru:"Меркурий"}},
+  {key:"cancer", glyph:"♋", range:[[6,21],[7,22]], name:{tr:"Yengeç",en:"Cancer",ru:"Рак"}, dates:{tr:"21 Haziran – 22 Temmuz",en:"Jun 21 – Jul 22",ru:"21 июня – 22 июля"}, element:{tr:"Su",en:"Water",ru:"Вода"}, planet:{tr:"Ay",en:"Moon",ru:"Луна"}},
+  {key:"leo", glyph:"♌", range:[[7,23],[8,22]], name:{tr:"Aslan",en:"Leo",ru:"Лев"}, dates:{tr:"23 Temmuz – 22 Ağustos",en:"Jul 23 – Aug 22",ru:"23 июля – 22 августа"}, element:{tr:"Ateş",en:"Fire",ru:"Огонь"}, planet:{tr:"Güneş",en:"Sun",ru:"Солнце"}},
+  {key:"virgo", glyph:"♍", range:[[8,23],[9,22]], name:{tr:"Başak",en:"Virgo",ru:"Дева"}, dates:{tr:"23 Ağustos – 22 Eylül",en:"Aug 23 – Sep 22",ru:"23 августа – 22 сентября"}, element:{tr:"Toprak",en:"Earth",ru:"Земля"}, planet:{tr:"Merkür",en:"Mercury",ru:"Меркурий"}},
+  {key:"libra", glyph:"♎", range:[[9,23],[10,22]], name:{tr:"Terazi",en:"Libra",ru:"Весы"}, dates:{tr:"23 Eylül – 22 Ekim",en:"Sep 23 – Oct 22",ru:"23 сентября – 22 октября"}, element:{tr:"Hava",en:"Air",ru:"Воздух"}, planet:{tr:"Venüs",en:"Venus",ru:"Венера"}},
+  {key:"scorpio", glyph:"♏", range:[[10,23],[11,21]], name:{tr:"Akrep",en:"Scorpio",ru:"Скорпион"}, dates:{tr:"23 Ekim – 21 Kasım",en:"Oct 23 – Nov 21",ru:"23 октября – 21 ноября"}, element:{tr:"Su",en:"Water",ru:"Вода"}, planet:{tr:"Plüton",en:"Pluto",ru:"Плутон"}},
+  {key:"sagittarius", glyph:"♐", range:[[11,22],[12,21]], name:{tr:"Yay",en:"Sagittarius",ru:"Стрелец"}, dates:{tr:"22 Kasım – 21 Aralık",en:"Nov 22 – Dec 21",ru:"22 ноября – 21 декабря"}, element:{tr:"Ateş",en:"Fire",ru:"Огонь"}, planet:{tr:"Jüpiter",en:"Jupiter",ru:"Юпитер"}},
+  {key:"capricorn", glyph:"♑", range:[[12,22],[1,19]], name:{tr:"Oğlak",en:"Capricorn",ru:"Козерог"}, dates:{tr:"22 Aralık – 19 Ocak",en:"Dec 22 – Jan 19",ru:"22 декабря – 19 января"}, element:{tr:"Toprak",en:"Earth",ru:"Земля"}, planet:{tr:"Satürn",en:"Saturn",ru:"Сатурн"}},
+  {key:"aquarius", glyph:"♒", range:[[1,20],[2,18]], name:{tr:"Kova",en:"Aquarius",ru:"Водолей"}, dates:{tr:"20 Ocak – 18 Şubat",en:"Jan 20 – Feb 18",ru:"20 января – 18 февраля"}, element:{tr:"Hava",en:"Air",ru:"Воздух"}, planet:{tr:"Uranüs",en:"Uranus",ru:"Уран"}},
+  {key:"pisces", glyph:"♓", range:[[2,19],[3,20]], name:{tr:"Balık",en:"Pisces",ru:"Рыбы"}, dates:{tr:"19 Şubat – 20 Mart",en:"Feb 19 – Mar 20",ru:"19 февраля – 20 марта"}, element:{tr:"Su",en:"Water",ru:"Вода"}, planet:{tr:"Neptün",en:"Neptune",ru:"Нептун"}}
+];
+
+const CATS = ["love","luck","daily","money"];
+
+const CAT_META = {
+  love: {label:{tr:"Aşk",en:"Love",ru:"Любовь"}},
+  luck: {label:{tr:"Şans",en:"Luck",ru:"Удача"}},
+  daily: {label:{tr:"Günlük Hayat",en:"Daily Life",ru:"Будни"}},
+  money: {label:{tr:"Para",en:"Money",ru:"Деньги"}}
+};
+
+const LUCKY_COLORS = [
+  {tr:"Altın Sarısı", en:"Gold", ru:"Золотой"},
+  {tr:"Ametist Moru", en:"Amethyst Purple", ru:"Аметистовый"},
+  {tr:"Zümrüt Yeşili", en:"Emerald Green", ru:"Изумрудный"},
+  {tr:"Gece Mavisi", en:"Midnight Blue", ru:"Тёмно-синий"},
+  {tr:"Ateş Kırmızısı", en:"Fire Red", ru:"Огненно-красный"},
+  {tr:"Gümüş", en:"Silver", ru:"Серебристый"},
+  {tr:"Turkuaz", en:"Turquoise", ru:"Бирюзовый"},
+  {tr:"Pudra Pembe", en:"Blush Pink", ru:"Пудрово-розовый"}
+];
+
+const MOON_PHASES = [
+  {emoji:"🌑", name:{tr:"Yeni Ay",en:"New Moon",ru:"Новолуние"}},
+  {emoji:"🌒", name:{tr:"Büyüyen Hilal",en:"Waxing Crescent",ru:"Растущий серп"}},
+  {emoji:"🌓", name:{tr:"İlk Dördün",en:"First Quarter",ru:"Первая четверть"}},
+  {emoji:"🌔", name:{tr:"Büyüyen Ay",en:"Waxing Gibbous",ru:"Растущая Луна"}},
+  {emoji:"🌕", name:{tr:"Dolunay",en:"Full Moon",ru:"Полнолуние"}},
+  {emoji:"🌖", name:{tr:"Küçülen Ay",en:"Waning Gibbous",ru:"Убывающая Луна"}},
+  {emoji:"🌗", name:{tr:"Son Dördün",en:"Last Quarter",ru:"Последняя четверть"}},
+  {emoji:"🌘", name:{tr:"Küçülen Hilal",en:"Waning Crescent",ru:"Убывающий серп"}}
+];
+
+const STAR_PHOTOS = [
+  {url:"https://www.publicdomainpictures.net/pictures/190000/velka/milky-way.jpg", credit:"Jean Beaufort · CC0", alt:{tr:"Samanyolu Galaksisi",en:"The Milky Way Galaxy",ru:"Галактика Млечный Путь"}},
+  {url:"https://www.publicdomainpictures.net/pictures/220000/velka/orion-nebula.jpg", credit:"Jean Beaufort · CC0", alt:{tr:"Orion Bulutsusu",en:"The Orion Nebula",ru:"Туманность Ориона"}},
+  {url:"https://www.publicdomainpictures.net/pictures/330000/velka/milky-way-constellation.jpg", credit:"Nicole Avagliano · CC0", alt:{tr:"Yıldızlarla dolu gece göğü",en:"A sky full of stars",ru:"Небо, полное звёзд"}},
+  {url:"https://www.publicdomainpictures.net/pictures/540000/velka/night-sky-from-desert-1696090637v7E.jpg", credit:"Circe Denyer · CC0", alt:{tr:"Çölden gece göğü manzarası",en:"Night sky from the desert",ru:"Ночное небо из пустыни"}},
+  {url:"https://www.publicdomainpictures.net/pictures/160000/velka/the-center-of-the-milky-way-galaxy.jpg", credit:"NASA / Hubble · CC0", alt:{tr:"Samanyolu'nun merkezi (Hubble)",en:"The center of the Milky Way (Hubble)",ru:"Центр Млечного Пути (Хаббл)"}},
+  {url:"https://www.publicdomainpictures.net/pictures/160000/velka/pink-star-roses-of-the-galaxies.jpg", credit:"NASA / Hubble · CC0", alt:{tr:"Galaksi merkezinde yıldız kümeleri (Hubble)",en:"Star clusters at the galactic center (Hubble)",ru:"Звёздные скопления в центре галактики (Хаббл)"}}
+];
+
+const SEASON_COMMENTARY = {
+  aries: {
+    tr:["Koç mevsimi başladı, kolektif enerji atılganlaşıyor ve yeni başlangıçlar cesaret kazanıyor.","Bu dönemde herkes biraz daha hızlı hareket etme, ilk adımı atma isteği hissediyor.","Ateşin öncü enerjisi havada, bekleme yerine harekete geçme zamanı."],
+    en:["Aries season has begun, collective energy turns bold and new beginnings gain courage.","Everyone feels the pull to move a little faster and take the first step during this stretch.","Fire's pioneering energy is in the air, this is a time for action over waiting."],
+    ru:["Началась сезон Овна — коллективная энергия становится смелее, а новые начинания набирают уверенность.","В эти дни у всех появляется желание двигаться чуть быстрее и сделать первый шаг.","В воздухе витает первопроходческая энергия огня — время действовать, а не ждать."]
+  },
+  taurus: {
+    tr:["Boğa mevsimi tempoyu yavaşlatıyor, herkes biraz daha köklenmeye ve tadını çıkarmaya davet ediliyor.","Bu dönemde acele etmek yerine sağlamlaşmak öne çıkıyor, toprağın sabrı hissediliyor.","Duyusal zevkler ve konfor bu mevsimde kolektif olarak daha çok değer görüyor."],
+    en:["Taurus season slows the pace, everyone's invited to root down a little and savor things.","Steadiness takes priority over rushing during this stretch, the earth's patience is felt.","Sensory pleasures and comfort get more collective appreciation this season."],
+    ru:["Сезон Тельца замедляет темп — всех приглашают немного укорениться и получать удовольствие от простого.","В эти дни устойчивость важнее спешки, ощущается терпение земли.","Чувственные удовольствия и комфорт в этот сезон ценятся коллективно больше обычного."]
+  },
+  gemini: {
+    tr:["İkizler mevsimi merakı ve sohbeti tetikliyor, herkesin aklında birden fazla fikir dolaşıyor.","Bu dönemde mesajlar, haberler ve yeni bağlantılar her zamankinden hızlı akıyor.","Kolektif zihin bu mevsimde çok yönlü düşünmeye ve öğrenmeye eğilimli."],
+    en:["Gemini season sparks curiosity and conversation, everyone's got more than one idea circling their mind.","Messages, news and new connections flow faster than usual during this stretch.","The collective mind leans toward multi-tasking and learning this season."],
+    ru:["Сезон Близнецов пробуждает любопытство и разговоры — в голове у всех крутится не одна идея.","В эти дни сообщения, новости и новые связи текут быстрее обычного.","Коллективный разум в этот сезон склонен мыслить многогранно и учиться новому."]
+  },
+  cancer: {
+    tr:["Yengeç mevsimi eve, aileye ve duygusal derinliğe dönüşü işaret ediyor.","Bu dönemde herkes biraz daha içine dönüyor ve yakınlarına sarılma isteği duyuyor.","Ay'ın koruyucu enerjisi kolektif olarak nostalji ve şefkati güçlendiriyor."],
+    en:["Cancer season signals a turn toward home, family and emotional depth.","Everyone turns a bit more inward during this stretch, wanting to hold their loved ones close.","The Moon's protective energy strengthens collective nostalgia and tenderness."],
+    ru:["Сезон Рака указывает на возвращение к дому, семье и эмоциональной глубине.","В эти дни все немного уходят в себя, хочется быть ближе к родным.","Заботливая энергия Луны усиливает коллективную ностальгию и нежность."]
+  },
+  leo: {
+    tr:["Aslan mevsimi sahneyi aydınlatıyor, herkes biraz daha görünür ve ifade edici olmak istiyor.","Bu dönemde yaratıcılık ve kendini ifade etme isteği kolektif olarak yükseliyor.","Güneş'in sıcak enerjisi kutlama ve cömertliği ön plana çıkarıyor."],
+    en:["Leo season lights up the stage, everyone wants to be a little more seen and expressive.","Creativity and self-expression rise collectively during this stretch.","The Sun's warm energy brings celebration and generosity to the front."],
+    ru:["Сезон Льва освещает сцену — всем хочется быть чуть заметнее и выразительнее.","В эти дни коллективно растёт тяга к творчеству и самовыражению.","Тёплая энергия Солнца выводит на первый план праздник и щедрость."]
+  },
+  virgo: {
+    tr:["Başak mevsimi düzeni ve detayları ön plana çıkarıyor, herkes biraz daha titiz davranıyor.","Bu dönemde sağlık, rutin ve küçük iyileştirmeler kolektif gündemde.","Merkür'ün analitik enerjisi netlik ve pratiklik arayışını güçlendiriyor."],
+    en:["Virgo season puts order and detail front and center, everyone gets a bit more meticulous.","Health, routine and small improvements are on the collective agenda this stretch.","Mercury's analytical energy strengthens the search for clarity and practicality."],
+    ru:["Сезон Девы выводит на первый план порядок и детали — все становятся чуть внимательнее.","В эти дни в коллективной повестке здоровье, рутина и мелкие улучшения.","Аналитическая энергия Меркурия усиливает стремление к ясности и практичности."]
+  },
+  libra: {
+    tr:["Terazi mevsimi dengeyi ve ilişkileri gündeme getiriyor, herkes uyum arayışında.","Bu dönemde estetik, adalet ve ortaklık kolektif olarak daha çok önem kazanıyor.","Venüs'ün zarif enerjisi barışı ve güzelliği ön plana çıkarıyor."],
+    en:["Libra season brings balance and relationships to the table, everyone's seeking harmony.","Aesthetics, fairness and partnership matter more collectively during this stretch.","Venus's graceful energy puts peace and beauty in the spotlight."],
+    ru:["Сезон Весов выводит на первый план баланс и отношения — все ищут гармонию.","В эти дни эстетика, справедливость и партнёрство коллективно значат больше обычного.","Изящная энергия Венеры выводит на первый план мир и красоту."]
+  },
+  scorpio: {
+    tr:["Akrep mevsimi yüzeyin altındaki gerçekleri gün yüzüne çıkarıyor.","Bu dönemde herkes biraz daha yoğun hissediyor, yarım önlemler tatmin etmiyor.","Plüton'un dönüştürücü enerjisi kolektif olarak derin değişimleri tetikliyor."],
+    en:["Scorpio season brings what's beneath the surface up into the light.","Everyone feels a bit more intense during this stretch, half-measures stop satisfying.","Pluto's transformative energy triggers deep collective change."],
+    ru:["Сезон Скорпиона выводит на свет то, что скрыто под поверхностью.","В эти дни все чувствуют себя чуть напряжённее, половинчатые меры больше не устраивают.","Преобразующая энергия Плутона запускает глубокие коллективные перемены."]
+  },
+  sagittarius: {
+    tr:["Yay mevsimi ufukları genişletiyor, herkes biraz daha maceraperest hissediyor.","Bu dönemde seyahat, felsefe ve iyimserlik kolektif olarak yükselişte.","Jüpiter'in bereketli enerjisi büyük resmi görme isteğini güçlendiriyor."],
+    en:["Sagittarius season widens the horizon, everyone feels a bit more adventurous.","Travel, philosophy and optimism are on the rise collectively this stretch.","Jupiter's generous energy strengthens the urge to see the bigger picture."],
+    ru:["Сезон Стрельца расширяет горизонты — все чувствуют себя чуть смелее и авантюрнее.","В эти дни коллективно растёт тяга к путешествиям, философии и оптимизму.","Щедрая энергия Юпитера усиливает желание увидеть картину целиком."]
+  },
+  capricorn: {
+    tr:["Oğlak mevsimi disiplini ve uzun vadeli hedefleri gündeme taşıyor.","Bu dönemde herkes biraz daha ciddileşiyor, sorumluluk almak öne çıkıyor.","Satürn'ün yapılandırıcı enerjisi azim ve sabrı kolektif olarak güçlendiriyor."],
+    en:["Capricorn season brings discipline and long-term goals to the forefront.","Everyone gets a bit more serious during this stretch, responsibility takes priority.","Saturn's structuring energy strengthens collective perseverance and patience."],
+    ru:["Сезон Козерога выводит на первый план дисциплину и долгосрочные цели.","В эти дни все становятся немного серьёзнее, на первый план выходит ответственность.","Структурирующая энергия Сатурна коллективно усиливает упорство и терпение."]
+  },
+  aquarius: {
+    tr:["Kova mevsimi sıra dışı fikirleri ve toplulukları ön plana çıkarıyor.","Bu dönemde herkes biraz daha bağımsız düşünüyor, kalıpların dışına çıkma isteği artıyor.","Uranüs'ün yenilikçi enerjisi kolektif hayal gücünü ve dayanışmayı güçlendiriyor."],
+    en:["Aquarius season puts unconventional ideas and communities in the spotlight.","Everyone thinks a bit more independently during this stretch, the urge to break the mold rises.","Uranus's innovative energy strengthens collective imagination and solidarity."],
+    ru:["Сезон Водолея выводит на первый план нестандартные идеи и сообщества.","В эти дни все мыслят немного независимее, растёт желание выйти за рамки привычного.","Новаторская энергия Урана усиливает коллективное воображение и солидарность."]
+  },
+  pisces: {
+    tr:["Balık mevsimi sınırları yumuşatıyor, herkes biraz daha sezgisel ve hayalperest hissediyor.","Bu dönemde sanat, rüyalar ve şefkat kolektif olarak daha çok değer görüyor.","Neptün'ün mistik enerjisi kolektif empatiyi ve maneviyatı güçlendiriyor."],
+    en:["Pisces season softens the edges, everyone feels a bit more intuitive and dreamy.","Art, dreams and compassion get more collective appreciation this stretch.","Neptune's mystical energy strengthens collective empathy and spirituality."],
+    ru:["Сезон Рыб смягчает границы — все чувствуют себя немного интуитивнее и мечтательнее.","В эти дни искусство, сны и сострадание коллективно ценятся больше обычного.","Мистическая энергия Нептуна усиливает коллективную эмпатию и духовность."]
+  }
+};
+
+const ELEMENT_KEY = { aries:"fire", taurus:"earth", gemini:"air", cancer:"water", leo:"fire", virgo:"earth", libra:"air", scorpio:"water", sagittarius:"fire", capricorn:"earth", aquarius:"air", pisces:"water" };
+
+const MODALITY_KEY = { aries:"cardinal", taurus:"fixed", gemini:"mutable", cancer:"cardinal", leo:"fixed", virgo:"mutable", libra:"cardinal", scorpio:"fixed", sagittarius:"mutable", capricorn:"cardinal", aquarius:"fixed", pisces:"mutable" };
+
+const ELEMENT_COMPAT = {
+  "fire-fire": { score:76, tr:["İki ateş burcu bir araya gelince ortalık kıvılcım saçıyor; tutku ve enerji bol ama ikiniz de dizginleri elden bırakmak istemiyor olabilirsiniz.","Heyecan hiç eksik olmuyor aranızda, ama aynı anda iki lider olmaya çalışmak sürtüşme yaratabilir.","Birbirinizin cesaretinden besleniyorsunuz; asıl mesele kimin ne zaman geri adım atacağını öğrenmek."], en:["Two fire signs together throw off sparks; passion and energy are never in short supply, though you may both be reluctant to hand over the reins.","Excitement is never missing between you, but two people trying to lead at once can create friction.","You feed off each other's courage; the real work is learning when to take turns leading."], ru:["Два огненных знака вместе — сплошные искры: страсти и энергии хватает, но вы оба не любите уступать бразды правления.","Скуки между вами не бывает, но когда оба хотят быть лидером одновременно, трение неизбежно.","Вы питаетесь смелостью друг друга; главное — научиться по очереди уступать первенство."] },
+  "earth-fire": { score:55, tr:["Ateş hızlı hareket etmek ister, Toprak önce düşünmek; bu fark sabırla köprüye dönüşebilir.","Biriniz alevi tutuşturuyor, diğeriniz onu kontrol altında tutmaya çalışıyor — dengeyi bulduğunuzda güçlü bir ekipsiniz.","Toprağın istikrarı Ateşi köklendirebilir, ama Ateş de Toprağı harekete geçirmeyi öğretebilir."], en:["Fire wants to move fast, Earth wants to think first; with patience that gap can become a bridge.","One of you sparks the flame, the other tries to keep it contained — find the balance and you're a strong team.","Earth's steadiness can ground Fire, and Fire can teach Earth how to take a leap."], ru:["Огонь хочет действовать быстро, Земля — сначала подумать; с терпением эта разница может стать мостом.","Один из вас разжигает пламя, другой пытается держать его под контролем — найдёте баланс, станете сильной командой.","Устойчивость Земли может укоренить Огонь, а Огонь может научить Землю решаться на прыжок."] },
+  "air-fire": { score:88, tr:["Hava, Ateşi büyütür; aranızda doğal bir uyum ve karşılıklı ilham var.","Biriniz fikir üretiyor, diğeriniz onu alevlendiriyor — birlikte gerçekten uçabilirsiniz.","Sohbetiniz hiç bitmiyor, heyecanınız birbirinizi besliyor; nadir görülen kolay bir uyum bu."], en:["Air feeds Fire; there's a natural ease and mutual inspiration between you.","One of you generates ideas, the other sets them alight — together you can really take flight.","Your conversations never run dry, your excitement feeds off each other; this is a rare, easy match."], ru:["Воздух питает Огонь — между вами естественная лёгкость и взаимное вдохновение.","Один из вас рождает идеи, другой их воспламеняет — вместе вы правда можете взлететь.","Разговоры между вами не кончаются, азарт подпитывает друг друга — редкая, лёгкая гармония."] },
+  "fire-water": { score:48, tr:["Ateş ve Su bir araya gelince ya buhar ya da sönme olur; ortası az — ama o nokta bulunursa dönüştürücü bir güç doğar.","Biriniz hislerle, diğeriniz dürtüyle hareket ediyor; birbirinizi anlamak biraz çaba ister ama karşılığı büyük.","Su, Ateşin hızını yavaşlatabilir; bu can sıkıcı gelse de aslında ikinizi de olgunlaştırıyor."], en:["Fire and Water together make either steam or steam out; there's little middle ground — but find it and it's transformative.","One of you moves on feeling, the other on instinct; understanding each other takes effort but pays off.","Water can slow Fire's pace; it may feel frustrating, but it's quietly maturing you both."], ru:["Огонь и Вода вместе создают либо пар, либо тушат друг друга — среднего мало, но если его найти, рождается настоящая трансформация.","Один из вас действует по чувству, другой по порыву; понять друг друга непросто, но результат того стоит.","Вода может замедлить темп Огня; это может раздражать, но на деле делает вас обоих зрелее."] },
+  "earth-earth": { score:68, tr:["İki Toprak burcu bir arada gerçekten sağlam bir zemin kurar; risk, birlikte fazla rahat olup hareketsiz kalmak.","Güven ve istikrar bu ikilide hiç sorun değil; asıl mesele arada bir rutini kırmayı hatırlamak.","Birbirinizin pratikliğine güveniyorsunuz; bazen biraz daha hayal kurmayı unutmayın."], en:["Two Earth signs together build genuinely solid ground; the risk is getting too comfortable and staying still.","Trust and stability are never an issue for this pair; the real task is remembering to break routine now and then.","You rely on each other's practicality; just don't forget to dream a little too."], ru:["Два земных знака вместе строят по-настоящему прочную основу; риск — стать слишком спокойными и застыть на месте.","Доверие и стабильность для этой пары не проблема; главное — не забывать иногда нарушать рутину.","Вы полагаетесь на практичность друг друга; только не забывайте иногда помечтать."] },
+  "air-earth": { score:52, tr:["Toprak somut olanı ister, Hava olasılıkları; bu farkı merak konusu yaparsanız birbirinizi zenginleştirirsiniz.","Biriniz plan yaparken diğeriniz zaten üç fikir daha üretmiş oluyor — tempo farkına sabır gerekiyor.","Hava'nın esnekliği Toprağı rahatlatabilir, Toprağın somutluğu da Hava'yı yere indirebilir."], en:["Earth wants the concrete, Air wants the possible; turn that gap into curiosity and you enrich each other.","While one of you is making a plan, the other has already dreamed up three more ideas — the pace difference takes patience.","Air's flexibility can loosen Earth up, and Earth's groundedness can bring Air back to solid footing."], ru:["Земля хочет конкретики, Воздух — возможностей; если превратить эту разницу в любопытство, вы обогатите друг друга.","Пока один строит план, другой уже придумал ещё три идеи — разница в темпе требует терпения.","Гибкость Воздуха может расслабить Землю, а приземлённость Земли — вернуть Воздух на твёрдую почву."] },
+  "earth-water": { score:85, tr:["Toprak ve Su doğal bir uyum içinde; biri besler, diğeri büyütür — klasik bir bahçe gibi.","Su'nun duygusu Toprağın pratikliğiyle buluşunca ortaya gerçekten besleyici bir bağ çıkıyor.","Birbirinizi anlamak için fazla çaba harcamıyorsunuz; bu uyum ender rastlanan bir rahatlık."], en:["Earth and Water fall into a natural harmony; one nourishes, the other helps things grow — like a well-tended garden.","When Water's feeling meets Earth's practicality, what emerges is a genuinely nurturing bond.","Understanding each other doesn't take much effort here; this ease is rare."], ru:["Земля и Вода естественно гармоничны: одна питает, другая помогает расти — как ухоженный сад.","Когда чувства Воды встречаются с практичностью Земли, рождается по-настоящему заботливая связь.","Понимать друг друга здесь не требует особых усилий; такая лёгкость встречается редко."] },
+  "air-air": { score:72, tr:["İki Hava burcu bir arada sonsuz bir sohbete dönüşür; fikirler uçuşur ama bazen duygular geride kalabilir.","Zihinsel uyumunuz çok güçlü; arada bir kalbe de kulak vermeyi unutmayın.","Birbirinizi asla sıkmıyorsunuz; asıl mesele bazen yere inip hissetmek."], en:["Two Air signs together turn into an endless conversation; ideas fly, though feelings can sometimes get left behind.","Your mental connection is strong; just remember to check in with the heart once in a while.","You never bore each other; the real task is occasionally landing and actually feeling something."], ru:["Два воздушных знака вместе превращаются в бесконечный разговор; идеи летают, а чувства иногда остаются позади.","Ваша ментальная связь очень сильна; не забывайте иногда прислушиваться и к сердцу.","Вам никогда не бывает скучно вместе; главное — иногда приземляться и по-настоящему чувствовать."] },
+  "air-water": { score:58, tr:["Hava mantıkla, Su duyguyla konuşur; aynı dili konuşmayı öğrenmek zaman alır ama imkansız değil.","Biriniz analiz ederken diğeri hissediyor; bu ikisini birleştirdiğinizde gerçekten derin bir anlayış doğabilir.","Su'nun derinliği Hava'yı bazen boğabilir; ama sabırla, birbirinizin dilini öğrenebilirsiniz."], en:["Air speaks in logic, Water speaks in feeling; learning the same language takes time but isn't impossible.","While one of you analyzes, the other feels; combine the two and real depth of understanding can emerge.","Water's depth can sometimes overwhelm Air; but with patience, you can learn each other's language."], ru:["Воздух говорит логикой, Вода — чувствами; научиться одному языку требует времени, но это возможно.","Пока один анализирует, другой чувствует; соединив это, можно получить настоящую глубину понимания.","Глубина Воды иногда может захлестнуть Воздух; но с терпением вы научитесь языку друг друга."] },
+  "water-water": { score:74, tr:["İki Su burcu birbirini kelimelere gerek kalmadan anlar; risk, aynı anda ikinizin de dalgalara kapılması.","Duygusal derinliğiniz gerçek ve nadir; sadece ikinizin de aynı anda batmadığından emin olun.","Birbirinizin sezgisine güveniyorsunuz; bu güven, doğru kullanıldığında çok güçlü bir bağ kurar."], en:["Two Water signs understand each other without needing words; the risk is both of you getting swept up by the same wave at once.","Your emotional depth together is real and rare; just make sure you're not both sinking at the same time.","You trust each other's intuition; used well, that trust builds a powerful bond."], ru:["Два водных знака понимают друг друга без слов; риск — что вас обоих накроет одной и той же волной одновременно.","Ваша эмоциональная глубина вместе редка и настоящая; только следите, чтобы не тонуть одновременно.","Вы доверяете интуиции друг друга; если использовать это правильно, связь получается очень крепкой."] }
+};
+
+function getCompatKey(sign1, sign2){
+  const e1 = ELEMENT_KEY[sign1], e2 = ELEMENT_KEY[sign2];
+  return [e1,e2].sort().join("-");
+}
+
+function getModalityModifier(sign1, sign2){
+  const m1 = MODALITY_KEY[sign1], m2 = MODALITY_KEY[sign2];
+  if (m1 === m2) { return m1 === "mutable" ? 4 : (m1 === "fixed" ? -4 : -2); }
+  if ((m1==="cardinal"&&m2==="fixed")||(m1==="fixed"&&m2==="cardinal")) return 6;
+  return 3;
+}
+
+function getCompatibility(sign1, sign2){
+  const key = getCompatKey(sign1, sign2);
+  const data = ELEMENT_COMPAT[key];
+  const modMod = getModalityModifier(sign1, sign2);
+  let score = Math.max(30, Math.min(97, data.score + modMod));
+  if (sign1 === sign2) score = Math.max(score, 80);
+  return { score: score, data: data, key: key };
+}
+
+const HORO = {
+  aries: {
+    love: {
+      tr:["Bugün flört etme cesaretin tavan yapmış durumda, ama biraz da dinlemeyi dene.","Sabırsızlığın aşk hayatına sızabilir, mesajı göndermeden önce bir nefes al.","Karşındaki kişi senin hızına yetişmeye çalışıyor, biraz yavaşlarsan ikiniz de rahatlar."],
+      en:["Your flirting confidence is through the roof today, just remember to listen too.","Your impatience might leak into your love life, take one breath before hitting send.","The person you like is trying to keep up with your pace, slow down and you'll both breathe easier."],
+      ru:["Сегодня твоя смелость флиртовать зашкаливает — но не забудь иногда слушать.","Твоё нетерпение может испортить отношения — сделай вдох перед тем, как отправить сообщение.","Тот, кто тебе нравится, пытается угнаться за твоим темпом — сбавь скорость, и вам обоим станет легче."]
+    },
+    luck: {
+      tr:["Mars bugün cesur hamlelerini destekliyor, riske girdiğin an şans da kapıyı çalıyor.","Beklenmedik bir yarışmaya ya da meydan okumaya girersen kazanan sen olabilirsin.","Aceleyle aldığın bir karar bugün seni şaşırtacak kadar iyi sonuçlanabilir."],
+      en:["Mars is backing your bold moves today, the moment you take a risk, luck knocks too.","If an unexpected contest or challenge shows up, you're the one likely to win it.","A decision you rush into today might turn out surprisingly well."],
+      ru:["Марс сегодня поддерживает твои смелые шаги — стоит рискнуть, и удача постучится в дверь.","Если внезапно появится соревнование или вызов — победителем можешь оказаться именно ты.","Решение, принятое сегодня второпях, может обернуться на удивление удачно."]
+    },
+    daily: {
+      tr:["Enerjin bugün ortalığı yakıyor, etraftakiler senin temponu yakalamaya çalışıyor.","Küçük bir tartışmaya girme isteğin var ama bugün haklı çıkmak yerine huzuru seç.","Yeni başladığın bir işe olan heyecanın bulaşıcı, etrafındakileri de harekete geçiriyor."],
+      en:["Your energy is setting the room on fire today, everyone else is just trying to keep up.","You feel like picking a small fight today, but choose peace over being right.","Your excitement for something you just started is contagious, it's pulling others into motion too."],
+      ru:["Твоя энергия сегодня зашкаливает — окружающие едва успевают за твоим темпом.","Тебе хочется поспорить по мелочи, но сегодня лучше выбрать спокойствие, а не правоту.","Твой азарт от нового начинания заразителен — он поднимает на ноги и окружающих."]
+    },
+    money: {
+      tr:["Aniden bir şey satın alma isteğin kabaracak, 24 saat kuralını uygulaman iyi olur.","Girişimci bir fikrin bugün gerçek bir fırsata dönüşebilir, cesurca ilerle.","Rekabetçi ruhun para konusunda da devreye giriyor, pazarlıkta üstün gelebilirsin."],
+      en:["The urge to buy something on impulse will spike, the 24-hour rule will save you.","An entrepreneurial idea of yours could turn into a real opportunity today, push forward boldly.","Your competitive spirit kicks in with money too, you could come out ahead in any negotiation."],
+      ru:["Желание купить что-то спонтанно резко возрастёт — правило 24 часов тебя спасёт.","Предпринимательская идея сегодня может превратиться в реальную возможность — действуй смело.","Твой дух соперничества проявится и в деньгах — в переговорах ты можешь выйти победителем."]
+    }
+  },
+  taurus: {
+    love: {
+      tr:["Bugün romantizmi lüks bir akşam yemeğiyle karıştırıyorsun, ikisi de aynı anda gelebilir.","İnatçılığın ilişkinde küçük bir gerginliğe sebep olabilir, bu sefer önce sen adım at.","Sadakatin bugün fark ediliyor, biri senin sessiz istikrarına hayran kalıyor."],
+      en:["Today you're mixing romance with a good meal, and honestly both might arrive at once.","Your stubbornness might cause a little tension in your relationship, be the one to make the first move this time.","Your loyalty is getting noticed today, someone is quietly falling for your steadiness."],
+      ru:["Сегодня романтика для тебя неотделима от хорошего ужина — возможно, получишь и то, и другое.","Твоё упрямство может слегка накалить отношения — на этот раз сделай первый шаг ты.","Твою верность сегодня замечают — кто-то тихо влюбляется в твою надёжность."]
+    },
+    luck: {
+      tr:["Venüs bugün güzellik ve konfor arayışlarını şansla ödüllendiriyor.","Sabırla beklediğin bir şey tam da bugün, hiç ummadığın anda gerçekleşebilir.","Doğayla ya da toprakla ilgili bir aktivite sana beklenmedik iyi bir haber getirebilir."],
+      en:["Venus is rewarding your search for beauty and comfort with a little luck today.","Something you've patiently waited for might finally happen today, right when you least expect it.","An activity involving nature or the outdoors could bring you unexpected good news."],
+      ru:["Венера сегодня вознаграждает удачей твоё стремление к красоте и комфорту.","То, чего ты терпеливо ждал, может случиться именно сегодня — когда меньше всего ожидаешь.","Что-то связанное с природой может принести тебе неожиданную хорошую новость."]
+    },
+    daily: {
+      tr:["Bugün hızlı değişimlere direniyorsun, ama biri planı değiştirirse esnemeyi dene.","Rahatına düşkünlüğün bugün seni kanepeden kaldırmıyor, ve bu tamamen normal.","Lezzetli bir şeyler yeme isteğin bugün seni beklenmedik bir yere yönlendirebilir."],
+      en:["You're resisting sudden changes today, but if plans shift, try to bend instead of breaking.","Your love of comfort is keeping you glued to the couch today, and that's completely fine.","Your craving for something delicious might lead you somewhere you didn't expect today."],
+      ru:["Сегодня ты сопротивляешься резким переменам, но если план изменится — попробуй прогнуться, а не сломаться.","Твоя любовь к комфорту сегодня приклеивает тебя к дивану — и это абсолютно нормально.","Желание вкусно поесть сегодня может привести тебя в неожиданное место."]
+    },
+    money: {
+      tr:["Kaliteli bir şeye yatırım yapma isteğin bugün cüzdanını zorlayabilir, ama pişman olmazsın.","İstikrarlı ve pratik yaklaşımın bugün finansal olarak sana avantaj sağlıyor.","Biriktirdiğin küçük bir miktar bugün beklediğinden daha değerli görünecek."],
+      en:["The urge to invest in something quality might strain your wallet today, but you won't regret it.","Your steady, practical approach is giving you a financial edge today.","The small amount you've been saving will look more valuable than you expected today."],
+      ru:["Желание вложиться в качественную вещь сегодня ударит по кошельку, но ты не пожалеешь.","Твой стабильный, практичный подход сегодня даёт тебе финансовое преимущество.","Небольшая сумма, которую ты откладывал, сегодня покажется ценнее, чем ты думал."]
+    }
+  },
+  gemini: {
+    love: {
+      tr:["Zekân bugün flörtte en güçlü silahın, ama tek konuya odaklanmayı da dene.","İki seçenek arasında kalan kalbin bugün bir işaret bekliyor, sabırlı ol.","Uzun bir mesajlaşma bugün beklenmedik bir yakınlaşmaya dönüşebilir."],
+      en:["Your wit is your sharpest flirting tool today, just try sticking to one topic.","Your heart torn between two options is waiting for a sign today, be patient.","A long text conversation could turn into unexpected closeness today."],
+      ru:["Твой ум сегодня — лучшее оружие флирта, но попробуй удержаться на одной теме.","Твоё сердце мечется между двумя вариантами и сегодня ждёт знака — потерпи.","Долгая переписка сегодня может перерасти в неожиданную близость."]
+    },
+    luck: {
+      tr:["Merkür bugün rastlantısal bir sohbeti değerli bir fırsata çeviriyor.","Meraklı doğan seni bugün hiç planlamadığın ama çok işine yarayan bir yere götürüyor.","İki farklı fikri birleştirdiğin an, şans da senden yana dönüyor."],
+      en:["Mercury is turning a random conversation into a valuable opportunity today.","Your curiosity leads you somewhere unplanned today that turns out to be exactly what you needed.","The moment you combine two different ideas, luck sides with you too."],
+      ru:["Меркурий сегодня превращает случайный разговор в ценную возможность.","Любопытство сегодня заведёт тебя туда, куда ты не планировал — и окажется как раз кстати.","Как только ты объединишь две разные идеи, удача окажется на твоей стороне."]
+    },
+    daily: {
+      tr:["Bugün beş farklı konuda aynı anda düşünüyorsun, birini seç ve ona sadık kal.","Sıkıldığın an her şeyi bırakma dürtün bugün güçlü, ama bitirdiğin şey seni gururlandıracak.","Sosyal çevrende bugün doğal bir haberci rolündesin, herkes senden haber bekliyor."],
+      en:["You're thinking about five different things at once today, pick one and stick with it.","Your urge to drop everything the moment you're bored is strong today, but finishing it will feel great.","You're the natural messenger of your social circle today, everyone's waiting to hear news from you."],
+      ru:["Сегодня в голове сразу пять тем — выбери одну и не отвлекайся.","Желание всё бросить, как только станет скучно, сегодня особенно сильное — но доведённое до конца дело порадует.","Сегодня ты — главный вестник в своей компании, все ждут новостей именно от тебя."]
+    },
+    money: {
+      tr:["Aynı anda iki farklı harcama planı yapıyorsun, ikisini birleştirmek daha akıllıca olur.","Küçük ama akıllıca bir fikir bugün beklenmedik bir ek gelir kapısı açabilir.","Fiyat karşılaştırmaya bugün fazla zaman harcıyorsun, bazen ilk seçenek de yeterli."],
+      en:["You're juggling two spending plans at once, combining them would be the smarter move.","A small but clever idea could open an unexpected extra income today.","You're spending too much time comparing prices today, sometimes the first option is enough."],
+      ru:["Ты крутишь в голове сразу два плана трат — умнее будет объединить их в один.","Небольшая, но умная идея сегодня может открыть неожиданный источник дохода.","Сегодня ты слишком долго сравниваешь цены — иногда достаточно и первого варианта."]
+    }
+  },
+  cancer: {
+    love: {
+      tr:["Sezgilerin bugün kalbinin sesini net duyuyor, ona güvenmekten çekinme.","Duygusal kabuğuna çekilme isteğin var ama biri seni dışarı çıkmaya değer kılabilir.","Evinde geçirdiğin sakin bir an, beklenmedik bir şekilde romantik bir sohbete dönüşüyor."],
+      en:["Your intuition is hearing your heart loud and clear today, don't be afraid to trust it.","You feel like retreating into your shell emotionally, but someone might just be worth coming out for.","A quiet moment at home turns into an unexpectedly romantic conversation today."],
+      ru:["Твоя интуиция сегодня отчётливо слышит голос сердца — не бойся довериться ей.","Тебе хочется спрятаться в свою раковину, но кое-кто может оказаться достойным того, чтобы выйти наружу.","Тихий момент дома сегодня неожиданно превращается в романтический разговор."]
+    },
+    luck: {
+      tr:["Ay bugün aile ya da yakın çevrenle ilgili güzel bir sürprizi işaret ediyor.","İçgüdülerine kulak verdiğin an, kaçırdığını sandığın bir fırsat geri dönüyor.","Eski bir anıyla bağlantılı bir şey bugün sana beklenmedik bir kapı aralıyor."],
+      en:["The Moon points to a lovely surprise involving family or close friends today.","The moment you listen to your gut, an opportunity you thought you'd missed comes back around.","Something connected to an old memory opens an unexpected door for you today."],
+      ru:["Луна сегодня указывает на приятный сюрприз, связанный с семьёй или близкими.","Как только прислушаешься к чутью, вернётся возможность, которую ты считал упущенной.","Что-то связанное со старым воспоминанием сегодня приоткрывает для тебя неожиданную дверь."]
+    },
+    daily: {
+      tr:["Ruh halin bugün gelgit gibi, sabah ve akşam çok farklı hissedebilirsin.","Birini koruma içgüdün bugün fazla devreye girebilir, herkes senin yardımına ihtiyaç duymuyor.","Evini düzenleme ya da güzelleştirme isteğin bugün seni gerçekten mutlu ediyor."],
+      en:["Your mood is tidal today, morning and evening might feel completely different.","Your protective instinct might kick in too much today, not everyone needs your rescue.","The urge to tidy or beautify your home genuinely makes you happy today."],
+      ru:["Настроение сегодня как прилив — утром и вечером можешь чувствовать себя совсем по-разному.","Твой защитный инстинкт сегодня может сработать слишком сильно — не всем нужна твоя помощь.","Желание навести уют дома сегодня приносит тебе настоящую радость."]
+    },
+    money: {
+      tr:["Güvenlik hissi para konusunda bugün önceliğin, riskli bir teklife hayır demen normal.","Aileyle ilgili bir harcama bugün beklediğinden az tutabilir, iç rahatlığı hissediyorsun.","Eve dair küçük bir yatırım uzun vadede sandığından çok daha değerli çıkabilir."],
+      en:["A sense of security is your priority with money today, it's fine to say no to a risky offer.","A family-related expense might cost less than expected today, giving you real peace of mind.","A small investment in your home could turn out far more valuable long-term than you think."],
+      ru:["Сегодня в деньгах для тебя важнее всего чувство защищённости — нормально отказаться от рискованного предложения.","Расходы, связанные с семьёй, сегодня могут оказаться меньше, чем ты думал — это принесёт спокойствие.","Небольшое вложение в дом в перспективе может оказаться куда ценнее, чем кажется."]
+    }
+  },
+  leo: {
+    love: {
+      tr:["Bugün sahneye çıkma vaktın, ışıltın karşındakini fazlasıyla etkiliyor.","Övgü bekleme isteğin bugün ilişkinde küçük bir hayal kırıklığına yol açabilir, sen de takdir etmeyi dene.","Cömertliğin bugün sözlerle değil küçük bir jestle daha çok konuşuyor."],
+      en:["Today's your moment to shine, your sparkle is making quite the impression.","Your need for praise might lead to a small letdown today, try giving some appreciation too.","Your generosity speaks louder through a small gesture today than through words."],
+      ru:["Сегодня твой выход на сцену — твоё сияние производит сильное впечатление.","Желание похвалы сегодня может немного разочаровать — попробуй сам похвалить кого-то в ответ.","Сегодня твоя щедрость говорит громче через маленький жест, чем через слова."]
+    },
+    luck: {
+      tr:["Güneş bugün senin cesaretini ödüllendiriyor, gösteriş yapmaktan çekinme.","Kalabalık önünde yaptığın bir şey beklenmedik bir takdir kazanabilir.","Cömertçe verdiğin bir şey, katbekat büyüyerek sana geri dönüyor."],
+      en:["The Sun is rewarding your boldness today, don't be shy about showing off a little.","Something you do in front of a crowd could earn unexpected recognition.","Something you give generously comes back to you multiplied."],
+      ru:["Солнце сегодня вознаграждает твою смелость — не стесняйся немного покрасоваться.","То, что ты сделаешь на публике, может неожиданно принести признание.","То, что ты щедро отдашь, вернётся к тебе в многократном размере."]
+    },
+    daily: {
+      tr:["Bugün dikkat merkezi olmak istemesen de olmaktan kurtulamıyorsun, kabullen ve keyfini çıkar.","Gururun bugün bir özür dilemeni zorlaştırabilir, ama küçük bir adım büyük fark yaratır.","Yaratıcı bir projeye enerjini verdiğinde bugün gerçekten parlıyorsun."],
+      en:["You can't escape being the center of attention today even if you wanted to, embrace it.","Your pride might make an apology hard today, but one small step makes a big difference.","When you pour your energy into a creative project today, you genuinely shine."],
+      ru:["Сегодня ты снова в центре внимания, хочешь ты этого или нет — прими это с удовольствием.","Гордость сегодня может мешать извиниться, но маленький шаг изменит многое.","Когда сегодня вкладываешь энергию в творческий проект, ты по-настоящему сияешь."]
+    },
+    money: {
+      tr:["Gösterişli bir harcama isteğin bugün tavan yapıyor, bütçeni bir kez kontrol et.","Cömertliğin bugün pahalıya patlayabilir ama karşılığında aldığın sevgi paha biçilmez.","Liderlik yeteneğin finansal bir konuda bugün sana avantaj sağlıyor."],
+      en:["Your urge to splurge for the spotlight is peaking today, check your budget once.","Your generosity might cost you today, but the love you get back is priceless.","Your natural leadership gives you a financial edge in something today."],
+      ru:["Желание потратиться напоказ сегодня зашкаливает — один раз загляни в бюджет.","Щедрость сегодня обойдётся недёшево, но полученная взамен любовь бесценна.","Твои лидерские качества сегодня дают финансовое преимущество в каком-то деле."]
+    }
+  },
+  virgo: {
+    love: {
+      tr:["Karşındakini analiz etmeyi bırak, bugün sadece anı yaşamayı dene.","Mükemmeliyetçiliğin bir detayda takılı kalmana neden olabilir, büyük resme bak.","Pratik bir yardım bugün senin en güzel aşk dilinize dönüşüyor."],
+      en:["Stop analyzing the other person for a second, just try living the moment today.","Your perfectionism might get you stuck on one detail, look at the bigger picture.","A practical bit of help becomes your most beautiful love language today."],
+      ru:["Перестань анализировать другого человека — сегодня просто попробуй жить моментом.","Перфекционизм может застрять на одной детали — посмотри на картину целиком.","Практическая помощь сегодня становится твоим самым красивым языком любви."]
+    },
+    luck: {
+      tr:["Merkür detaylara verdiğin özeni bugün gözle görülür bir şansa çeviriyor.","Kimsenin fark etmediği küçük bir hatayı düzeltmen bugün büyük bir kapı açıyor.","Düzenli çalışman sonunda beklediğin karşılığı bugün buluyor."],
+      en:["Mercury turns your attention to detail into visible luck today.","Fixing a small mistake nobody else noticed opens a big door today.","Your organized effort finally finds the payoff it deserves today."],
+      ru:["Меркурий сегодня превращает твоё внимание к деталям в заметную удачу.","Исправление мелкой ошибки, которую никто не заметил, сегодня открывает большую дверь.","Твоя организованность сегодня наконец находит заслуженную награду."]
+    },
+    daily: {
+      tr:["Bugün her şeyi kontrol listesine dönüştürme isteğin var, biraz da akışa bırak.","Kendine karşı eleştirel sesin bugün biraz fazla yüksek, sesini kıs.","Sağlıklı bir alışkanlığa bugün başlarsan, kalıcı olma ihtimali çok yüksek."],
+      en:["You want to turn everything into a checklist today, let a little of it just flow.","Your inner critic is a bit too loud today, turn the volume down.","If you start a healthy habit today, it has a real chance of sticking."],
+      ru:["Сегодня хочется превратить всё в список дел — позволь части этого течь само собой.","Внутренний критик сегодня говорит слишком громко — приглуши его немного.","Если начнёшь полезную привычку сегодня, есть все шансы, что она приживётся."]
+    },
+    money: {
+      tr:["Excel tablona bir sütun daha eklemek bugün seni şaşırtacak bir tasarruf gösterebilir.","Titiz bütçeleme bugün seninle aynı fikirde olmayan biriyle küçük bir tartışmaya yol açabilir.","Küçük ama sürekli bir tasarruf alışkanlığın bugün gerçek bir güvene dönüşüyor."],
+      en:["Adding one more column to your spreadsheet today might reveal a surprising bit of savings.","Your meticulous budgeting might spark a small disagreement with someone today.","A small but consistent saving habit turns into real confidence today."],
+      ru:["Ещё одна колонка в твоей таблице сегодня может показать неожиданную экономию.","Твоя дотошность в бюджете сегодня может вызвать небольшой спор с кем-то.","Небольшая, но постоянная привычка откладывать деньги сегодня превращается в настоящую уверенность."]
+    }
+  },
+  libra: {
+    love: {
+      tr:["İki seçenek arasında terazi gibi sallanıyorsun, kalbinin ilk tepkisine güven.","Uyum arayışın bugün çok güzel ama kendi isteklerini de listeye ekle.","Zarafetin bugün fark ettiğinden çok daha fazla kalp çalıyor."],
+      en:["You're swinging like a scale between two options, trust your heart's first reaction.","Your search for harmony is lovely today, just add your own wants to the list too.","Your grace is stealing more hearts today than you realize."],
+      ru:["Ты качаешься, как весы, между двумя вариантами — доверься первой реакции сердца.","Стремление к гармонии сегодня прекрасно — просто добавь в список и свои желания.","Твоё изящество сегодня покоряет куда больше сердец, чем ты думаешь."]
+    },
+    luck: {
+      tr:["Venüs bugün estetik bir tercihini beklenmedik bir ödülle taçlandırıyor.","Adil davranışın bugün sana bumerang gibi geri dönüyor, üstelik iyi yönde.","İki kişiyi barıştırdığın an, evren de sana bir iyilik borçlu hissediyor."],
+      en:["Venus crowns an aesthetic choice of yours with an unexpected reward today.","Your fairness comes back like a boomerang today, and in a good way.","The moment you bring two people together, the universe feels it owes you one."],
+      ru:["Венера сегодня венчает твой эстетический выбор неожиданной наградой.","Твоя справедливость сегодня возвращается бумерангом — причём в хорошем смысле.","Как только помиришь двоих, вселенная почувствует себя обязанной ответить тем же."]
+    },
+    daily: {
+      tr:["Basit bir kararı bugün karmaşık bir konsey toplantısına çeviriyorsun, sadece seç.","Herkesi memnun etme çaban bugün seni yoruyor, önce kendine iyi bak.","Etrafını güzelleştirme dürtün bugün gerçekten iyi hissettiriyor, ortamı yenile."],
+      en:["You're turning a simple decision into a full committee meeting today, just pick one.","Your effort to please everyone is wearing you out today, take care of yourself first.","Your urge to beautify your surroundings genuinely feels good today, refresh the space."],
+      ru:["Простое решение сегодня превращается в целое совещание — просто выбери.","Попытки угодить всем сегодня утомляют — сначала позаботься о себе.","Желание украсить окружение сегодня приносит настоящую радость — обнови обстановку."]
+    },
+    money: {
+      tr:["Güzel bir şeye para verme isteğin bugün cazip ama fiyat etiketine iki kez bak.","Ortak bir harcamada adil paylaşım yapman bugün ilişkilere iyi geliyor.","İki teklif arasında kararsız kalman bugün normal, ama fazla bekleme."],
+      en:["The urge to spend on something pretty is tempting today, check the price tag twice.","Splitting a shared expense fairly does your relationships good today.","Being torn between two offers is normal today, just don't wait too long."],
+      ru:["Желание потратиться на красивую вещь сегодня велико — дважды проверь ценник.","Справедливое разделение общих расходов сегодня пойдёт на пользу отношениям.","Метаться между двумя предложениями сегодня нормально — только не тяни слишком долго."]
+    }
+  },
+  scorpio: {
+    love: {
+      tr:["Bugün yüzeysel sohbetlere tahammülün yok, ya derin ya hiç istiyorsun.","Kıskançlık hissin bugün gereksiz yere kabarabilir, güvene alan aç.","Gizli tuttuğun bir duygu bugün açığa çıkma isteği duyuyor, korkma."],
+      en:["You have zero patience for small talk today, it's all-in or nothing.","Your jealousy might flare up unnecessarily today, make room for trust.","A feeling you've kept hidden wants to surface today, don't be afraid."],
+      ru:["Сегодня у тебя нет терпения на пустые разговоры — либо всё, либо ничего.","Ревность сегодня может вспыхнуть без повода — дай место доверию.","Чувство, которое ты скрывал, сегодня хочет выйти наружу — не бойся."]
+    },
+    luck: {
+      tr:["Plüton bugün derinlerde sakladığın bir yeteneği gün yüzüne çıkarıyor.","Sezgisel bir kararın bugün mantıklı olandan çok daha iyi sonuç veriyor.","Bir sırrı kendine saklaman bugün beklenmedik bir avantaja dönüşüyor."],
+      en:["Pluto is bringing a talent you've buried deep out into the light today.","An intuitive decision works out far better today than a logical one would have.","Keeping a secret to yourself turns into an unexpected advantage today."],
+      ru:["Плутон сегодня выводит на свет талант, который ты глубоко скрывал.","Интуитивное решение сегодня срабатывает куда лучше, чем логичное.","Сохранение тайны при себе сегодня превращается в неожиданное преимущество."]
+    },
+    daily: {
+      tr:["Bugün her şeyin altında yatan gerçek niyeti arıyorsun, bazen basit basittir.","Yoğun bakışların bugün fark edilmeden geçmiyor, biri seni izlediğini fark ediyor.","Eski bir alışkanlığı bırakma gücün bugün gerçekten etkileyici seviyede."],
+      en:["You're searching for hidden motives behind everything today, sometimes simple really is simple.","Your intense stare doesn't go unnoticed today, someone catches you watching.","Your power to let go of an old habit is genuinely impressive today."],
+      ru:["Сегодня ты ищешь скрытые мотивы во всём — иногда простое действительно просто.","Твой пристальный взгляд сегодня не остаётся незамеченным — кто-то ловит тебя на этом.","Твоя способность отказаться от старой привычки сегодня по-настоящему впечатляет."]
+    },
+    money: {
+      tr:["Gizli tuttuğun bir yatırım fikri bugün konuşulmaya değer hale geliyor.","Kontrolü bırakmaman gereken bir finansal konuda bugün haklı çıkıyorsun.","Tüm ya da hiç yaklaşımın bugün bir yatırımda işe yarayabilir, ama dikkatli ol."],
+      en:["An investment idea you've kept quiet about becomes worth discussing today.","You're proven right today about a financial matter you refused to let go of control over.","Your all-or-nothing approach might work for an investment today, but stay careful."],
+      ru:["Идея вложений, которую ты держал в тайне, сегодня становится достойной обсуждения.","Сегодня ты оказываешься прав в финансовом вопросе, контроль над которым не хотел отпускать.","Подход «всё или ничего» сегодня может сработать в инвестициях, но будь осторожен."]
+    }
+  },
+  sagittarius: {
+    love: {
+      tr:["Bağlanma korkun bugün biraz azalıyor, birine şans vermeyi düşünebilirsin.","Dürüstlüğün bugün fazla keskin çıkabilir, aynı gerçeği daha yumuşak söylemeyi dene.","Maceraperest ruhun bugün ilişkine yeni ve eğlenceli bir fikir getiriyor."],
+      en:["Your fear of commitment eases up a bit today, you might consider giving someone a chance.","Your honesty might come out too sharp today, try saying the same truth more gently.","Your adventurous spirit brings a fun new idea into your relationship today."],
+      ru:["Страх привязанности сегодня немного отступает — можешь дать кому-то шанс.","Твоя честность сегодня может прозвучать слишком резко — попробуй сказать то же самое мягче.","Твой дух авантюризма сегодня приносит в отношения новую весёлую идею."]
+    },
+    luck: {
+      tr:["Jüpiter bugün senin iyimserliğini gerçek bir şansla ödüllendiriyor.","Yabancı bir yerle ya da kültürle ilgili bir şey bugün kapını çalabilir.","Plansız çıktığın bir yolculuk bugün en iyi hikayen olabilir."],
+      en:["Jupiter rewards your optimism with real luck today.","Something related to a foreign place or culture might knock on your door today.","An unplanned trip today could become your best story yet."],
+      ru:["Юпитер сегодня вознаграждает твой оптимизм настоящей удачей.","Что-то, связанное с чужой страной или культурой, сегодня может постучаться в твою дверь.","Незапланированная поездка сегодня может стать твоей лучшей историей."]
+    },
+    daily: {
+      tr:["Rutin bugün sana dar geliyor, küçük bir kaçış planı yapmak iyi gelir.","Bir konuda abartılı iyimserliğin bugün seni gerçeklikten biraz uzaklaştırabilir.","Felsefi bir soruyla uyanıyorsun bugün, cevabı bulmasan da tadını çıkar."],
+      en:["Routine feels too tight for you today, planning a small escape would help.","Your exaggerated optimism about something might drift a bit from reality today.","You wake up with a philosophical question today, enjoy it even without an answer."],
+      ru:["Рутина сегодня жмёт, как тесная обувь — небольшой побег из неё пойдёт на пользу.","Твой чрезмерный оптимизм в чём-то сегодня может немного оторваться от реальности.","Сегодня ты просыпаешься с философским вопросом в голове — наслаждайся им, даже без ответа."]
+    },
+    money: {
+      tr:["Yurt dışıyla ya da seyahatle ilgili bir harcama bugün değerini fazlasıyla kanıtlıyor.","Fazla iyimser bir bütçe planı bugün seni küçük bir sürprizle karşılaştırabilir.","Büyük resmi görme yeteneğin bugün uzun vadeli bir yatırımda işine yarıyor."],
+      en:["A travel or foreign-related expense today proves its worth many times over.","An overly optimistic budget plan might surprise you a little today.","Your ability to see the big picture pays off in a long-term investment today."],
+      ru:["Расходы на поездку или что-то заграничное сегодня многократно окупаются.","Слишком оптимистичный план бюджета сегодня может преподнести небольшой сюрприз.","Твоя способность видеть картину целиком сегодня окупается в долгосрочных вложениях."]
+    }
+  },
+  capricorn: {
+    love: {
+      tr:["Bugün işi bırakıp kalbine zaman ayırmak gerçekten hak ettiğin bir mola.","Ciddiyetin bugün soğuk algılanabilir, küçük bir espri buzları hemen eritir.","Sadakatin ve sabrın bugün karşındakine tam olarak ihtiyacı olan güveni veriyor."],
+      en:["Stepping away from work to give your heart some time today is a break you truly deserve.","Your seriousness might come across as cold today, one small joke melts the ice instantly.","Your loyalty and patience give the other person exactly the security they need today."],
+      ru:["Отложить работу и уделить время сердцу сегодня — перерыв, который ты действительно заслужил.","Твоя серьёзность сегодня может показаться холодной — одна маленькая шутка мгновенно растопит лёд.","Твоя верность и терпение сегодня дают другому человеку именно ту уверенность, в которой он нуждался."]
+    },
+    luck: {
+      tr:["Satürn bugün disiplinli çalışmanı somut bir başarıyla ödüllendiriyor.","Yıllar önce attığın sabırlı bir adım bugün meyvesini veriyor.","Statü sahibi biriyle kurduğun bağlantı bugün beklenmedik bir kapı açıyor."],
+      en:["Saturn rewards your disciplined work with a concrete win today.","A patient step you took years ago bears fruit today.","A connection with someone of status opens an unexpected door today."],
+      ru:["Сатурн сегодня вознаграждает твою дисциплину конкретным успехом.","Терпеливый шаг, сделанный много лет назад, сегодня приносит плоды.","Связь с влиятельным человеком сегодня открывает неожиданную дверь."]
+    },
+    daily: {
+      tr:["Bugün kendine bile mola vermeyi yasaklıyorsun, ama beş dakika mola dünyanın sonu değil.","Kuru mizahın bugün tam zamanında geliyor ve ortamı gerçekten yumuşatıyor.","Uzun vadeli bir hedefe attığın küçük adım bugün gözle görülür ilerleme sağlıyor."],
+      en:["You're banning even yourself from a break today, but five minutes off won't end the world.","Your dry humor lands at just the right moment today and genuinely lightens the room.","A small step toward a long-term goal shows visible progress today."],
+      ru:["Сегодня ты запрещаешь себе даже короткий отдых — но пять минут паузы не разрушат мир.","Твой суховатый юмор сегодня приходится точно в момент и по-настоящему разряжает обстановку.","Маленький шаг к долгосрочной цели сегодня даёт заметный результат."]
+    },
+    money: {
+      tr:["Bugün harcama yapmadan önce üç kez düşünüyorsun, bu alışkanlık seni zengin edecek.","Kariyerindeki disiplinin bugün somut bir finansal karşılık buluyor.","Uzun vadeli bir plan yapman bugün kısa vadeli bir cazibeye karşı seni koruyor."],
+      en:["You think three times before spending today, and this habit will make you rich.","Your discipline in your career finds a concrete financial payoff today.","Having a long-term plan protects you from a short-term temptation today."],
+      ru:["Сегодня ты трижды подумаешь, прежде чем потратить — эта привычка сделает тебя богатым.","Твоя дисциплина в карьере сегодня находит конкретную финансовую отдачу.","Наличие долгосрочного плана сегодня защищает тебя от кратковременного соблазна."]
+    }
+  },
+  aquarius: {
+    love: {
+      tr:["Bugün duygularını analiz etmek yerine sadece hissetmeyi dene, garip gelse de işe yarar.","Bağımsızlık ihtiyacın bugün karşındaki tarafından yanlış anlaşılabilir, biraz açıkla.","Sıra dışı bir jest bugün beklediğinden çok daha romantik karşılanıyor."],
+      en:["Try just feeling your emotions today instead of analyzing them, it works even if it feels strange.","Your need for independence might be misread today, explain it a little.","An unconventional gesture is received far more romantically today than you expected."],
+      ru:["Сегодня попробуй просто чувствовать, а не анализировать эмоции — это работает, даже если непривычно.","Твоя потребность в независимости сегодня может быть неправильно понята — немного объясни.","Необычный жест сегодня воспринимается гораздо романтичнее, чем ты ожидал."]
+    },
+    luck: {
+      tr:["Uranüs bugün sıra dışı bir fikrini gerçek bir fırsata dönüştürüyor.","Bir topluluğa ya da arkadaş grubuna katkın bugün sana beklenmedik şekilde geri dönüyor.","Herkesten farklı düşünmen bugün tam olarak avantajına dönüşüyor."],
+      en:["Uranus turns one of your unconventional ideas into a real opportunity today.","Your contribution to a group or community comes back to you in an unexpected way today.","Thinking differently from everyone else turns into exactly your advantage today."],
+      ru:["Уран сегодня превращает твою нестандартную идею в реальную возможность.","Твой вклад в сообщество или компанию друзей сегодня неожиданно возвращается к тебе.","Умение мыслить иначе, чем все, сегодня становится именно твоим преимуществом."]
+    },
+    daily: {
+      tr:["Bugün insanlardan biraz uzaklaşma isteğin var, bu bencillik değil ihtiyaç.","Alışılmadık bir fikrin bugün ilk başta garip karşılanabilir ama sonunda takdir toplar.","Teknolojiyle ya da yeni bir araçla ilgili bir şey bugün gününü kolaylaştırıyor."],
+      en:["You feel like pulling away from people a bit today, that's not selfish, it's a need.","An unusual idea of yours might seem odd at first today but earns respect eventually.","Something involving technology or a new gadget makes your day easier today."],
+      ru:["Сегодня хочется немного отдалиться от людей — это не эгоизм, а потребность.","Необычная идея сегодня сначала может показаться странной, но в итоге вызовет уважение.","Что-то связанное с технологиями или новым гаджетом сегодня облегчает твой день."]
+    },
+    money: {
+      tr:["Alışılmadık bir gelir kaynağı bugün ciddiye almaya değer görünüyor.","Bir topluluk projesine yaptığın katkı bugün finansal olarak da anlam kazanıyor.","Herkesin izlediği yoldan farklı bir finansal tercih bugün seni haklı çıkarıyor."],
+      en:["An unconventional income source looks worth taking seriously today.","Your contribution to a group project gains financial meaning too today.","A financial choice different from the crowd proves you right today."],
+      ru:["Нестандартный источник дохода сегодня выглядит достойным серьёзного внимания.","Твой вклад в групповой проект сегодня приобретает и финансовый смысл.","Финансовый выбор, отличный от толпы, сегодня доказывает твою правоту."]
+    }
+  },
+  pisces: {
+    love: {
+      tr:["Bugün hayal dünyanla gerçeklik el ele yürüyor, biri seni tam da olduğun gibi seviyor.","Aşırı empatin bugün seni yormasın, sınır koymak da sevginin bir parçası.","Sanatsal bir jest bugün bin kelimeden daha çok şey anlatıyor."],
+      en:["Your dream world and reality walk hand in hand today, someone loves you just as you are.","Don't let your deep empathy wear you out today, setting a boundary is also a form of love.","An artistic gesture says more today than a thousand words could."],
+      ru:["Сегодня твой мир мечтаний и реальность идут рука об руку — кто-то любит тебя именно таким, какой ты есть.","Пусть глубокая эмпатия сегодня тебя не изматывает — границы тоже часть любви.","Творческий жест сегодня скажет больше тысячи слов."]
+    },
+    luck: {
+      tr:["Neptün bugün sezgilerini gerçek bir şansa dönüştürüyor, rüyalarına dikkat et.","Sanatsal bir uğraşın bugün beklenmedik bir takdir kazanabilir.","Bir yabancıya gösterdiğin nezaket bugün katbekat geri dönüyor."],
+      en:["Neptune turns your intuition into real luck today, pay attention to your dreams.","An artistic pursuit of yours could earn unexpected recognition today.","The kindness you show a stranger comes back multiplied today."],
+      ru:["Нептун сегодня превращает твою интуицию в настоящую удачу — обрати внимание на сны.","Творческое занятие сегодня может неожиданно принести признание.","Доброта, проявленная к незнакомцу, сегодня вернётся многократно."]
+    },
+    daily: {
+      tr:["Bugün gerçeklikten biraz kaçıp müziğe ya da bir filme sığınmak sana iyi gelir.","Kararsızlığın bugün seni bir yerde bekletebilir, zar atmak bile bir çözüm olabilir.","Birinin sana anlattığı dertte kendi çözümünü bulman bugün onu çok rahatlatıyor."],
+      en:["Escaping into music or a film for a bit today would do you good.","Your indecisiveness might leave you stuck somewhere today, even flipping a coin could work.","Finding your own solution reflected in someone else's problem today brings them real comfort."],
+      ru:["Сегодня побег в музыку или фильм ненадолго пойдёт тебе на пользу.","Нерешительность сегодня может задержать тебя на месте — можно даже подбросить монетку.","Найденное тобой решение чужой проблемы сегодня по-настоящему успокоит этого человека."]
+    },
+    money: {
+      tr:["Duygusal bir anda yaptığın harcama bugün pişmanlık yerine mutluluk getirebilir.","Finansal konularda başını kuma gömme isteğin var, ama bir bakış seni rahatlatacak.","Sanatsal yeteneğini paraya çevirme fikri bugün sandığından daha gerçekçi görünüyor."],
+      en:["A purchase made in an emotional moment might bring happiness instead of regret today.","You feel like burying your head in the sand about money today, but one look will bring relief.","The idea of turning your artistic talent into money looks more realistic today than you thought."],
+      ru:["Покупка, сделанная под влиянием эмоций, сегодня может принести радость, а не сожаление.","Хочется спрятать голову в песок от финансовых вопросов, но один взгляд принесёт облегчение.","Идея превратить творческий талант в доход сегодня выглядит реальнее, чем казалось."]
+    }
+  }
+};
+
+const TAROT = [
+  {key:"fool", num:"0", grad:"linear-gradient(160deg, #FDE9C8, #8FCB9B)", textColor:"#F1E9D8", essence:{tr:"cesur bir başlangıç",en:"a bold, blind leap",ru:"смелый прыжок в неизвестность"}, img:"https://sacred-texts.com/tarot/pkt/img/ar00.jpg", name:{tr:"Deli",en:"The Fool",ru:"Шут"}, meaning:{tr:"Yeni bir yolculuğun eşiğindesin, önündeki bilinmezlik seni korkutmak yerine heyecanlandırsın. Saf bir güvenle ilk adımı at, evren seni tutacak.",en:"You stand at the edge of a new journey, let the unknown ahead excite you rather than scare you. Take the first step with pure trust, the universe will catch you.",ru:"Ты стоишь на пороге нового пути — пусть неизвестность впереди не пугает, а вдохновляет. Сделай первый шаг с чистой верой, вселенная тебя подхватит."}},
+  {key:"magician", num:"I", grad:"linear-gradient(160deg, #7B4FA6, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"gizli gücün uyanışı",en:"hidden power awakening",ru:"пробуждение скрытой силы"}, img:"https://sacred-texts.com/tarot/pkt/img/ar01.jpg", name:{tr:"Büyücü",en:"The Magician",ru:"Маг"}, meaning:{tr:"Elindeki tüm araçlar zaten hazır, sadece harekete geçme cesaretini bekliyorsun. Niyetini net koy, istediğini gerçeğe dönüştürme gücü tamamen sende.",en:"Every tool you need is already in your hands, you're just waiting for the courage to act. Set your intention clearly, the power to turn it into reality is entirely yours.",ru:"Все нужные инструменты уже у тебя в руках — не хватает лишь смелости начать действовать. Чётко обозначь намерение, сила воплотить его в жизнь целиком твоя."}},
+  {key:"highpriestess", num:"II", grad:"linear-gradient(160deg, #1B2A4A, #6E7FB0)", textColor:"#F1E9D8", essence:{tr:"sessiz bir sezgi",en:"a quiet inner knowing",ru:"тихое внутреннее знание"}, img:"https://sacred-texts.com/tarot/pkt/img/ar02.jpg", name:{tr:"Başrahibe",en:"The High Priestess",ru:"Верховная Жрица"}, meaning:{tr:"Cevap mantığında değil sessizliğinde saklı, biraz durup içine dönmen gerekiyor. Sezgilerin şu an mantığından çok daha güvenilir bir rehber.",en:"The answer isn't hiding in logic but in stillness, you need to pause and turn inward. Your intuition is a far more trustworthy guide right now than your reasoning.",ru:"Ответ скрыт не в логике, а в тишине — стоит ненадолго остановиться и заглянуть внутрь себя. Сейчас интуиция — куда более надёжный проводник, чем разум."}},
+  {key:"empress", num:"III", grad:"linear-gradient(160deg, #4C7A4E, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"bereketli bir büyüme",en:"abundant, nurturing growth",ru:"изобильный, заботливый рост"}, img:"https://sacred-texts.com/tarot/pkt/img/ar03.jpg", name:{tr:"İmparatoriçe",en:"The Empress",ru:"Императрица"}, meaning:{tr:"Bolluk ve yaratıcılık şu an senin doğal halin, kendine ve emeğine izin ver büyümesi için. Bir fikri ya da ilişkiyi büyütmek için tam zamanı.",en:"Abundance and creativity are your natural state right now, give yourself and your work room to grow. This is the right time to nurture an idea or a relationship.",ru:"Изобилие и творчество сейчас твоё естественное состояние — дай себе и своему делу пространство для роста. Самое время взрастить идею или отношения."}},
+  {key:"emperor", num:"IV", grad:"linear-gradient(160deg, #7A1F2B, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"sağlam bir düzen",en:"firm structure and control",ru:"твёрдый порядок и контроль"}, img:"https://sacred-texts.com/tarot/pkt/img/ar04.jpg", name:{tr:"İmparator",en:"The Emperor",ru:"Император"}, meaning:{tr:"Düzen kurma ve sorumluluk alma vaktin geldi, kararsızlık yerine net sınırlar çiz. Otoritene güven, yapı kurduğun her şey seni daha güçlü kılıyor.",en:"It's time to build structure and take responsibility, draw clear boundaries instead of hesitating. Trust your authority, everything you build structure around makes you stronger.",ru:"Пришло время навести порядок и взять на себя ответственность — вместо колебаний проведи чёткие границы. Доверяй своему авторитету: всё, что ты выстраиваешь, делает тебя сильнее."}},
+  {key:"hierophant", num:"V", grad:"linear-gradient(160deg, #5C3A21, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"geleneksel bir rehberlik",en:"traditional guidance",ru:"традиционное наставничество"}, img:"https://sacred-texts.com/tarot/pkt/img/ar05.jpg", name:{tr:"Aziz",en:"The Hierophant",ru:"Иерофант"}, meaning:{tr:"Geleneksel bir bilgelik ya da bir akıl hocası şu an yolunu aydınlatabilir. Kuralları tamamen yıkmak yerine önce onlardan öğrenmeyi dene.",en:"Traditional wisdom or a mentor could light your path right now. Try learning from the rules first before deciding to break them entirely.",ru:"Традиционная мудрость или наставник сейчас может осветить твой путь. Прежде чем полностью нарушать правила, попробуй сначала у них поучиться."}},
+  {key:"lovers", num:"VI", grad:"linear-gradient(160deg, #C96B8A, #F1C4D0)", textColor:"#F1E9D8", essence:{tr:"kalpten bir seçim",en:"a choice from the heart",ru:"выбор от сердца"}, img:"https://sacred-texts.com/tarot/pkt/img/ar06.jpg", name:{tr:"Aşıklar",en:"The Lovers",ru:"Влюблённые"}, meaning:{tr:"Önemli bir seçimle karşı karşıyasın ve bu seçim değerlerinle uyumlu olmalı. Kalbinin ve aklının aynı yöne baktığı an doğru yoldasın demektir.",en:"You're facing an important choice, and it needs to align with your values. When your heart and mind point the same way, you'll know you're on the right path.",ru:"Перед тобой важный выбор, и он должен соответствовать твоим ценностям. Когда сердце и разум смотрят в одну сторону — значит, ты на верном пути."}},
+  {key:"chariot", num:"VII", grad:"linear-gradient(160deg, #2E4A6B, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"kararlı bir ilerleyiş",en:"determined forward motion",ru:"решительное движение вперёд"}, img:"https://sacred-texts.com/tarot/pkt/img/ar07.jpg", name:{tr:"Savaş Arabası",en:"The Chariot",ru:"Колесница"}, meaning:{tr:"İrade gücün şu an zıt yönlere çeken güçleri bile tek bir hedefe yönlendirebilir. Kontrolü elinde tut ve kararlılıkla ileri sür.",en:"Your willpower right now can steer even opposing forces toward a single goal. Keep hold of the reins and push forward with determination.",ru:"Твоя воля сейчас способна направить даже противоборствующие силы к одной цели. Держи поводья крепко и уверенно двигайся вперёд."}},
+  {key:"strength", num:"VIII", grad:"linear-gradient(160deg, #B5651D, #F0C674)", textColor:"#F1E9D8", essence:{tr:"yumuşak ama kırılmaz bir güç",en:"gentle, unbreakable strength",ru:"мягкая, но несокрушимая сила"}, img:"https://sacred-texts.com/tarot/pkt/img/ar08.jpg", name:{tr:"Güç",en:"Strength",ru:"Сила"}, meaning:{tr:"Gerçek güç kaba kuvvette değil, sabır ve şefkatte saklı. En vahşi göründüğü anda bile durumu yumuşaklıkla evcilleştirebilirsin.",en:"True strength isn't in brute force but in patience and compassion. Even when things seem wildest, you can tame the situation with gentleness.",ru:"Настоящая сила не в грубой мощи, а в терпении и сострадании. Даже когда всё кажется диким и неукротимым, ты можешь смягчить ситуацию нежностью."}},
+  {key:"hermit", num:"IX", grad:"linear-gradient(160deg, #2B2B38, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"yalnız bir iç yolculuk",en:"a solitary inner journey",ru:"одинокое путешествие внутрь себя"}, img:"https://sacred-texts.com/tarot/pkt/img/ar09.jpg", name:{tr:"Ermiş",en:"The Hermit",ru:"Отшельник"}, meaning:{tr:"Kalabalıktan uzaklaşıp kendi fenerinle yol bulma zamanın geldi. Yalnızlık şu an bir eksiklik değil, bilgeliğe giden bir kapı.",en:"It's time to step away from the crowd and find your way by your own lantern. Solitude right now isn't a lack, it's a doorway to wisdom.",ru:"Пришло время отойти от толпы и искать путь при свете собственного фонаря. Одиночество сейчас — не пустота, а дверь к мудрости."}},
+  {key:"wheel", num:"X", grad:"linear-gradient(160deg, #5B3A8E, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"dönen bir kader",en:"fate's turning wheel",ru:"поворот колеса судьбы"}, img:"https://sacred-texts.com/tarot/pkt/img/ar10.jpg", name:{tr:"Kader Çarkı",en:"Wheel of Fortune",ru:"Колесо Фортуны"}, meaning:{tr:"Hayatın çarkı şu an lehine dönüyor, ama unutma her şey döngüseldir. Bu iyi anı kucakla ve akışa güven.",en:"Life's wheel is turning in your favor right now, but remember everything moves in cycles. Embrace this good moment and trust the flow.",ru:"Колесо жизни сейчас поворачивается в твою пользу, но помни — всё циклично. Прими этот хороший момент и доверься течению."}},
+  {key:"justice", num:"XI", grad:"linear-gradient(160deg, #1F5A5B, #D4AF6A)", textColor:"#F1E9D8", essence:{tr:"adil bir hesaplaşma",en:"a fair reckoning",ru:"справедливая расплата"}, img:"https://sacred-texts.com/tarot/pkt/img/ar11.jpg", name:{tr:"Adalet",en:"Justice",ru:"Справедливость"}, meaning:{tr:"Attığın her adımın bir karşılığı var, dengeyi ve dürüstlüğü şimdi önceliğin yap. Adil davrandığın sürece terazi senden yana.",en:"Every step you take has a consequence, make balance and honesty your priority right now. As long as you act fairly, the scale tips in your favor.",ru:"У каждого твоего шага есть последствия — сделай баланс и честность приоритетом прямо сейчас. Пока ты справедлив, весы на твоей стороне."}},
+  {key:"hangedman", num:"XII", grad:"linear-gradient(160deg, #24506B, #5FA88A)", textColor:"#F1E9D8", essence:{tr:"ters bir bekleyiş",en:"a suspended pause",ru:"подвешенная пауза"}, img:"https://sacred-texts.com/tarot/pkt/img/ar12.jpg", name:{tr:"Asılan Adam",en:"The Hanged Man",ru:"Повешенный"}, meaning:{tr:"Bazen ilerlemenin yolu durup bakış açını tersine çevirmekten geçer. Bu bekleyiş boşa değil, sana yeni bir perspektif kazandırıyor.",en:"Sometimes the way forward is to pause and flip your perspective upside down. This waiting isn't wasted, it's giving you a new point of view.",ru:"Иногда путь вперёд лежит через паузу и взгляд на всё вверх ногами. Это ожидание не напрасно — оно даёт тебе новый взгляд на вещи."}},
+  {key:"death", num:"XIII", grad:"linear-gradient(160deg, #1A1224, #6B3F82)", textColor:"#F1E9D8", essence:{tr:"kaçınılmaz bir dönüşüm",en:"an inevitable transformation",ru:"неизбежное превращение"}, img:"https://sacred-texts.com/tarot/pkt/img/ar13.jpg", name:{tr:"Ölüm",en:"Death",ru:"Смерть"}, meaning:{tr:"Bir dönem kapanıyor ama bu son değil, bir dönüşümün başlangıcı. Eskiyi bırakman, yeninin doğması için gerekli.",en:"A chapter is closing, but this isn't an ending, it's the start of a transformation. Letting go of the old is necessary for the new to be born.",ru:"Одна глава закрывается, но это не конец, а начало преображения. Отпустить старое — необходимо, чтобы родилось новое."}},
+  {key:"temperance", num:"XIV", grad:"linear-gradient(160deg, #4A7FA5, #F1E9D8)", textColor:"#F1E9D8", essence:{tr:"sabırlı bir denge",en:"patient balance",ru:"терпеливое равновесие"}, img:"https://sacred-texts.com/tarot/pkt/img/ar14.jpg", name:{tr:"Denge",en:"Temperance",ru:"Умеренность"}, meaning:{tr:"İki uç arasında altın orta yolu bulman şu an en büyük gücün. Sabırla karıştır, acele etme, uyum kendiliğinden oluşacak.",en:"Finding the golden middle between two extremes is your greatest strength right now. Blend patiently, don't rush, harmony will form on its own.",ru:"Найти золотую середину между двумя крайностями — сейчас твоя главная сила. Смешивай терпеливо, не спеши, гармония сложится сама."}},
+  {key:"devil", num:"XV", grad:"linear-gradient(160deg, #3A0E12, #7A1F2B)", textColor:"#F1E9D8", essence:{tr:"kendi kendine kurulan bir tuzak",en:"a self-made trap",ru:"ловушка собственных рук"}, img:"https://sacred-texts.com/tarot/pkt/img/ar15.jpg", name:{tr:"Şeytan",en:"The Devil",ru:"Дьявол"}, meaning:{tr:"Seni bağlı tutan zincir göründüğünden çok daha gevşek, çözmek için sadece fark etmen yeterli. Bağımlılık ya da korku, kontrolü yeniden sende.",en:"The chain holding you is looser than it looks, noticing it is enough to start undoing it. Whether it's a habit or a fear, the control is yours again.",ru:"Цепь, что держит тебя, слабее, чем кажется — достаточно её заметить, чтобы начать освобождаться. Будь то привычка или страх, контроль снова в твоих руках."}},
+  {key:"tower", num:"XVI", grad:"linear-gradient(160deg, #7A1F2B, #C9812E)", textColor:"#F1E9D8", essence:{tr:"ani bir yıkılış",en:"a sudden collapse",ru:"внезапное крушение"}, img:"https://sacred-texts.com/tarot/pkt/img/ar16.jpg", name:{tr:"Kule",en:"The Tower",ru:"Башня"}, meaning:{tr:"Ani bir yıkım gibi görünse de, çökmesi gereken şey zaten sağlam değildi. Toz dinince altından çok daha sağlam bir temel çıkacak.",en:"It may look like sudden collapse, but what's falling wasn't stable to begin with. Once the dust settles, a far stronger foundation will remain underneath.",ru:"Это может выглядеть как внезапное разрушение, но то, что рушится, изначально не было прочным. Когда пыль осядет, под ней окажется куда более крепкий фундамент."}},
+  {key:"star", num:"XVII", grad:"linear-gradient(160deg, #1B2A4A, #A9C9E8)", textColor:"#F1E9D8", essence:{tr:"fısıldayan bir umut",en:"a whispering hope",ru:"шепчущая надежда"}, img:"https://sacred-texts.com/tarot/pkt/img/ar17.jpg", name:{tr:"Yıldız",en:"The Star",ru:"Звезда"}, meaning:{tr:"Fırtınadan sonra gelen umut şu an tam olarak senin üzerinde parlıyor. Kendine ve geleceğine olan inancını yeniden tazele.",en:"The hope that comes after the storm is shining directly on you right now. Renew your faith in yourself and in what's ahead.",ru:"Надежда, приходящая после бури, сейчас сияет именно над тобой. Обнови веру в себя и в то, что впереди."}},
+  {key:"moon", num:"XVIII", grad:"linear-gradient(160deg, #14213D, #8B9DC3)", textColor:"#F1E9D8", essence:{tr:"bulanık bir belirsizlik",en:"a hazy uncertainty",ru:"туманная неопределённость"}, img:"https://sacred-texts.com/tarot/pkt/img/ar18.jpg", name:{tr:"Ay",en:"The Moon",ru:"Луна"}, meaning:{tr:"Her şey net görünmüyor ve bu şu an tamamen normal, belirsizlikte ilerlemeyi öğreniyorsun. Korkularının çoğu gölgeden ibaret.",en:"Not everything looks clear right now, and that's completely normal, you're learning to move through uncertainty. Most of your fears are just shadows.",ru:"Не всё сейчас выглядит ясно, и это абсолютно нормально — ты учишься двигаться сквозь неопределённость. Большинство твоих страхов — лишь тени."}},
+  {key:"sun", num:"XIX", grad:"linear-gradient(160deg, #D4AF6A, #F4E285)", textColor:"#F1E9D8", essence:{tr:"saf bir aydınlanma",en:"pure, radiant clarity",ru:"чистая, сияющая ясность"}, img:"https://sacred-texts.com/tarot/pkt/img/ar19.jpg", name:{tr:"Güneş",en:"The Sun",ru:"Солнце"}, meaning:{tr:"Saf bir neşe ve netlik şu an kapını çalıyor, kutlamaktan çekinme. Başarı bu sefer hiçbir gölge taşımıyor.",en:"Pure joy and clarity are knocking on your door right now, don't hold back from celebrating. Success this time carries no shadow at all.",ru:"Чистая радость и ясность сейчас стучатся в твою дверь — не стесняйся праздновать. На этот раз успех не несёт с собой ни тени сомнений."}},
+  {key:"judgement", num:"XX", grad:"linear-gradient(160deg, #6E7FB0, #F1E9D8)", textColor:"#F1E9D8", essence:{tr:"bir çağrıya uyanış",en:"waking to a calling",ru:"пробуждение по зову"}, img:"https://sacred-texts.com/tarot/pkt/img/ar20.jpg", name:{tr:"Mahkeme",en:"Judgement",ru:"Суд"}, meaning:{tr:"Geçmişini değerlendirip yeni bir bölüme geçme zamanın geldi, kendini affetmekten başla. Bir çağrı seni yeniden doğuşa davet ediyor.",en:"It's time to look back on your past and step into a new chapter, start by forgiving yourself. A calling is inviting you toward rebirth.",ru:"Пришло время оглянуться на прошлое и перейти к новой главе — начни с прощения самого себя. Зов приглашает тебя к новому рождению."}},
+  {key:"world", num:"XXI", grad:"linear-gradient(160deg, #5B3A8E, #1F5A5B, #B5651D)", textColor:"#F1E9D8", essence:{tr:"tamamlanmış bir döngü",en:"a completed cycle",ru:"завершённый цикл"}, img:"https://sacred-texts.com/tarot/pkt/img/ar21.jpg", name:{tr:"Dünya",en:"The World",ru:"Мир"}, meaning:{tr:"Uzun bir döngü tamamlanıyor ve bunun tadını çıkarmayı hak ediyorsun. Bu bitiş aslında çok daha büyük bir başlangıcın kapısı.",en:"A long cycle is completing, and you deserve to savor it. This ending is actually the doorway to a far bigger beginning.",ru:"Долгий цикл завершается, и ты заслуживаешь насладиться этим моментом. Этот финал на самом деле — дверь к куда большему началу."}}
+];
+
+/* ---- Blog posts (original content, all 3 languages) ---- */
+
+const COMBO_TEMPLATES = {
+  tr: [
+    "Geçmişinde {past} yatıyor; bugün bu, {present} olarak karşına çıkıyor. Bu ikisini birlikte taşırsan önünde {future} seni bekliyor.",
+    "{past} ile başlayan hikaye şimdi {present} evresine geldi. Kartların işaret ettiği yol {future} ile açılıyor.",
+    "Arkanda {past} var, elinde {present}. İkisinin birleşimi seni {future} olan yere doğru itiyor.",
+    "Geçmişten gelen {past}, bugünün {present} enerjisiyle buluşuyor. Kartlar bu birleşimin seni {future} noktasına taşıyacağını söylüyor.",
+    "Önce {past} yaşandı, şimdi {present} sürüyor. Bu üçlü hikaye seni {future} eşiğine getiriyor."
+  ],
+  en: [
+    "Your past carries {past}; today that shows up as {present}. Hold both together and {future} is what waits ahead.",
+    "A story that began with {past} has now reached {present}. The path the cards point to opens into {future}.",
+    "Behind you is {past}, in your hands is {present}. Together they're pushing you toward {future}.",
+    "What came from the past, {past}, is meeting today's energy of {present}. The cards say this combination carries you to {future}.",
+    "First came {past}, now {present} continues. This three-part story brings you to the threshold of {future}."
+  ],
+  ru: [
+    "Позади — {past}. Сегодня — {present}. Впереди — {future}.",
+    "Всё началось с одного: {past}. Сейчас звучит иначе: {present}. А дальше откроется: {future}.",
+    "За спиной — {past}, в руках — {present}. Карты ведут к одному: {future}.",
+    "Из прошлого пришло вот что: {past}. Это встречается с сегодняшним состоянием: {present}. Итог, к которому всё идёт: {future}.",
+    "Сначала: {past}. Потом: {present}. А в конце этой истории тебя ждёт вот что: {future}."
+  ]
+};
+
+function renderComboReading(spread, lang){
+  if (!spread || spread.length < 3) return "";
+  const pastE = spread[0].essence[lang];
+  const presentE = spread[1].essence[lang];
+  const futureE = spread[2].essence[lang];
+  const templates = COMBO_TEMPLATES[lang];
+  const seed = spread.map(function(c){return c.key;}).join("-") + "-" + todayKey();
+  const template = pick(templates, seed);
+  return template.replace("{past}", pastE).replace("{present}", presentE).replace("{future}", futureE);
+}
+
+const CONSTELLATIONS = {
+  aries: { points:[[10,60],[35,42],[55,45],[78,20]], lines:[[0,1],[1,2],[2,3]] },
+  taurus: { points:[[18,18],[35,45],[50,20],[65,45],[82,18],[50,72]], lines:[[0,1],[1,2],[2,3],[3,4],[1,5],[3,5]] },
+  gemini: { points:[[25,10],[25,50],[25,88],[75,10],[75,50],[75,88]], lines:[[0,1],[1,2],[3,4],[4,5],[1,4]] },
+  cancer: { points:[[50,14],[34,45],[66,45],[50,80]], lines:[[0,1],[0,2],[1,3],[2,3]] },
+  leo: { points:[[14,55],[30,34],[46,18],[60,24],[70,44],[54,60],[34,64]], lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0]] },
+  virgo: { points:[[18,18],[35,40],[50,28],[60,55],[45,76],[70,58],[86,76]], lines:[[0,1],[1,2],[2,3],[3,4],[3,5],[5,6]] },
+  libra: { points:[[18,50],[50,22],[82,50],[50,78]], lines:[[0,1],[1,2],[2,3],[3,0]] },
+  scorpio: { points:[[8,18],[20,38],[35,54],[50,64],[65,70],[78,60],[86,44],[80,28]], lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]] },
+  sagittarius: { points:[[18,72],[35,44],[55,55],[50,28],[70,40],[82,24],[64,66]], lines:[[0,1],[1,2],[1,3],[3,4],[4,5],[2,6]] },
+  capricorn: { points:[[14,30],[50,18],[86,35],[70,72],[34,66]], lines:[[0,1],[1,2],[2,3],[3,4],[4,0]] },
+  aquarius: { points:[[8,60],[24,38],[40,60],[56,38],[72,60],[88,38]], lines:[[0,1],[1,2],[2,3],[3,4],[4,5]] },
+  pisces: { points:[[14,24],[26,40],[20,56],[50,60],[80,56],[74,40],[86,24]], lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]] }
+};
+
+function renderConstellationSVG(signKey, cssClass) {
+  const c = CONSTELLATIONS[signKey];
+  if (!c) return "";
+  let svg = '<svg class="'+(cssClass||"sign-constellation")+'" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">';
+  c.lines.forEach(function(pair){
+    const a = c.points[pair[0]], b = c.points[pair[1]];
+    svg += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'"></line>';
+  });
+  c.points.forEach(function(p){
+    svg += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.4"></circle>';
+  });
+  svg += '</svg>';
+  return svg;
+}
+
+function seededRandom(seed){
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return function(){
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function renderStarChartPoster(signKey){
+  const c = CONSTELLATIONS[signKey];
+  if (!c) return "";
+  const seed = hashStr(todayKey() + "-poster-" + signKey);
+  const rand = seededRandom(seed);
+  let svg = '<svg class="poster-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">';
+
+  svg += '<circle cx="200" cy="200" r="186" class="poster-frame-outer"></circle>';
+  svg += '<circle cx="200" cy="200" r="168" class="poster-frame-inner"></circle>';
+
+  for (let i=0;i<36;i++){
+    const angle = (i*10) * Math.PI/180;
+    const major = (i%3===0);
+    const r1 = major ? 156 : 163;
+    const r2 = 168;
+    const x1 = 200 + Math.sin(angle)*r1, y1 = 200 - Math.cos(angle)*r1;
+    const x2 = 200 + Math.sin(angle)*r2, y2 = 200 - Math.cos(angle)*r2;
+    svg += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" class="poster-tick'+(major?' major':'')+'"></line>';
+  }
+
+  for (let i=0;i<70;i++){
+    const x = rand()*372+14;
+    const y = rand()*372+14;
+    const dx = x-200, dy = y-200;
+    if (Math.sqrt(dx*dx+dy*dy) > 182) continue;
+    const r = rand()*1.3+0.35;
+    const o = rand()*0.55+0.15;
+    svg += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(2)+'" opacity="'+o.toFixed(2)+'" class="poster-field-star"></circle>';
+  }
+
+  const scaleX = 190/100, scaleY = 168/90;
+  const offX = 200 - (50*scaleX), offY = 200 - (45*scaleY);
+  c.lines.forEach(function(pair){
+    const a = c.points[pair[0]], b = c.points[pair[1]];
+    const x1 = offX + a[0]*scaleX, y1 = offY + a[1]*scaleY;
+    const x2 = offX + b[0]*scaleX, y2 = offY + b[1]*scaleY;
+    svg += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" class="poster-const-line"></line>';
+  });
+  c.points.forEach(function(p){
+    const x = offX + p[0]*scaleX, y = offY + p[1]*scaleY;
+    svg += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="10" class="poster-const-glow"></circle>';
+    svg += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4" class="poster-const-star"></circle>';
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+/* ---- Custom icon set (replaces all emoji sitewide) ---- */
+
+function getCurrentSunSign(date){
+  const m = date.getMonth()+1, d = date.getDate();
+  for (let i=0;i<ZODIAC.length;i++){
+    const z = ZODIAC[i];
+    const sm = z.range[0][0], sd = z.range[0][1], em = z.range[1][0], ed = z.range[1][1];
+    if (sm <= em) {
+      if ((m===sm && d>=sd) || (m>sm && m<em) || (m===em && d<=ed)) return z;
+    } else {
+      if ((m===sm && d>=sd) || m>sm || m<em || (m===em && d<=ed)) return z;
+    }
+  }
+  return ZODIAC[0];
+}
+
+function formatSeason(name, lang){
+  if (lang==="ru") return "Сезон " + name;
+  if (lang==="en") return name + " Season";
+  return name + " Sezonu";
+}
+
+function todayKey(){
+  const d = new Date();
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+
+function pick(arr, seed){ return arr[hashStr(seed) % arr.length]; }
+
+function buildCompatSelectors(){
+  const s1 = document.getElementById("compatSign1");
+  const s2 = document.getElementById("compatSign2");
+  if (!s1 || !s2) return;
+  [s1, s2].forEach(function(sel, idx){
+    sel.innerHTML = "";
+    ZODIAC.forEach(function(z){
+      const opt = document.createElement("option");
+      opt.value = z.key;
+      opt.textContent = z.glyph + " " + z.name[state.lang];
+      sel.appendChild(opt);
+    });
+    sel.selectedIndex = idx === 0 ? 0 : 1;
+  });
+}
+
+function updateCompatSelectorLabels(){
+  ["compatSign1","compatSign2"].forEach(function(id){
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const current = sel.value;
+    Array.prototype.forEach.call(sel.options, function(opt, i){
+      const z = ZODIAC[i];
+      opt.textContent = z.glyph + " " + z.name[state.lang];
+    });
+    sel.value = current;
+  });
+}
+
+function compatRingSVG(score){
+  const r = 60, c = 2*Math.PI*r;
+  const offset = c * (1 - score/100);
+  return '<svg viewBox="0 0 140 140"><circle class="compat-ring-bg" cx="70" cy="70" r="'+r+'"></circle>'+
+    '<circle class="compat-ring-fg" cx="70" cy="70" r="'+r+'" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+c.toFixed(1)+'"></circle></svg>';
+}
+
+function compatTier(score, lang){
+  if (score >= 80) return UI[lang].tierHigh;
+  if (score >= 65) return UI[lang].tierGood;
+  if (score >= 50) return UI[lang].tierMid;
+  return UI[lang].tierLow;
+}
+
+function checkCompatibility(){
+  const lang = state.lang;
+  const sign1 = document.getElementById("compatSign1").value;
+  const sign2 = document.getElementById("compatSign2").value;
+  const z1 = ZODIAC.find(function(z){return z.key===sign1;});
+  const z2 = ZODIAC.find(function(z){return z.key===sign2;});
+  const result = getCompatibility(sign1, sign2);
+  const text = pick(result.data[lang], todayKey()+"-compat-"+result.key+"-"+sign1+"-"+sign2);
+
+  const el = document.getElementById("compatResult");
+  el.innerHTML =
+    '<div class="compat-ring-wrap">'+compatRingSVG(result.score)+'<div class="compat-ring-num">'+result.score+'%</div></div>'+
+    '<div class="compat-tier">'+compatTier(result.score, lang)+'</div>'+
+    '<div class="compat-pair-names">'+z1.glyph+' '+z1.name[lang]+' + '+z2.glyph+' '+z2.name[lang]+'</div>'+
+    '<p class="compat-text">'+text+'</p>';
+  el.style.display = "block";
+  el.classList.remove("visible");
+  void el.offsetWidth;
+  el.classList.add("reveal");
+  requestAnimationFrame(function(){ el.classList.add("visible"); });
+
+  setTimeout(function(){
+    const fg = el.querySelector(".compat-ring-fg");
+    if (fg) {
+      const r = 60, c = 2*Math.PI*r;
+      fg.style.strokeDashoffset = (c * (1 - result.score/100)).toFixed(1);
+    }
+  }, 80);
+}
+
+function buildWheel() {
+  const wheel = document.getElementById("zodiacWheel");
+  for (let i=0;i<36;i++){
+    const tick = document.createElement("div");
+    tick.className = "wheel-tick" + (i % 3 === 0 ? " major" : "");
+    tick.style.setProperty("--i", i);
+    wheel.appendChild(tick);
+  }
+  ZODIAC.forEach(function(z, i) {
+    const btn = document.createElement("button");
+    btn.className = "zitem";
+    btn.style.setProperty("--i", i);
+    btn.dataset.sign = z.key;
+    btn.onclick = function(){ selectSign(z.key); };
+    btn.innerHTML = renderConstellationSVG(z.key, "zitem-constellation")+'<span class="zitem-label"></span>';
+    wheel.appendChild(btn);
+  });
+  updateWheelLabels();
+}
+
+function updateWheelLabels(){
+  document.querySelectorAll(".zitem").forEach(function(btn){
+    const z = ZODIAC.find(function(s){ return s.key===btn.dataset.sign; });
+    const label = btn.querySelector(".zitem-label");
+    if (label) label.textContent = z.name[state.lang];
+  });
+}
+
+function selectSign(key) {
+  state.selectedSign = key;
+  document.querySelectorAll(".zitem").forEach(function(b){ b.classList.toggle("active", b.dataset.sign===key); });
+  renderHoroPanel();
+}
+
+function renderHoroPanel() {
+  const panel = document.getElementById("horoPanel");
+  const lang = state.lang;
+  if (!state.selectedSign) { panel.innerHTML = '<p class="hpanel-empty">'+UI[lang].selectPrompt+'</p>'; return; }
+  const sign = ZODIAC.find(function(z){ return z.key===state.selectedSign; });
+  const tk = todayKey();
+  let catsHtml = "";
+  CATS.forEach(function(cat){
+    const variants = HORO[sign.key][cat][lang];
+    const text = pick(variants, tk+"-"+sign.key+"-"+cat);
+    catsHtml += '<div class="hcat" data-cat="'+cat+'"><div class="hcat-head"><span class="hcat-icon">'+icon(cat,24)+'</span><h4>'+CAT_META[cat].label[lang]+'</h4></div><p>'+text+'</p></div>';
+  });
+  const luckyNum = (hashStr(tk+"-"+sign.key+"-num") % 99) + 1;
+  const color = pick(LUCKY_COLORS, tk+"-"+sign.key+"-color")[lang];
+  const energy = (hashStr(tk+"-"+sign.key+"-energy") % 41) + 60;
+
+  let mlScoreBadge = "";
+  if (window.LunarisML && typeof window.LunarisML.getCategoryScores === "function") {
+    const mlScores = window.LunarisML.getCategoryScores(sign.key, new Date());
+    const avgScore = Math.round(((mlScores.love + mlScores.luck + mlScores.career + mlScores.health) / 4) * 100);
+    mlScoreBadge = '<div class="hp-ml-badge" title="Algoritmik Ağırlıklı Gün Skoru"><span class="hp-ml-spark">✦</span> ML Kozmik Titreşim: <strong>'+avgScore+'%</strong></div>';
+  }
+
+  panel.innerHTML =
+    '<div class="hpanel-head"><span class="hp-glyph">'+renderConstellationSVG(sign.key,"hp-glyph-icon")+'</span><div class="hp-text"><h3>'+sign.name[lang]+'</h3><p class="hp-meta">'+sign.dates[lang]+' · '+sign.element[lang]+' · '+sign.planet[lang]+'</p>'+mlScoreBadge+'</div></div>'+
+    '<div class="hpanel-grid">'+catsHtml+'</div>'+
+    '<div class="hpanel-stats">'+
+      '<div class="hstat">'+icon("statNumber",22,"hstat-icon")+'<span>'+UI[lang].luckyNumLabel+'</span><strong>'+luckyNum+'</strong></div>'+
+      '<div class="hstat">'+icon("statColor",22,"hstat-icon")+'<span>'+UI[lang].luckyColorLabel+'</span><strong>'+color+'</strong></div>'+
+      '<div class="hstat">'+icon("statEnergy",22,"hstat-icon")+'<span>'+UI[lang].energyLabel+'</span><strong>'+energy+'%</strong></div>'+
+    '</div>'+
+    '<div class="horo-save-wrap">'+
+      '<button class="horo-save-btn" id="horoSaveBtn" onclick="saveActiveHoroscope()">'+
+        '<span>✦</span> <span>'+UI[lang].saveHoroBtn+'</span>'+
+      '</button>'+
+      '<button class="horo-deep-jump-btn" onclick="quickFillDeepSign(\''+sign.key+'\')">'+
+        '<span>🧠</span> <span>'+(lang==="tr" ? "Kişisel Doğum Haritası & Derin Yorum" : (lang==="ru" ? "Глубокий ML-анализ по карте" : "Deep Birth Chart & ML Analysis"))+'</span>'+
+      '</button>'+
+    '</div>';
+}
+
+function saveActiveHoroscope() {
+  const lang = state.lang;
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn()) {
+    openAuthModal("login");
+    triggerAuthError(UI[lang].wallLoginRequired);
+    return;
+  }
+  if (!state.selectedSign) return;
+  const sign = ZODIAC.find(function(z){ return z.key===state.selectedSign; });
+  if (!sign) return;
+  const tk = todayKey();
+  
+  const readings = {};
+  CATS.forEach(function(cat){
+    const variants = HORO[sign.key][cat][lang];
+    readings[cat] = pick(variants, tk+"-"+sign.key+"-"+cat);
+  });
+  
+  const luckyNum = (hashStr(tk+"-"+sign.key+"-num") % 99) + 1;
+  const color = pick(LUCKY_COLORS, tk+"-"+sign.key+"-color")[lang];
+  const energy = ((hashStr(tk+"-"+sign.key+"-energy") % 41) + 60) + "%";
+
+  const horoData = {
+    signKey: sign.key,
+    signName: sign.name,
+    glyph: sign.glyph,
+    love: readings.love,
+    luck: readings.luck,
+    daily: readings.daily,
+    money: readings.money,
+    luckyNum: luckyNum,
+    luckyColor: color,
+    energy: energy,
+    dateText: new Date().toLocaleDateString(lang === "tr" ? "tr-TR" : (lang === "ru" ? "ru-RU" : "en-US"), { day: "numeric", month: "long", year: "numeric" }),
+    lang: lang
+  };
+
+  window.LunarisAuth.saveHoroscope(horoData).then(function(){
+    const btn = document.getElementById("horoSaveBtn");
+    if (btn) {
+      btn.classList.add("saved");
+      btn.innerHTML = '<span>✓</span> <span>' + UI[lang].horoSavedBadge + '</span>';
+    }
+    const signNameStr = sign.name[lang] || sign.name.tr;
+    showToast(UI[lang].horoSavedToast.replace("{sign}", signNameStr));
+  });
+}
+
+function drawSpread() {
+  const shuffled = TAROT.slice().sort(function(){ return Math.random()-0.5; });
+  state.spread = shuffled.slice(0,3);
+  renderSpread(true);
+}
+
+function renderSpread(animate) {
+  const container = document.getElementById("tarotSpread");
+  const lang = state.lang;
+  const posKeys = ["posPast","posPresent","posFuture"];
+  container.innerHTML = "";
+  state.spread.forEach(function(card, i) {
+    const slot = document.createElement("div");
+    slot.className = "tcard-slot";
+    slot.innerHTML =
+      '<div class="tcard-position">'+UI[lang][posKeys[i]]+'</div>'+
+      '<div class="tcard" id="tcard-'+i+'">'+
+        '<div class="tcard-inner">'+
+          '<div class="tcard-face tcard-back"><span class="tcard-back-symbol">✦</span></div>'+
+          '<div class="tcard-face tcard-front" id="tcard-front-'+i+'" style="background:'+card.grad+'">'+
+            '<img class="tcard-img" src="'+card.img+'" alt="'+card.name[lang]+'" loading="lazy" onerror="this.parentElement.classList.add(\'img-fallback\');">'+
+            '<div class="tcard-fallback-icon">'+icon(card.key,52)+'</div>'+
+            '<div class="tcard-caption">'+
+              '<span class="tcard-numeral">'+card.num+'</span>'+
+              '<span class="tcard-name">'+card.name[lang]+'</span>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<p class="tcard-meaning">'+card.meaning[lang]+'</p>';
+    container.appendChild(slot);
+  });
+  const drawBtn = document.getElementById("drawBtn");
+  drawBtn.textContent = UI[lang].redrawBtn;
+
+  const comboEl = document.getElementById("comboReading");
+  const comboTextEl = document.getElementById("comboText");
+  if (comboEl && comboTextEl) {
+    const comboResult = renderComboReading(state.spread, lang);
+    comboTextEl.textContent = comboResult;
+    if (animate && window.LunarisAuth && window.LunarisAuth.isLoggedIn()) {
+      window.LunarisAuth.saveReading(state.spread.map(function(c){return c.key;}), comboResult, lang);
+    }
+    if (animate) {
+      comboEl.style.display = "none";
+      comboEl.classList.remove("visible");
+      setTimeout(function(){
+        comboEl.style.display = "block";
+        comboEl.classList.add("reveal");
+        requestAnimationFrame(function(){ comboEl.classList.add("visible"); });
+      }, 300 + state.spread.length*350 + 500);
+    } else {
+      comboEl.style.display = "block";
+    }
+  }
+  if (animate) {
+    state.spread.forEach(function(card,i){
+      setTimeout(function(){
+        const el = document.getElementById("tcard-"+i);
+        if (el) {
+          el.classList.add("flipped");
+          setTimeout(function(){
+            const rect = el.getBoundingClientRect();
+            spawnSparkleBurst(rect.left+rect.width/2, rect.top+rect.height/2);
+          }, 750);
+        }
+      }, 300 + i*350);
+    });
+  } else {
+    state.spread.forEach(function(card,i){
+      const el = document.getElementById("tcard-"+i);
+      if (el) el.classList.add("flipped");
+    });
+  }
+}
+
+function updateMoonDisplay(){
+  const lang = state.lang;
+  const now = new Date();
+
+  const localeMap = {tr:"tr-TR", en:"en-US", ru:"ru-RU"};
+  const dateEl = document.getElementById("todayDateText");
+  if (dateEl) dateEl.textContent = now.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long", year:"numeric"});
+
+  const sunSign = getCurrentSunSign(now);
+  const signIconEl = document.getElementById("todaySignIcon");
+  if (signIconEl) signIconEl.innerHTML = renderConstellationSVG(sunSign.key, "ti-constellation");
+  const signTextEl = document.getElementById("todaySignText");
+  if (signTextEl) signTextEl.textContent = formatSeason(sunSign.name[lang], lang);
+
+  const heroIconEl = document.getElementById("heroStarIcon");
+  if (heroIconEl) heroIconEl.innerHTML = renderConstellationSVG(sunSign.key, "hero-star-svg");
+  const heroNameEl = document.getElementById("heroStarName");
+  if (heroNameEl) heroNameEl.textContent = sunSign.name[lang];
+
+  const bgPhotoEl = document.getElementById("bgPhoto");
+  if (bgPhotoEl && !bgPhotoEl.classList.contains("loaded")) {
+    const photo = pick(STAR_PHOTOS, todayKey()+"-starmap-photo");
+    const preload = new Image();
+    preload.onload = function(){ bgPhotoEl.classList.add("loaded"); };
+    preload.src = photo.url;
+    bgPhotoEl.style.backgroundImage = "url('" + photo.url + "')";
+  }
+
+  const idx = getMoonPhaseIndex(now);
+  const phase = MOON_PHASES[idx];
+  const moonIconEl = document.getElementById("todayMoonIcon");
+  if (moonIconEl) moonIconEl.innerHTML = moonIconSVG(idx, "hero" + idx);
+  const moonTextEl = document.getElementById("todayMoonText");
+  if (moonTextEl) moonTextEl.textContent = phase.name[lang];
+
+  const wheelEmojiEl = document.getElementById("wheelCenterEmoji");
+  if (wheelEmojiEl) wheelEmojiEl.innerHTML = moonIconSVG(idx, "wheel" + idx);
+  const wheelDateEl = document.getElementById("wheelCenterDate");
+  if (wheelDateEl) wheelDateEl.textContent = now.toLocaleDateString(localeMap[lang], {day:"numeric", month:"short"});
+}
+
+function updateStarMap(){
+  const lang = state.lang;
+  const now = new Date();
+  const tk = todayKey();
+  const localeMap = {tr:"tr-TR", en:"en-US", ru:"ru-RU"};
+
+  const photo = pick(STAR_PHOTOS, tk+"-starmap-photo");
+  const imgEl = document.getElementById("starmapPhoto");
+  if (imgEl && imgEl.getAttribute("data-loaded-url") !== photo.url) {
+    imgEl.src = photo.url;
+    imgEl.setAttribute("data-loaded-url", photo.url);
+  }
+  if (imgEl) imgEl.alt = photo.alt[lang];
+  const creditEl = document.getElementById("starmapCredit");
+  if (creditEl) creditEl.textContent = UI[lang].starmapCreditPrefix + ": " + photo.credit;
+
+  const dateEl = document.getElementById("starmapDateText");
+  if (dateEl) dateEl.textContent = now.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long", year:"numeric"});
+
+  const sunSign = getCurrentSunSign(now);
+  const signIconEl = document.getElementById("starmapSignIcon");
+  if (signIconEl) signIconEl.innerHTML = renderConstellationSVG(sunSign.key, "ti-constellation");
+  const signTextEl = document.getElementById("starmapSignText");
+  if (signTextEl) signTextEl.textContent = formatSeason(sunSign.name[lang], lang);
+
+  const idx = getMoonPhaseIndex(now);
+  const moonIconEl = document.getElementById("starmapMoonIcon");
+  if (moonIconEl) moonIconEl.innerHTML = moonIconSVG(idx, "starmap" + idx);
+  const moonTextEl = document.getElementById("starmapMoonText");
+  if (moonTextEl) moonTextEl.textContent = MOON_PHASES[idx].name[lang];
+
+  const commentaryArr = SEASON_COMMENTARY[sunSign.key][lang];
+  const commentary = pick(commentaryArr, tk+"-"+sunSign.key+"-season");
+  const commentaryEl = document.getElementById("starmapCommentary");
+  if (commentaryEl) commentaryEl.textContent = commentary;
+
+  const posterContainer = document.getElementById("posterSvgContainer");
+  if (posterContainer && posterContainer.getAttribute("data-sign") !== sunSign.key) {
+    posterContainer.innerHTML = renderStarChartPoster(sunSign.key);
+    posterContainer.setAttribute("data-sign", sunSign.key);
+  }
+  const posterNameEl = document.getElementById("posterSignName");
+  if (posterNameEl) posterNameEl.textContent = sunSign.name[lang];
+  const posterSubEl = document.getElementById("posterSubText");
+  if (posterSubEl) posterSubEl.textContent = UI[lang].posterSub + " · " + now.toLocaleDateString(localeMap[lang], {day:"numeric", month:"short", year:"numeric"});
+}
+
+function buildHeroHalo(){
+  const container = document.getElementById("haloGlyphs");
+  if (!container) return;
+  container.innerHTML = "";
+  ZODIAC.forEach(function(z, i){
+    const span = document.createElement("span");
+    span.className = "halo-glyph";
+    span.style.setProperty("--i", i);
+    container.appendChild(span);
+  });
+}
+
+function initParallax(){
+  const heroArt = document.querySelector(".hero-art");
+  const wrap = document.getElementById("heroParallax");
+  if (!heroArt || !wrap) return;
+  heroArt.addEventListener("mousemove", function(e){
+    const rect = heroArt.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width/2) / (rect.width/2);
+    const y = (e.clientY - rect.top - rect.height/2) / (rect.height/2);
+    wrap.style.transform = "translate(" + (x*14) + "px," + (y*14) + "px)";
+  });
+  heroArt.addEventListener("mouseleave", function(){ wrap.style.transform = "translate(0,0)"; });
+}
+
+const WALL_MOODS = [
+  { key:"starry", iconKey:"star", labelKey:"moodStarry" },
+  { key:"loved", iconKey:"love", labelKey:"moodLoved" },
+  { key:"lucky", iconKey:"luck", labelKey:"moodLucky" },
+  { key:"dreamy", iconKey:"moon", labelKey:"moodDreamy" }
+];
+
+const WALL_NAME_KEY = "lunarisWallName";
+
+const WALL_LOCAL_KEY = "lunaris_local_wall";
+
+const WALL_LIKED_KEY = "lunarisWallLiked";
+
+const WALL_LAST_POST_KEY = "lunarisWallLastPost";
+
+const WALL_COOLDOWN_MS = 10000;
+
+const AVATAR_PALETTE = ["amethyst","gold","rose","jade"];
+
+function escapeHtml(str){
+  return String(str == null ? "" : str).replace(/[&<>"']/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+  });
+}
+
+function avatarPalette(name){
+  const key = AVATAR_PALETTE[hashStr(name || "?") % AVATAR_PALETTE.length];
+  return { key: key, cssVar: "var(--" + key + ")" };
+}
+
+function timeAgo(dateObj, lang){
+  if (!dateObj) return "";
+  const seconds = Math.max(0, Math.floor((Date.now() - dateObj.getTime()) / 1000));
+  if (seconds < 60) return UI[lang].wallJustNow;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return minutes + " " + UI[lang].wallMinAgo;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + " " + UI[lang].wallHourAgo;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return days + " " + UI[lang].wallDayAgo;
+  const localeMap = {tr:"tr-TR", en:"en-US", ru:"ru-RU"};
+  return dateObj.toLocaleDateString(localeMap[lang], {day:"numeric", month:"short"});
+}
+
+function buildWallMoodChips(){
+  const row = document.getElementById("wallMoodRow");
+  if (!row) return;
+  const lang = state.lang;
+  let html = "";
+  WALL_MOODS.forEach(function(m){
+    html += '<button type="button" class="wall-mood-chip'+(state.wallMood===m.key?" active":"")+'" data-mood="'+m.key+'">'+icon(m.iconKey,14)+'<span>'+UI[lang][m.labelKey]+'</span></button>';
+  });
+  row.innerHTML = html;
+  row.querySelectorAll(".wall-mood-chip").forEach(function(chip){
+    chip.onclick = function(){ selectWallMood(chip.dataset.mood); };
+  });
+}
+
+function selectWallMood(key){
+  state.wallMood = key;
+  document.querySelectorAll(".wall-mood-chip").forEach(function(chip){
+    chip.classList.toggle("active", chip.dataset.mood === key);
+  });
+}
+
+function updateWallCharCount(){
+  const ta = document.getElementById("wallText");
+  const counter = document.getElementById("wallCharCount");
+  if (!ta || !counter) return;
+  counter.textContent = ta.value.length + " / 280";
+}
+
+function loadLocalWallPosts(){
+  let arr = [];
+  try { arr = JSON.parse(localStorage.getItem(WALL_LOCAL_KEY) || "[]"); } catch(e){ arr = []; }
+  return arr.map(function(p){ return Object.assign({}, p, { createdAt: new Date(p.createdAt) }); });
+}
+
+function saveLocalWallPosts(arr){
+  try {
+    const trimmed = arr.slice(0,200).map(function(p){
+      return Object.assign({}, p, { createdAt: p.createdAt instanceof Date ? p.createdAt.toISOString() : p.createdAt });
+    });
+    localStorage.setItem(WALL_LOCAL_KEY, JSON.stringify(trimmed));
+  } catch(e){}
+}
+
+let wallUnsubscribe = null;
+
+function renderWallFeed(posts){
+  const feed = document.getElementById("wallFeed");
+  if (!feed) return;
+  const lang = state.lang;
+  if (!posts || !posts.length) {
+    feed.innerHTML = '<p class="wall-empty">'+UI[lang].wallEmpty+'</p>';
+    return;
+  }
+  let liked = [];
+  try { liked = JSON.parse(localStorage.getItem(WALL_LIKED_KEY) || "[]"); } catch(e){}
+  const activeUser = typeof getActiveUser === "function" ? getActiveUser() : null;
+  const currentUid = activeUser ? activeUser.uid : "";
+
+  let html = "";
+  posts.forEach(function(post){
+    const pal = avatarPalette(post.name);
+    const initial = (post.name || "?").trim().charAt(0).toUpperCase() || "?";
+    const isLiked = liked.indexOf(post.id) !== -1;
+    const moodDef = WALL_MOODS.find(function(m){ return m.key === post.mood; }) || WALL_MOODS[0];
+    const isAuthor = currentUid && (post.authorUid === currentUid || post.authorUid === "user_" + currentUid);
+    const rawHandle = post.handle || (post.name ? post.name.toLowerCase().replace(/[^a-z0-9._]/g, "") : "gezgin");
+    const displayHandle = "@" + rawHandle;
+
+    const avatarContent = post.photoURL 
+      ? '<img src="'+escapeHtml(post.photoURL)+'" class="account-avatar-img" alt="Avatar">' 
+      : escapeHtml(initial);
+
+    html += '<div class="wall-post" id="post_'+escapeHtml(post.id)+'">'+
+      '<div class="wall-avatar'+(pal.key==="gold" && !post.photoURL?" avatar-gold":"")+'" style="background:'+(post.photoURL?'none':pal.cssVar)+'">'+avatarContent+'</div>'+
+      '<div class="wall-post-body">'+
+        '<div class="wall-post-head">'+
+          '<div class="wall-author-info">'+
+            '<span class="wall-post-name">'+escapeHtml(post.name)+'</span>'+
+            '<span class="wall-post-handle">'+escapeHtml(displayHandle)+'</span>'+
+            '<span class="wall-post-dot">•</span>'+
+            '<span class="wall-post-time">'+timeAgo(post.createdAt instanceof Date ? post.createdAt : new Date(post.createdAt), lang)+'</span>'+
+          '</div>'+
+          '<span class="wall-post-mood" data-mood="'+moodDef.key+'">'+icon(moodDef.iconKey,12)+' <span>'+UI[lang][moodDef.labelKey]+'</span></span>'+
+        '</div>'+
+        '<p class="wall-post-text">'+escapeHtml(post.text)+'</p>'+
+        '<div class="wall-post-actions">'+
+          '<button type="button" class="wall-like-btn'+(isLiked?" liked":"")+'" data-id="'+escapeHtml(post.id)+'" title="Beğen">'+icon("love",15)+'<span class="wall-like-count">'+(post.likes||0)+'</span></button>'+
+          '<button type="button" class="wall-share-btn" data-id="'+escapeHtml(post.id)+'" title="Paylaş" onclick="shareWallPost(\''+escapeHtml(post.id)+'\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>'+
+          (isAuthor ? '<button type="button" class="wall-del-btn" onclick="deleteWallPost(\''+escapeHtml(post.id)+'\')" title="Sil"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>' : '')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+  feed.innerHTML = html;
+  feed.querySelectorAll(".wall-like-btn").forEach(function(btn){
+    btn.onclick = function(){ likeWallPost(btn.dataset.id); };
+  });
+}
+
+function shareWallPost(id) {
+  const url = window.location.origin + "/#wall";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function() {
+      showToast("Gönderi bağlantısı kopyalandı ✨");
+    }).catch(function(){});
+  } else {
+    showToast("Bağlantı: " + url);
+  }
+}
+
+function deleteWallPost(id) {
+  if (window.LunarisWall && typeof window.LunarisWall.deleteMessage === "function") {
+    window.LunarisWall.deleteMessage(id).then(function() {
+      showToast("Gönderi kaldırıldı ✦");
+      loadWallPosts(false);
+    });
+  }
+}
+
+function loadWallPosts(showLoading){
+  const feed = document.getElementById("wallFeed");
+  const lang = state.lang;
+  if (showLoading && feed) feed.innerHTML = '<p class="wall-loading">'+UI[lang].wallLoading+'</p>';
+  const configured = window.LunarisWall && window.LunarisWall.isConfigured();
+  const note = document.getElementById("wallComposerNote");
+  if (note) note.textContent = configured ? UI[lang].wallSyncedNote : UI[lang].wallLocalNote;
+
+  if (window.LunarisWall && typeof window.LunarisWall.subscribeMessages === "function") {
+    if (wallUnsubscribe) {
+      try { wallUnsubscribe(); } catch(e){}
+    }
+    wallUnsubscribe = window.LunarisWall.subscribeMessages(function(posts){
+      state.wallPosts = posts;
+      renderWallFeed(posts);
+    });
+  } else if (window.LunarisWall) {
+    window.LunarisWall.loadMessages().then(function(posts){
+      state.wallPosts = posts;
+      renderWallFeed(posts);
+    }).catch(function(){
+      state.wallPosts = loadLocalWallPosts();
+      renderWallFeed(state.wallPosts);
+    });
+  } else {
+    state.wallPosts = loadLocalWallPosts();
+    renderWallFeed(state.wallPosts);
+  }
+}
+
+function submitWallPost(){
+  const lang = state.lang;
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn()) {
+    openAuthModal("login");
+    triggerAuthError(UI[lang].wallLoginRequired);
+    return;
+  }
+  const textInput = document.getElementById("wallText");
+  const btn = document.getElementById("wallSubmitBtn");
+  if (!textInput) return;
+  const text = textInput.value.trim();
+  if (!text) { textInput.focus(); return; }
+
+  let lastPost = 0;
+  try { lastPost = parseInt(localStorage.getItem(WALL_LAST_POST_KEY) || "0", 10); } catch(e){}
+  if (Date.now() - lastPost < WALL_COOLDOWN_MS) {
+    if (btn) {
+      const original = btn.textContent;
+      btn.textContent = UI[lang].wallCooldown;
+      setTimeout(function(){ btn.textContent = original; }, 2200);
+    }
+    return;
+  }
+
+  if (btn) btn.disabled = true;
+  const finish = function(){
+    if (btn) btn.disabled = false;
+    textInput.value = "";
+    updateWallCharCount();
+    try { localStorage.setItem(WALL_LAST_POST_KEY, String(Date.now())); } catch(e){}
+  };
+
+  window.LunarisWall.postMessage(text, state.wallMood).then(finish).catch(function(err){
+    console.warn("Post error:", err);
+    finish();
+  });
+}
+
+function likeWallPost(id){
+  const btn = document.querySelector('.wall-like-btn[data-id="'+id+'"]');
+  let liked = [];
+  try { liked = JSON.parse(localStorage.getItem(WALL_LIKED_KEY) || "[]"); } catch(e){}
+  if (liked.indexOf(id) !== -1) return;
+  liked.push(id);
+  try { localStorage.setItem(WALL_LIKED_KEY, JSON.stringify(liked)); } catch(e){}
+  if (btn) {
+    btn.classList.add("liked");
+    const countEl = btn.querySelector(".wall-like-count");
+    if (countEl) countEl.textContent = (parseInt(countEl.textContent,10) || 0) + 1;
+  }
+  if (window.LunarisWall && window.LunarisWall.isConfigured()) {
+    window.LunarisWall.likeMessage(id).catch(function(){});
+  } else {
+    const local = loadLocalWallPosts();
+    const idx = local.findIndex(function(p){ return p.id === id; });
+    if (idx !== -1) { local[idx].likes = (local[idx].likes||0) + 1; saveLocalWallPosts(local); }
+  }
+}
+
+/* ---- ML Derin Astroloji Mantığı ---- */
+let lastDeepReadingData = null;
+
+function quickFillDeepSign(signKey) {
+  const signApproxDates = {
+    aries: "1998-04-05", taurus: "1998-05-05", gemini: "1998-06-05",
+    cancer: "1998-07-05", leo: "1998-08-05", virgo: "1998-09-05",
+    libra: "1998-10-05", scorpio: "1998-11-05", sagittarius: "1998-12-05",
+    capricorn: "1998-01-05", aquarius: "1998-02-05", pisces: "1998-03-05"
+  };
+  const dateInput = document.getElementById("deepBirthDate");
+  if (dateInput && signApproxDates[signKey]) {
+    dateInput.value = signApproxDates[signKey];
+  }
+  const deepSec = document.getElementById("deepreading");
+  if (deepSec) {
+    deepSec.scrollIntoView({ behavior: "smooth" });
+  }
+  runDeepReading();
+}
+
+function runDeepReading() {
+  const lang = state.lang;
+  const dateInput = document.getElementById("deepBirthDate");
+  const hourInput = document.getElementById("deepBirthHour");
+  const errEl = document.getElementById("deepError");
+  const resultEl = document.getElementById("deepResult");
+
+  if (!dateInput || !dateInput.value) {
+    if (errEl) {
+      errEl.textContent = UI[lang].deepDateRequired;
+      errEl.style.display = "block";
+    }
+    if (dateInput) dateInput.focus();
+    return;
+  }
+  if (errEl) errEl.style.display = "none";
+
+  const dateParts = dateInput.value.split("-");
+  const birthDate = new Date(parseInt(dateParts[0], 10), parseInt(dateParts[1], 10) - 1, parseInt(dateParts[2], 10));
+
+  let birthHour = 12;
+  if (hourInput && hourInput.value) {
+    const hp = hourInput.value.split(":");
+    birthHour = parseInt(hp[0], 10) + (parseInt(hp[1], 10) || 0) / 60;
+  }
+
+  const sunSignKey = window.LunarisML.getSunSign(birthDate);
+  const reading = window.LunarisML.generateDeepReading(sunSignKey, lang, birthDate, birthHour);
+  const timeline = window.LunarisML.generateEnergyTimeline(sunSignKey, reading.natal ? reading.natal.natalVector : null);
+  const insight = window.LunarisML.getProfileInsight(reading.natal.profile, lang);
+
+  lastDeepReadingData = {
+    birthDate: birthDate,
+    birthHour: birthHour,
+    sunSignKey: sunSignKey,
+    reading: reading,
+    timeline: timeline,
+    insight: insight
+  };
+
+  renderDeepReadingUI(lastDeepReadingData);
+
+  resultEl.style.display = "block";
+  resultEl.classList.remove("visible");
+  void resultEl.offsetWidth;
+  resultEl.classList.add("reveal");
+  requestAnimationFrame(function(){ resultEl.classList.add("visible"); });
+
+  setTimeout(function() {
+    resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, 100);
+}
+
+function renderDeepReadingUI(data) {
+  const lang = state.lang;
+  const reading = data.reading;
+  const natal = reading.natal;
+  const insight = data.insight;
+  const timeline = data.timeline;
+
+  const findSignName = function(key) {
+    const z = ZODIAC.find(function(s){ return s.key === key; });
+    return z ? (z.glyph + " " + z.name[lang]) : key;
+  };
+
+  // 1. Üç Sütun
+  const dnSunVal = document.getElementById("dnSunVal");
+  const dnMoonVal = document.getElementById("dnMoonVal");
+  const dnAscVal = document.getElementById("dnAscVal");
+  if (dnSunVal) dnSunVal.textContent = findSignName(natal.sunSign);
+  if (dnMoonVal) dnMoonVal.textContent = findSignName(natal.moonSign);
+  if (dnAscVal) dnAscVal.textContent = findSignName(natal.ascSign);
+
+  // 2. Radar Chart
+  drawRadarChart(natal.profile, lang);
+
+  // 3. Kozmik Anlık Durum
+  const planetHourEl = document.getElementById("deepPlanetHour");
+  const moonPhaseEl = document.getElementById("deepMoonPhase");
+  const retrogradEl = document.getElementById("deepRetrograd");
+  
+  if (planetHourEl) {
+    const pName = window.LunarisML.PLANET_NAMES[reading.planetaryHour];
+    planetHourEl.textContent = pName ? pName[lang] : reading.planetaryHour;
+  }
+  if (moonPhaseEl) {
+    moonPhaseEl.textContent = reading.moonPhase[lang];
+  }
+  if (retrogradEl) {
+    if (reading.transits.mercRetro) {
+      retrogradEl.textContent = "Merkür (Retro) ⚠️";
+    } else if (reading.transits.venusRetro) {
+      retrogradEl.textContent = "Venüs (Retro) ⚠️";
+    } else {
+      retrogradEl.textContent = UI[lang].deepRetrogradNone;
+    }
+  }
+
+  // 4. Enerji Ring
+  const energyPctEl = document.getElementById("deepEnergyPct");
+  const energyRingFg = document.getElementById("deepEnergyRingFg");
+  if (energyPctEl) energyPctEl.textContent = reading.totalEnergy;
+  if (energyRingFg) {
+    const circ = 2 * Math.PI * 52;
+    const offset = circ * (1 - reading.totalEnergy / 100);
+    energyRingFg.style.strokeDasharray = circ.toFixed(1);
+    energyRingFg.style.strokeDashoffset = offset.toFixed(1);
+  }
+
+  // 5. Derin Yorum Kartları
+  const catsContainer = document.getElementById("deepCats");
+  if (catsContainer) {
+    const catKeys = [
+      { key: "love", icon: "💖", label: UI[lang].deepCatLove },
+      { key: "luck", icon: "✨", label: UI[lang].deepCatLuck },
+      { key: "career", icon: "⚡", label: UI[lang].deepCatCareer },
+      { key: "health", icon: "🌿", label: UI[lang].deepCatHealth }
+    ];
+    let catsHtml = "";
+    catKeys.forEach(function(c) {
+      const scoreVal = Math.round((reading.scores[c.key] || 0.5) * 100);
+      const txt = reading.texts[c.key] || "";
+      catsHtml +=
+        '<div class="deep-cat-card">' +
+          '<div class="dcc-head">' +
+            '<div class="dcc-title-wrap">' +
+              '<span class="dcc-icon">' + c.icon + '</span>' +
+              '<h4>' + c.label + '</h4>' +
+            '</div>' +
+            '<div class="dcc-score-pill"><span class="dcc-score-bar" style="width:'+scoreVal+'%"></span><span class="dcc-score-num">'+scoreVal+'%</span></div>' +
+          '</div>' +
+          '<p class="dcc-text">' + txt + '</p>' +
+        '</div>';
+    });
+    catsContainer.innerHTML = catsHtml;
+  }
+
+  // 6. Şanslı Sayı & Renk
+  const numEl = document.getElementById("deepLuckyNum");
+  const colEl = document.getElementById("deepLuckyColor");
+  if (numEl) numEl.textContent = reading.luckyNum;
+  if (colEl) colEl.textContent = reading.luckyColor;
+
+  // 7. Retrograd Uyarısı
+  const retroWarnEl = document.getElementById("deepRetrogradWarn");
+  if (retroWarnEl) {
+    if (reading.retrogradWarning) {
+      retroWarnEl.textContent = reading.retrogradWarning;
+      retroWarnEl.style.display = "block";
+    } else {
+      retroWarnEl.style.display = "none";
+    }
+  }
+
+  // 8. 12 Aylık Timeline
+  renderEnergyTimelineUI(timeline, lang);
+
+  // 9. Güçlü Yönler
+  const strEl = document.getElementById("deepStrength");
+  const chaEl = document.getElementById("deepChallenge");
+  if (strEl) strEl.textContent = insight.strength;
+  if (chaEl) chaEl.textContent = insight.challenge;
+}
+
+function drawRadarChart(profile, lang) {
+  const svg = document.getElementById("deepRadarSvg");
+  const labelsWrap = document.getElementById("deepRadarLabels");
+  if (!svg) return;
+
+  const dims = ['energy','stability','adventure','practicality','social','intuition','leadership','sensitivity'];
+  const center = 130;
+  const maxRadius = 85;
+  const total = dims.length;
+  const angleStep = (Math.PI * 2) / total;
+
+  let gridSvg = "";
+  [0.25, 0.5, 0.75, 1.0].forEach(function(lvl) {
+    let pts = [];
+    for (let i = 0; i < total; i++) {
+      const angle = i * angleStep - Math.PI / 2;
+      const r = maxRadius * lvl;
+      pts.push((center + r * Math.cos(angle)).toFixed(1) + "," + (center + r * Math.sin(angle)).toFixed(1));
+    }
+    gridSvg += '<polygon points="' + pts.join(" ") + '" class="radar-grid-ring" />';
+  });
+
+  for (let i = 0; i < total; i++) {
+    const angle = i * angleStep - Math.PI / 2;
+    const x = center + maxRadius * Math.cos(angle);
+    const y = center + maxRadius * Math.sin(angle);
+    gridSvg += '<line x1="' + center + '" y1="' + center + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '" class="radar-axis-line" />';
+  }
+
+  let polyPts = [];
+  dims.forEach(function(dim, i) {
+    const val = (profile[dim] || 50) / 100;
+    const r = maxRadius * val;
+    const angle = i * angleStep - Math.PI / 2;
+    const x = center + r * Math.cos(angle);
+    const y = center + r * Math.sin(angle);
+    polyPts.push(x.toFixed(1) + "," + y.toFixed(1));
+  });
+
+  const polySvg = '<polygon points="' + polyPts.join(" ") + '" class="radar-polygon" />';
+  let dotsSvg = "";
+  dims.forEach(function(dim, i) {
+    const val = (profile[dim] || 50) / 100;
+    const r = maxRadius * val;
+    const angle = i * angleStep - Math.PI / 2;
+    const x = center + r * Math.cos(angle);
+    const y = center + r * Math.sin(angle);
+    dotsSvg += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="3.5" class="radar-dot" />';
+  });
+
+  svg.innerHTML = gridSvg + polySvg + dotsSvg;
+
+  if (labelsWrap) {
+    let lblHtml = "";
+    dims.forEach(function(dim, i) {
+      const angle = i * angleStep - Math.PI / 2;
+      const r = maxRadius + 22;
+      const left = ((center + r * Math.cos(angle)) / 260) * 100;
+      const top = ((center + r * Math.sin(angle)) / 260) * 100;
+      const labelObj = window.LunarisML.PROFILE_LABELS[dim];
+      const lblText = labelObj ? labelObj[lang] : dim;
+      lblHtml += '<span class="radar-lbl" style="left:'+left.toFixed(1)+'%;top:'+top.toFixed(1)+'%;">'+lblText+'</span>';
+    });
+    labelsWrap.innerHTML = lblHtml;
+  }
+}
+
+function renderEnergyTimelineUI(timeline, lang) {
+  const container = document.getElementById("deepTimeline");
+  const legend = document.getElementById("deepTimelineLegend");
+  if (!container) return;
+
+  if (legend) {
+    legend.innerHTML =
+      '<span class="dtl-item"><span class="dtl-dot energy"></span> '+UI[lang].deepTimelineEnergy+'</span>'+
+      '<span class="dtl-item"><span class="dtl-dot love"></span> '+UI[lang].deepTimelineLove+'</span>'+
+      '<span class="dtl-item"><span class="dtl-dot career"></span> '+UI[lang].deepTimelineCareer+'</span>'+
+      '<span class="dtl-item"><span class="dtl-dot luck"></span> '+UI[lang].deepTimelineLuck+'</span>';
+  }
+
+  let html = "";
+  timeline.forEach(function(item) {
+    const lbl = item.label[lang] || item.label.tr;
+    html +=
+      '<div class="dt-col '+(item.isCurrent ? 'current' : '')+'">'+
+        '<div class="dt-bars">'+
+          '<div class="dt-bar dt-b-energy" style="height:'+item.energy+'%" title="'+UI[lang].deepTimelineEnergy+': '+item.energy+'%"></div>'+
+          '<div class="dt-bar dt-b-love" style="height:'+item.love+'%" title="'+UI[lang].deepTimelineLove+': '+item.love+'%"></div>'+
+          '<div class="dt-bar dt-b-career" style="height:'+item.career+'%" title="'+UI[lang].deepTimelineCareer+': '+item.career+'%"></div>'+
+          '<div class="dt-bar dt-b-luck" style="height:'+item.luck+'%" title="'+UI[lang].deepTimelineLuck+': '+item.luck+'%"></div>'+
+        '</div>'+
+        '<span class="dt-month-lbl">'+lbl+'</span>'+
+      '</div>';
+  });
+  container.innerHTML = html;
+}
+
+/* ---- Language switching (page-specific re-renders) ---- */
+
+function setLang(lang){
+  applyLangToDOM(lang);
+  updateWheelLabels();
+  updateCompatSelectorLabels();
+  if (document.getElementById("compatResult") && document.getElementById("compatResult").style.display === "block") { checkCompatibility(); }
+  if (state.spread.length) { renderSpread(false); }
+  else { const db = document.getElementById("drawBtn"); if (db) db.textContent = UI[lang].drawBtn; }
+  renderHoroPanel();
+  updateMoonDisplay();
+  updateStarMap();
+  buildWallMoodChips();
+  renderWallFeed(state.wallPosts);
+  if (lastDeepReadingData) {
+    const reading = window.LunarisML.generateDeepReading(lastDeepReadingData.sunSignKey, lang, lastDeepReadingData.birthDate, lastDeepReadingData.birthHour);
+    const timeline = window.LunarisML.generateEnergyTimeline(lastDeepReadingData.sunSignKey, reading.natal ? reading.natal.natalVector : null);
+    const insight = window.LunarisML.getProfileInsight(reading.natal.profile, lang);
+    lastDeepReadingData.reading = reading;
+    lastDeepReadingData.timeline = timeline;
+    lastDeepReadingData.insight = insight;
+    renderDeepReadingUI(lastDeepReadingData);
+  }
+  const wallNoteEl = document.getElementById("wallComposerNote");
+  if (wallNoteEl) {
+    const wallConfigured = window.LunarisWall && window.LunarisWall.isConfigured();
+    wallNoteEl.textContent = wallConfigured ? UI[lang].wallSyncedNote : UI[lang].wallLocalNote;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  setLang(state.lang);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  createStars(70);
+  buildWheel();
+  buildCompatSelectors();
+  buildHeroHalo();
+  buildBgConstellation();
+  updateMoonDisplay();
+  updateStarMap();
+  renderHoroPanel();
+  buildWallMoodChips();
+  updateWallCharCount();
+  loadWallPosts(true);
+  initNavSpy(["tarot","horoscope","deepreading","compat","wall"]);
+  initToTopButton();
+  initScrollReveal(".feature-card, .section-title, .section-text, .tarot-controls, .wheel-wrap, .hpanel, .starmap-card, .starmap-poster, .compat-box, .wall-composer, .wall-feed, .deep-form-card, .deep-result");
+  if (!reduceMotion) {
+    initParallax();
+    initSparkleTrail();
+    setInterval(function(){ if (Math.random() < 0.6) spawnShootingStar(); }, 4500);
+  }
+  document.addEventListener("click", function(e){
+    const nav = document.getElementById("siteNav");
+    const toggle = document.getElementById("navToggle");
+    if (!nav || !nav.classList.contains("open")) return;
+    if (nav.contains(e.target) || (toggle && toggle.contains(e.target))) return;
+    closeNav();
+  });
+  let resizeTimer;
+  window.addEventListener("resize", function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildBgConstellation, 400);
+  });
+});
+</script>
+
+<script type="module" src="firebase-config.js"></script>
+</body>
+</html>

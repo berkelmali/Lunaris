@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNARIS Araçlar — Numeroloji, Çin Burcu ve Kozmik Takvim</title>
+<meta name="description" content="Doğum tarihine göre yaşam yolu sayını ve Çin burcunu hesapla, 2026'nın Merkür retro dönemlerine ve tutulmalarına göz at, aylık ay evrelerini takip et.">
+<meta name="theme-color" content="#0B0714">
+<meta property="og:title" content="LUNARIS Araçlar — Numeroloji, Çin Burcu, Kozmik Takvim">
+<meta property="og:description" content="Numeroloji, Çin burcu, Merkür retrosu, tutulmalar ve aylık ay takvimi — LUNARIS'in mistik araçları bir arada.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%99%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Yeseva+One&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ==========================================================
+     LUNARIS PRELOADER (AÇILIŞ ANİMASYONU)
+     ========================================================== -->
+<div id="lunarisPreloader">
+  <div class="preloader-inner">
+    <div class="preloader-emblem-wrap">
+      <div class="preloader-glow-ring"></div>
+      <div class="preloader-orbit-outer"><div class="preloader-orbit-dot"></div></div>
+      <svg class="preloader-emblem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pLogoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--amethyst)"/>
+            <stop offset="1" stop-color="var(--gold-bright)"/>
+          </linearGradient>
+        </defs>
+        <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+        <circle class="logo-ring-inner" cx="20" cy="20" r="14.5"/>
+        <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z" fill="url(#pLogoGrad)"/>
+        <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z" fill="var(--gold-bright)"/>
+        <circle class="logo-spark" cx="27.5" cy="26" r="1" fill="#FFF"/>
+      </svg>
+    </div>
+    <div class="preloader-title">LUNARIS</div>
+    <div class="preloader-bar-wrap"><div class="preloader-bar"></div></div>
+    <div class="preloader-quote" id="preloaderQuote">Kozmik enerjiler yükleniyor...</div>
+  </div>
+</div>
+
+<div class="bg-photo" id="bgPhoto"></div>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+<div class="starfield" id="starfield"></div>
+<svg class="bg-constellation" id="bgConstellation" xmlns="http://www.w3.org/2000/svg"></svg>
+<div class="shooting-stars" id="shootingStars"></div>
+<div class="vignette"></div>
+
+<header class="site-header">
+  <a href="index.html" class="brand">
+    <span class="brand-emblem" aria-hidden="true">
+      <svg class="logo-emblem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoMoonGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--amethyst)"/>
+            <stop offset="1" stop-color="var(--gold)"/>
+          </linearGradient>
+        </defs>
+        <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+        <circle class="logo-ring-inner" cx="20" cy="20" r="14.5"/>
+        <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z"/>
+        <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z"/>
+        <circle class="logo-spark" cx="27.5" cy="26" r="1"/>
+      </svg>
+    </span>
+    <span class="brand-wordmark">
+      <span class="brand-name">LUNARIS</span>
+      <span class="brand-tag" data-i18n="brandTag">Tarot & Astroloji</span>
+    </span>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menü" aria-expanded="false" onclick="toggleNav()">
+    <svg class="icon-svg" viewBox="0 0 40 40"><line x1="6" y1="12" x2="34" y2="12"/><line x1="6" y1="20" x2="34" y2="20"/><line x1="6" y1="28" x2="34" y2="28"/></svg>
+  </button>
+  <nav class="site-nav" id="siteNav">
+    <a href="index.html#tarot" data-i18n="navTarot" onclick="closeNav()">Tarot</a>
+    <a href="index.html#horoscope" data-i18n="navHoro" onclick="closeNav()">Burçlar</a>
+    <a href="index.html#deepreading" data-i18n="navDeep" onclick="closeNav()">Derin Analiz</a>
+    <a href="index.html#compat" data-i18n="navCompat" onclick="closeNav()">Uyum</a>
+    <a href="araclar.html" class="active" data-i18n="navTools" onclick="closeNav()">Araçlar</a>
+    <a href="blog.html" data-i18n="navBlog" onclick="closeNav()">Blog</a>
+    <a href="index.html#wall" data-i18n="navWall" onclick="closeNav()">Topluluk</a>
+  </nav>
+  <div class="header-right">
+    <button class="account-btn" id="accountBtn" onclick="handleAccountClick()">
+      <svg class="icon-svg" width="18" height="18" viewBox="0 0 40 40"><circle cx="20" cy="15" r="8"/><path d="M6,35 C6,25 13,20 20,20 C27,20 34,25 34,35"/></svg>
+      <span id="accountBtnLabel" data-i18n="loginBtn">Giriş Yap</span>
+    </button>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="tr" onclick="setLang('tr')">TR</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+    </div>
+  </div>
+</header>
+
+<!-- ==========================================================
+     YENİLENMİŞ KOZMİK GİRİŞ / KAYIT MODALI
+     ========================================================== -->
+<div class="modal-overlay" id="authModalOverlay" style="display:none;" onclick="if(event.target===this) closeAuthModal();">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAuthModal()" aria-label="Kapat">×</button>
+    
+    <div class="auth-modal-header">
+      <div class="auth-modal-icon">
+        <svg class="logo-emblem" viewBox="0 0 40 40" style="width:34px;height:34px;">
+          <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+          <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z" fill="url(#logoMoonGrad)"/>
+          <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z" fill="var(--gold-bright)"/>
+        </svg>
+      </div>
+      <h3 class="auth-modal-title" data-i18n="authModalTitle">Kozmik Portal</h3>
+      <p class="auth-modal-sub" data-i18n="authModalSub">Yıldızların rehberliğine adım at</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')" data-i18n="authTabLogin">Giriş Yap</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')" data-i18n="authTabSignup">Kayıt Ol</button>
+    </div>
+
+    <!-- Giriş Formu -->
+    <div class="auth-form" id="authFormLogin">
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <input type="email" id="loginEmail" class="auth-input" data-i18n-ph="authEmailPh" placeholder="E-posta adresin" autocomplete="email">
+      </div>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <input type="password" id="loginPassword" class="auth-input" data-i18n-ph="authPasswordPh" placeholder="Şifren" autocomplete="current-password">
+        <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Şifreyi Göster/Gizle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
+      <a class="auth-forgot-link" onclick="switchAuthTab('forgot')" data-i18n="authTabForgot">Şifremi Unuttum</a>
+      <button class="btn-primary auth-submit" onclick="doLogin()" data-i18n="authTabLogin">Giriş Yap</button>
+      
+      <div class="auth-divider">veya</div>
+      <button class="btn-auth-google" onclick="doGoogleLogin()">
+        <svg class="google-icon-svg" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        <span data-i18n="authGoogleBtn">Google ile Devam Et</span>
+      </button>
+
+      <button class="btn-auth-demo" onclick="doDemoLogin()" data-i18n="authDemoBtn">✨ Demo / Misafir Moduyla Giriş Yap</button>
+    </div>
+
+    <!-- Kayıt Formu -->
+    <div class="auth-form" id="authFormSignup" style="display:none;">
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <input type="text" id="signupUsername" class="auth-input" data-i18n-ph="authUsernamePh" placeholder="Kullanıcı Adın" required autocomplete="username">
+      </div>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <input type="email" id="signupEmail" class="auth-input" data-i18n-ph="authEmailPh" placeholder="E-posta adresin" autocomplete="email">
+      </div>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <input type="password" id="signupPassword" class="auth-input" data-i18n-ph="authPasswordMinPh" placeholder="Şifre (en az 6 karakter)" autocomplete="new-password">
+        <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility('signupPassword', this)" aria-label="Şifreyi Göster/Gizle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
+      <button class="btn-primary auth-submit" onclick="doSignup()" data-i18n="authCreateBtn">Hesap Oluştur</button>
+      
+      <div class="auth-divider">veya</div>
+      <button class="btn-auth-google" onclick="doGoogleLogin()">
+        <svg class="google-icon-svg" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        <span data-i18n="authGoogleBtn">Google ile Devam Et</span>
+      </button>
+    </div>
+
+    <!-- Şifremi Unuttum Formu -->
+    <div class="auth-form" id="authFormForgot" style="display:none;">
+      <p style="color:var(--mist); font-size:0.88rem; line-height:1.5; text-align:center;" data-i18n="authForgotSub">Kayıtlı e-posta adresini gir, sıfırlama bağlantısını hemen gönderelim.</p>
+      <div class="auth-input-group">
+        <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <input type="email" id="forgotEmail" class="auth-input" data-i18n-ph="authEmailPh" placeholder="E-posta adresin">
+      </div>
+      <button class="btn-primary auth-submit" onclick="doForgotPassword()" data-i18n="authSendResetBtn">Sıfırlama Bağlantısı Gönder</button>
+      <button type="button" class="btn-auth-demo" onclick="switchAuthTab('login')" data-i18n="authBackToLogin">Giriş Ekranına Dön</button>
+    </div>
+
+    <div class="auth-success-badge" id="authSuccess"></div>
+    <p class="auth-error" id="authError"></p>
+    <p class="auth-note" id="authNote" data-i18n="authNotConfiguredNote">Firebase yapılandırması henüz girilmedi. İstersen Demo Modu ile hemen test edebilirsin.</p>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="accountModalOverlay" style="display:none;" onclick="if(event.target===this) closeAccountModal();">
+  <div class="modal-box account-box">
+    <button class="modal-close" onclick="closeAccountModal()" aria-label="Kapat">×</button>
+    <div class="account-profile-header">
+      <div class="account-avatar-wrapper" title="Profil fotoğrafını değiştir" onclick="document.getElementById('avatarFileInput').click();">
+        <div class="account-avatar-large" id="accountAvatarLarge">✦</div>
+        <div class="avatar-edit-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        </div>
+      </div>
+      <div class="account-profile-details">
+        <div class="account-username-title" id="accountUsername">@Gezgin</div>
+        <div class="account-email-sub" id="accountEmail"></div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()" data-i18n="logoutBtn">Çıkış Yap</button>
+    </div>
+
+    <!-- Profil Fotoğrafı Yükleme & Mistik İkon Seçimi -->
+    <div class="avatar-picker-wrap">
+      <div class="avatar-picker-title">
+        <span data-i18n="changeAvatarLabel">Profil Fotoğrafı:</span>
+        <label class="file-upload-btn">
+          <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleCustomPhotoUpload(event)">
+          <span data-i18n="uploadPhotoBtn">📷 Fotoğraf Yükle</span>
+        </label>
+      </div>
+      <div style="font-size:0.75rem; color:var(--mist); margin-bottom:6px;" data-i18n="presetAvatarsLabel">Veya Mistik İkon Seç:</div>
+      <div class="avatar-presets-row">
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Luna')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Luna" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Orion')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Orion" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Selena')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Selena" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Astra')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Astra" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Zenith')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Zenith" alt="Preset"></button>
+      </div>
+    </div>
+    <div class="account-pref-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-4); padding-bottom:var(--sp-3); border-bottom:1px solid rgba(212,175,106,0.15);">
+      <span style="font-size:0.85rem; color:var(--mist);" data-i18n="prefLangLabel">Tercih Edilen Dil:</span>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="tr" onclick="setLang('tr')">TR</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+      </div>
+    </div>
+    <div class="account-subtabs">
+      <button class="account-subtab-btn active" id="tabAccountTarot" onclick="switchAccountTab('tarot')" data-i18n="tabTarotHist">🃏 Tarot Fallarım</button>
+      <button class="account-subtab-btn" id="tabAccountHoro" onclick="switchAccountTab('horoscope')" data-i18n="tabHoroHist">⭐ Burç Yorumlarım</button>
+      <button class="account-subtab-btn" id="tabAccountWishes" onclick="switchAccountTab('wishes')" data-i18n="tabWishesHist">🌟 Dileklerim</button>
+    </div>
+    <div class="reading-history" id="readingHistoryList"></div>
+    <div class="reading-history" id="horoHistoryList" style="display:none;"></div>
+    <div class="reading-history" id="wishesHistoryList" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="page-intro">
+  <span class="section-eyebrow" data-i18n="toolsEyebrow">Kozmik Doğum Matrisi</span>
+  <h1 class="section-title" data-i18n="toolsTitle">Astrolojik Doğum Haritan</h1>
+  <p class="section-text" data-i18n="toolsText">Doğum tarihini gir; kutsal numeroloji sayını, Doğu astrolojisi 5 element mührünü ve Güneş burcunun kozmik güç dengesini keşfet.</p>
+
+  <div class="tools-form-wrap">
+    <div class="tools-form">
+      <div class="tools-form-field">
+        <label for="toolsBirthDate" data-i18n="toolsDateLabel">Doğum Tarihin</label>
+        <input type="date" id="toolsBirthDate" class="tools-date-input" onkeydown="if(event.key==='Enter') calculatePersonalTools()">
+      </div>
+      <button class="btn-primary" onclick="calculatePersonalTools()" data-i18n="toolsCalcBtn">✦ Kozmik İmzamı Çöz</button>
+    </div>
+  </div>
+
+  <div class="birth-matrix-results" id="birthMatrixResults">
+    <!-- 1. Kutsal Numeroloji & Yaşam Yolu -->
+    <div class="tool-card astro-matrix-card" id="numeroCard">
+      <div class="matrix-card-header">
+        <span class="tool-card-eyebrow" data-i18n="numeroEyebrow">Kutsal Numeroloji</span>
+        <span class="matrix-badge gold" id="numeroFreqBadge" data-i18n="numeroBadgePending">✦ Yaşam Yolu</span>
+      </div>
+      
+      <div class="matrix-empty-wrap" id="numeroEmpty">
+        <div class="matrix-empty-icon-wrap gold-glow">
+          <div class="matrix-empty-ring"></div>
+          <div class="matrix-empty-glyph">✦</div>
+        </div>
+        <h4 class="matrix-empty-title" data-i18n="numeroEmptyTitle">Kutsal Sayı Frekansı</h4>
+        <p class="matrix-empty-desc" data-i18n="numeroEmpty">Doğum tarihini girerek yaşam yolu sayını, gezegensel titreşimini ve solfeggio frekansını keşfet.</p>
+        <div class="matrix-empty-chip" data-i18n="numeroEmptyChip">✦ 1 - 9 & Usta Sayılar (11, 22, 33)</div>
+      </div>
+      
+      <div id="numeroResult" class="matrix-card-content" style="display:none;">
+        <div class="numero-hero-wrap">
+          <div class="numero-sacred-ring"></div>
+          <div class="numero-sacred-ring inner"></div>
+          <div class="numero-number" id="numeroNumber">0</div>
+        </div>
+        <div class="numero-archetype-badge" id="numeroArchetypeBadge">✦ Yaratıcı Ruh</div>
+        <div class="numero-title" id="numeroResultTitle"></div>
+        <div class="matrix-formula-chip" id="numeroFormulaChip">13.01.2005 ➔ 1+3 + 0+1 + 2+0+0+5 = 12 ➔ 3</div>
+        <p class="numero-desc" id="numeroDesc"></p>
+        <div class="matrix-meta-row">
+          <div class="matrix-meta-item">
+            <span class="meta-label" data-i18n="matrixVibeLabel">Gezegensel Titreşim</span>
+            <strong class="meta-val" id="numeroPlanetVal">Jüpiter ♃</strong>
+          </div>
+          <div class="matrix-meta-item">
+            <span class="meta-label" data-i18n="matrixChakraLabel">Kozmik Çakra</span>
+            <strong class="meta-val" id="numeroChakraVal">Güneş Düğümü ☀️</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Doğu Astrolojisi & Çin Burcu -->
+    <div class="tool-card astro-matrix-card" id="chineseCard">
+      <div class="matrix-card-header">
+        <span class="tool-card-eyebrow" data-i18n="chineseEyebrow">Doğu Astrolojisi & Çin Burcu</span>
+        <span class="matrix-badge jade" id="chinesePolarityBadge" data-i18n="chineseBadgePending">✦ 5 Element Mührü</span>
+      </div>
+      
+      <div class="matrix-empty-wrap" id="chineseEmpty">
+        <div class="matrix-empty-icon-wrap jade-glow">
+          <div class="matrix-empty-ring jade"></div>
+          <div class="matrix-empty-glyph">☯</div>
+        </div>
+        <h4 class="matrix-empty-title" data-i18n="chineseEmptyTitle">Doğu Mührü & 5 Element</h4>
+        <p class="matrix-empty-desc" data-i18n="chineseEmpty">12 Göksel Hayvan totemini, Yin/Yang polariteni ve Ahşap, Ateş, Toprak, Metal, Su element dengeni mühürle.</p>
+        <div class="matrix-empty-chip" data-i18n="chineseEmptyChip">✦ 12 Yıllık Ay Takvimi Döngüsü</div>
+      </div>
+      
+      <div id="chineseResult" class="matrix-card-content" style="display:none;">
+        <div class="chinese-seal-wrap">
+          <div class="chinese-seal-glow" id="chineseSealGlow"></div>
+          <div class="chinese-seal" id="chineseSealBox">
+            <div class="chinese-seal-kanji" id="chineseKanji">酉</div>
+            <div class="chinese-seal-animal" id="chineseAnimal">Horoz</div>
+          </div>
+        </div>
+        <div class="chinese-element-badge-wrap">
+          <span class="chinese-element-pill" id="chineseElementPill">
+            <span class="el-dot" id="chineseElDot"></span>
+            <span id="chineseElement">Ahşap (Wood)</span>
+          </span>
+        </div>
+        <p class="chinese-desc" id="chineseDesc"></p>
+        <div class="matrix-meta-row">
+          <div class="matrix-meta-item">
+            <span class="meta-label" data-i18n="matrixLuckyNumLabel">Şanslı Sayılar</span>
+            <strong class="meta-val" id="chineseLuckyNums">5, 7, 8</strong>
+          </div>
+          <div class="matrix-meta-item">
+            <span class="meta-label" data-i18n="matrixLuckyColLabel">Aura Renkleri</span>
+            <strong class="meta-val" id="chineseLuckyColors">Altın, Yeşil, Toprak</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Batı Astrolojisi & Güneş Burcu Sentezi -->
+    <div class="tool-card astro-matrix-card" id="westernCard">
+      <div class="matrix-card-header">
+        <span class="tool-card-eyebrow" data-i18n="westernEyebrow">Güneş Burcu & Element Dengesi</span>
+        <span class="matrix-badge amethyst" id="westernElementBadge" data-i18n="westernBadgePending">✦ Güneş Haritası</span>
+      </div>
+      
+      <div class="matrix-empty-wrap" id="westernEmpty">
+        <div class="matrix-empty-icon-wrap amethyst-glow">
+          <div class="matrix-empty-ring amethyst"></div>
+          <div class="matrix-empty-glyph">☉</div>
+        </div>
+        <h4 class="matrix-empty-title" data-i18n="westernEmptyTitle">Güneş İmzası & Enerji Radarı</h4>
+        <p class="matrix-empty-desc" data-i18n="westernEmpty">Güneş burcunun dekansal arketiplerini, sezgisel derinliğini ve manyetik aura güç dengesini ortaya çıkar.</p>
+        <div class="matrix-empty-chip" data-i18n="westernEmptyChip">✦ Zodyak Dekanı & 3 Boyutlu Güç Dengesi</div>
+      </div>
+      
+      <div id="westernResult" class="matrix-card-content" style="display:none;">
+        <div class="western-symbol-wrap">
+          <div class="western-halo"></div>
+          <div class="western-symbol" id="westernGlyph">♑</div>
+          <div class="western-sign-name" id="westernSignName">Oğlak (Capricorn)</div>
+        </div>
+        <div class="western-decan-chip" id="westernDecanChip">1. Dekan • Satürn Etkisi</div>
+        <p class="western-desc" id="westernDesc"></p>
+        
+        <div class="astro-balance-wrap">
+          <div class="astro-bar-item">
+            <div class="bar-header"><span data-i18n="matrixIntuition">Ruhsal Sezgi</span><strong id="barIntuitionVal">88%</strong></div>
+            <div class="bar-track"><div class="bar-fill intuition" id="barIntuitionFill" style="width:0%;"></div></div>
+          </div>
+          <div class="astro-bar-item">
+            <div class="bar-header"><span data-i18n="matrixCharm">Manyetik Çekim</span><strong id="barCharmVal">92%</strong></div>
+            <div class="bar-track"><div class="bar-fill charm" id="barCharmFill" style="width:0%;"></div></div>
+          </div>
+          <div class="astro-bar-item">
+            <div class="bar-header"><span data-i18n="matrixFocus">Zihinsel Odak</span><strong id="barFocusVal">85%</strong></div>
+            <div class="bar-track"><div class="bar-fill focus" id="barFocusFill" style="width:0%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="tool-note" id="toolsSharedNote" data-i18n="numeroNote">Numeroloji ve doğum analizi kadim ezoterik sistemlere ve astronomik takvim hesaplamalarına dayanır.</p>
+</div>
+
+<div class="divider"><span>✦</span></div>
+
+<!-- 1. GÜNÜN KOZMİK FREKANSI & AURA KARTI -->
+<section id="aura" class="aura-section">
+  <span class="section-eyebrow" data-i18n="auraEyebrow">Kozmik Frekans & Aura</span>
+  <h2 class="section-title" data-i18n="auraTitle">Günün Aura Kartı</h2>
+  <p class="section-text" data-i18n="auraText">Burcun ile bugünün kozmik enerjisini birleştir; rezonans frekansını, aura rengini ve mistik güçlerini öğren.</p>
+  
+  <div class="aura-form-wrap">
+    <select id="auraSignSelect" class="aura-select">
+      <option value="" disabled selected data-i18n="auraSelectSign">Burcunu Seç</option>
+      <option value="aries">♈ Koç (Aries)</option>
+      <option value="taurus">♉ Boğa (Taurus)</option>
+      <option value="gemini">♊ İkizler (Gemini)</option>
+      <option value="cancer">♋ Yengeç (Cancer)</option>
+      <option value="leo">♌ Aslan (Leo)</option>
+      <option value="virgo">♍ Başak (Virgo)</option>
+      <option value="libra">♎ Terazi (Libra)</option>
+      <option value="scorpio">♏ Akrep (Scorpio)</option>
+      <option value="sagittarius">♐ Yay (Sagittarius)</option>
+      <option value="capricorn">♑ Oğlak (Capricorn)</option>
+      <option value="aquarius">♒ Kova (Aquarius)</option>
+      <option value="pisces">♓ Balık (Pisces)</option>
+    </select>
+    <button class="btn-primary" onclick="scanAura()" data-i18n="auraScanBtn">Aurayı Tara & Kartı Oluştur</button>
+  </div>
+  <div id="auraResult" style="display:none;"></div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<!-- 2. EVET / HAYIR MİSTİK SARKACI -->
+<section id="pendulum" class="pendulum-section">
+  <span class="section-eyebrow" data-i18n="pendulumEyebrow">Mistik Sarkaç</span>
+  <h2 class="section-title" data-i18n="pendulumTitle">Evet / Hayır Kahini</h2>
+  <p class="section-text" data-i18n="pendulumText">Zihnini odakla, aklındaki soruyu fısılda ve ametist sarkacı serbest bırak.</p>
+  
+  <div class="pendulum-wrap">
+    <div class="pendulum-stage">
+      <div class="pendulum-pivot"></div>
+      <div class="pendulum-arm" id="pendulumVisual">
+        <div class="pendulum-bob"></div>
+      </div>
+    </div>
+    <div class="pendulum-input-wrap">
+      <input type="text" id="pendulumInput" class="pendulum-input" data-i18n-ph="pendulumInputPh" placeholder="Sorunu buraya fısılda...">
+      <button class="btn-primary" onclick="swingPendulum()" data-i18n="pendulumSwingBtn">Sarkacı Sal</button>
+    </div>
+    <div id="pendulumResult"></div>
+  </div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<!-- 3. KOZMİK SİNERJİ & YÖRÜNGE RADARI -->
+<section id="orbit" class="orbit-section">
+  <span class="section-eyebrow" data-i18n="orbitEyebrow">Kozmik Sinerji</span>
+  <h2 class="section-title" data-i18n="orbitTitle">Yörünge Radarı & Simya</h2>
+  <p class="section-text" data-i18n="orbitText">İki ruh arasındaki manyetik çekimi, elementel simyayı ve 4 boyutlu uyum radarını keşfet.</p>
+  
+  <div class="orbit-selectors">
+    <select id="orbitSign1" class="aura-select">
+      <option value="" disabled selected data-i18n="orbitSign1">1. Kişinin Burcu</option>
+      <option value="aries">♈ Koç</option><option value="taurus">♉ Boğa</option><option value="gemini">♊ İkizler</option><option value="cancer">♋ Yengeç</option>
+      <option value="leo">♌ Aslan</option><option value="virgo">♍ Başak</option><option value="libra">♎ Terazi</option><option value="scorpio">♏ Akrep</option>
+      <option value="sagittarius">♐ Yay</option><option value="capricorn">♑ Oğlak</option><option value="aquarius">♒ Kova</option><option value="pisces">♓ Balık</option>
+    </select>
+    <div style="color:var(--gold); font-size:1.4rem;">✦</div>
+    <select id="orbitSign2" class="aura-select">
+      <option value="" disabled selected data-i18n="orbitSign2">2. Kişinin Burcu</option>
+      <option value="aries">♈ Koç</option><option value="taurus">♉ Boğa</option><option value="gemini">♊ İkizler</option><option value="cancer">♋ Yengeç</option>
+      <option value="leo">♌ Aslan</option><option value="virgo">♍ Başak</option><option value="libra">♎ Terazi</option><option value="scorpio">♏ Akrep</option>
+      <option value="sagittarius">♐ Yay</option><option value="capricorn">♑ Oğlak</option><option value="aquarius">♒ Kova</option><option value="pisces">♓ Balık</option>
+    </select>
+  </div>
+  <button class="btn-primary" onclick="calculateOrbit()" data-i18n="orbitCalcBtn">Yörüngeyi Hesapla</button>
+  <div id="orbitResult" class="orbit-result" style="display:none;"></div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<!-- 4. CANLI AY EVRESİ & RİTÜEL REHBERİ -->
+<section id="moonritual" style="max-width:800px; margin:0 auto var(--sp-6); text-align:center;">
+  <span class="section-eyebrow" data-i18n="moonRitualEyebrow">Ay Döngüsü & Ritüel</span>
+  <h2 class="section-title" data-i18n="moonRitualTitle">Canlı Ay Evresi & Günlük Ritüeller</h2>
+  <p class="section-text" data-i18n="moonRitualText">Gökyüzündeki Ay'ın anlık evresini, bulunduğu burcu ve frekansını yükseltecek ritüelleri öğren.</p>
+  
+  <div class="moon-ritual-wrap" id="moonRitualResult"></div>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="cosmic">
+  <span class="section-eyebrow" data-i18n="cosmicEyebrow">Kozmik Takvim</span>
+  <h2 class="section-title" data-i18n="cosmicTitle">2026'da Gökyüzü</h2>
+  <p class="section-text" data-i18n="cosmicText">Merkür'ün retro dönemleri ve bu yılın tutulmaları — gerçek astronomik tarihlerle.</p>
+
+  <div class="cosmic-status" id="cosmicStatus"></div>
+
+  <div class="cosmic-columns">
+    <div>
+      <h3 class="cosmic-list-title" data-i18n="cosmicRetroListTitle">2026 Merkür Retro Dönemleri</h3>
+      <div id="retroList"></div>
+    </div>
+    <div>
+      <h3 class="cosmic-list-title" data-i18n="cosmicEclipseListTitle">2026 Tutulmaları</h3>
+      <div id="eclipseList"></div>
+    </div>
+  </div>
+  <p class="tool-note" data-i18n="cosmicNote">Tarihler 2026 yılına özeldir ve yaygın astronomik/astrolojik kaynaklara dayanır.</p>
+</section>
+
+<div class="divider"><span>✦</span></div>
+
+<section id="mooncal">
+  <span class="section-eyebrow" data-i18n="moonCalEyebrow">Ay Takvimi</span>
+  <h2 class="section-title" data-i18n="moonCalTitle">Aylık Ay Evreleri</h2>
+  <p class="section-text" data-i18n="moonCalText">Ayın bu ayki tüm evrelerini gör, günden güne takip et.</p>
+
+  <div class="mooncal-wrap">
+    <div class="mooncal-nav">
+      <button class="mooncal-nav-btn" onclick="navigateMoonMonth(-1)" aria-label="Önceki ay">
+        <svg class="icon-svg" viewBox="0 0 40 40"><path d="M25,10 L15,20 L25,30"/></svg>
+      </button>
+      <span class="mooncal-label" id="mooncalLabel"></span>
+      <button class="mooncal-nav-btn" onclick="navigateMoonMonth(1)" aria-label="Sonraki ay">
+        <svg class="icon-svg" viewBox="0 0 40 40"><path d="M15,10 L25,20 L15,30"/></svg>
+      </button>
+    </div>
+    <div class="mooncal-grid" id="mooncalGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-emblem-wrap">
+    <svg class="footer-logo-emblem" viewBox="0 0 40 40">
+      <circle class="logo-ring-outer" cx="20" cy="20" r="18"/>
+      <path class="logo-crescent" d="M25.5,9.3 a10.7,10.7 0 1,0 0,21.4 a13,13 0 1,1 0,-21.4 Z" fill="url(#logoMoonGrad)"/>
+      <path class="logo-star" d="M16.5,12 L17.9,15.6 L21.6,16.3 L18.8,18.9 L19.6,22.6 L16.5,20.6 L13.4,22.6 L14.2,18.9 L11.4,16.3 L15.1,15.6 Z" fill="var(--gold-bright)"/>
+    </svg>
+    <div class="footer-brand">LUNARIS</div>
+  </div>
+  <nav class="footer-nav">
+    <a href="index.html#tarot" data-i18n="navTarot">Tarot</a>
+    <a href="index.html#horoscope" data-i18n="navHoro">Burçlar</a>
+    <a href="index.html#compat" data-i18n="navCompat">Uyum</a>
+    <a href="araclar.html" data-i18n="navTools">Araçlar</a>
+    <a href="blog.html" data-i18n="navBlog">Blog</a>
+    <a href="index.html#wall" data-i18n="navWall">Topluluk</a>
+  </nav>
+  <p data-i18n="footerText">LUNARIS eğlence amaçlıdır, kararlarını yıldızlara değil kendi sezgine bırak.</p>
+  <p class="footer-credit" data-i18n="footerCredit">✨ ile hazırlandı</p>
+</footer>
+
+
+<button class="to-top-btn" id="toTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Yukarı çık">
+  <svg class="icon-svg" viewBox="0 0 40 40"><line x1="20" y1="30" x2="20" y2="10"/><path d="M11,19 L20,10 L29,19"/></svg>
+</button>
+
+
+
+
+<script src="main.js"></script>
+<script>
+/* ==========================================================
+   LUNARIS — araclar.html page logic
+   Numerology (life path number), Chinese zodiac, the 2026
+   cosmic calendar (Mercury retrograde + eclipses) and an
+   expanded monthly moon calendar. Requires main.js first.
+   ========================================================== */
+
+/* ==========================================================
+   ASTROLOGICAL BIRTH MATRIX DATA & ENGINE
+   ========================================================== */
+
+/* ---- Numerology: life path number meanings with planetary vibrations & chakras ---- */
+const NUMEROLOGY = {
+  1: { 
+    title:{tr:"Öncü Ruh",en:"The Pioneer",ru:"Первопроходец"},
+    archetype:{tr:"✦ Kozmik Lider",en:"✦ Cosmic Leader",ru:"✦ Космический лидер"},
+    freq:"432 Hz",
+    planet:{tr:"Güneş ☉",en:"Sun ☉",ru:"Солнце ☉"},
+    chakra:{tr:"Kök & Taç Çakra 👑",en:"Root & Crown 👑",ru:"Сахасрара 👑"},
+    text:{
+      tr:"Doğal bir lidersin; bağımsız, girişimci ve yeni yollar açmayı seven biri. Başkalarının izinden gitmek yerine kendi rotanı çizmeyi tercih edersin. Kararlılığın ilk adımı atma cesaretinden gelir.",
+      en:"You're a natural leader — independent, driven, and drawn to carving your own path. Your greatest power is the pure courage to initiate and conquer new frontiers.",
+      ru:"Ты прирождённый лидер — независимый, целеустремлённый, прокладывающий свой путь. Твоя сила — в смелости сделать первый шаг и повести за собой."
+    }
+  },
+  2: { 
+    title:{tr:"Barışçı & Diplomat",en:"The Peacemaker",ru:"Миротворец"},
+    archetype:{tr:"✦ Uyum Ustası",en:"✦ Master of Harmony",ru:"✦ Мастер гармонии"},
+    freq:"528 Hz",
+    planet:{tr:"Ay ☽",en:"Moon ☽",ru:"Луна ☽"},
+    chakra:{tr:"Kalp & Boğaz Çakrası 💚",en:"Heart & Throat 💚",ru:"Анахата 💚"},
+    text:{
+      tr:"Uyum ve denge senin doğal dilin. Başkalarını derinlemesine hissetmekte, köprü kurmakta ve nazik bir diplomasiyle anlaşmazlıkları yumuşatmakta ustasın. Sezgilerine daima güven.",
+      en:"Harmony and balance are your natural frequency. You're gifted at deep listening, intuitive empathy, and resolving conflicts with gentle grace.",
+      ru:"Гармония и баланс — твоя стихия. Ты тонко чувствуешь людей, наводишь мосты и исцеляешь конфликты мягкой дипломатией. Доверяй своей интуиции."
+    }
+  },
+  3: { 
+    title:{tr:"Yaratıcı Ruh",en:"The Creative",ru:"Творец"},
+    archetype:{tr:"✦ İlham Kaynağı",en:"✦ Fountain of Inspiration",ru:"✦ Источник вдохновения"},
+    freq:"639 Hz",
+    planet:{tr:"Jüpiter ♃",en:"Jupiter ♃",ru:"Юпитер ♃"},
+    chakra:{tr:"Solar Pleksus ☀️",en:"Solar Plexus ☀️",ru:"Манипура ☀️"},
+    text:{
+      tr:"Yaratıcılık ve ifade gücü senden taşıyor; kelimelerle, sanatla ve pozitif enerjinle çevrene ışık saçarsın. Fikirlerini tek bir yüksek hedefe odaklamak senin en büyük kozmik gücündür.",
+      en:"Pure creativity and self-expression flow through you. You illuminate rooms with your optimism and charm. Channeling your spark into single-minded focus is your greatest mastery.",
+      ru:"Творчество и самовыражение бьют ключом. Ты освещаешь всё вокруг оптимизмом и вдохновением. Сфокусировав свой дар, ты способен творить чудеса."
+    }
+  },
+  4: { 
+    title:{tr:"Usta İnşacı",en:"The Pillar",ru:"Строитель"},
+    archetype:{tr:"✦ Sarsılmaz Temel",en:"✦ Solid Anchor",ru:"✦ Незыблемая опора"},
+    freq:"396 Hz",
+    planet:{tr:"Uranüs / Satürn ♄",en:"Uranus / Saturn ♄",ru:"Уран / Сатурн ♄"},
+    chakra:{tr:"Kök Çakra 🏛️",en:"Root Chakra 🏛️",ru:"Муладхара 🏛️"},
+    text:{
+      tr:"Sağlam temeller kurmak senin yeteneğin. Disiplinli, güvenilir ve emek vermeyi bilen birisin; insanlar senin yanında huzur ve güven bulur. Sabırla yükselen başarıların kalıcı olur.",
+      en:"Laying unshakeable foundations is your sacred gift. You are dependable, disciplined, and deeply trustworthy — empires are built on your resilience.",
+      ru:"Создавать прочный фундамент — твой священный дар. Ты надёжен, дисциплинирован и терпелив — на твою силу всегда можно опереться."
+    }
+  },
+  5: { 
+    title:{tr:"Özgür Gezgin",en:"The Free Explorer",ru:"Свободный дух"},
+    archetype:{tr:"✦ Değişim Elçisi",en:"✦ Catalyst of Change",ru:"✦ Проводник перемен"},
+    freq:"741 Hz",
+    planet:{tr:"Merkür ☿",en:"Mercury ☿",ru:"Меркурий ☿"},
+    chakra:{tr:"Boğaz & Üçüncü Göz 👁️",en:"Throat & Third Eye 👁️",ru:"Вишудха 👁️"},
+    text:{
+      tr:"Özgürlük, macera ve hızlı değişim seni besler. Meraklı, çok yönlü ve uyum sağlama kabiliyeti yüksek bir ruhsun; yenilik peşinde koşmaktan asla çekinmezsin.",
+      en:"Freedom, movement, and dynamic evolution electrify your spirit. You adapt instantly to the winds of change and thrive on thrilling horizons.",
+      ru:"Свобода, странствия и динамичные перемены питают тебя. Ты невероятно гибок, любознателен и смело идёшь навстречу новым горизонтам."
+    }
+  },
+  6: { 
+    title:{tr:"Şifacı & Koruyucu",en:"The Nurturer",ru:"Хранитель"},
+    archetype:{tr:"✦ Koşulsuz Sevgi",en:"✦ Heart of Compassion",ru:"✦ Хранитель очага"},
+    freq:"852 Hz",
+    planet:{tr:"Venüs ♀",en:"Venus ♀",ru:"Венера ♀"},
+    chakra:{tr:"Kalp Çakrası 💖",en:"Heart Chakra 💖",ru:"Анахата 💖"},
+    text:{
+      tr:"Şefkat ve sorumluluk bilinci ruhunun özüdür. Sevdiklerini korumak, güzellik ve huzur üretmek senin doğal misyonundur. Kendi enerjini de tazelemeyi unutma.",
+      en:"Compassion, service, and unconditional love form the core of your soul. You bring harmony to families and heal spaces wherever you step.",
+      ru:"Сострадание, забота и любовь — суть твоей души. Твоё присутствие приносит гармонию и исцеление всем, кто рядом."
+    }
+  },
+  7: { 
+    title:{tr:"Mistik Arayıcı",en:"The Mystic Seeker",ru:"Искатель тайн"},
+    archetype:{tr:"✦ Kadim Bilgelik",en:"✦ Ancient Wisdom",ru:"✦ Древняя мудрость"},
+    freq:"963 Hz",
+    planet:{tr:"Neptün ♆",en:"Neptune ♆",ru:"Нептун ♆"},
+    chakra:{tr:"Üçüncü Göz & Taç 🌌",en:"Third Eye & Crown 🌌",ru:"Аджна 🌌"},
+    text:{
+      tr:"Görünmeyeni gören derin bir sezgiye ve analitik zekaya sahipsin. Yüzeysel olanla yetinmez, evrenin ve hakikatin derin sırlarını keşfetmeye çekilirsin.",
+      en:"A profound seeker of metaphysical truth and sharp analytical depth. You look beneath surfaces to uncover the universal mysteries.",
+      ru:"Глубокий искатель истины с острой интуицией. Ты видишь скрытые смыслы и стремишься постичь тайны мироздания."
+    }
+  },
+  8: { 
+    title:{tr:"Kozmik Güç & Bolluk",en:"The Powerhouse",ru:"Властелин силы"},
+    archetype:{tr:"✦ Maddi & Manevi Zafer",en:"✦ Manifestor of Abundance",ru:"✦ Сила и Изобилие"},
+    freq:"528 Hz",
+    planet:{tr:"Satürn ♄",en:"Saturn ♄",ru:"Сатурн ♄"},
+    chakra:{tr:"Solar Pleksus & Kök ⚡",en:"Solar Plexus & Root ⚡",ru:"Манипура ⚡"},
+    text:{
+      tr:"Bolluk, vizyoner yönetim ve büyük başarılar senin doğum hakkın. Maddi ve manevi dünyayı birleştirme yeteneğine sahipsin; gücünü adalet ve bilgelikle kullanırsın.",
+      en:"Supreme manifestor of abundance, strategy, and triumph. You possess the willpower to turn massive ambitions into lasting empires.",
+      ru:"Ты рождён для масштаба, стратегического триумфа и изобилия. Твоя воля соединяет материальный и духовный успех."
+    }
+  },
+  9: { 
+    title:{tr:"Evrensel Hümanist",en:"The Universal Sage",ru:"Гуманист"},
+    archetype:{tr:"✦ Kozmik Bilge",en:"✦ Universal Guide",ru:"✦ Космический мудрец"},
+    freq:"432 Hz",
+    planet:{tr:"Mars / Jüpiter ♂",en:"Mars / Jupiter ♂",ru:"Марс / Юпитер ♂"},
+    chakra:{tr:"Taç Çakra 🌟",en:"Crown Chakra 🌟",ru:"Сахасрара 🌟"},
+    text:{
+      tr:"Geniş bir kalp ve yüksek bir bilinç taşıyorsun. İnsanlığa hizmet etmek, ilham vermek ve eski döngüleri bilgelikle tamamlayıp yeniyi başlatmak senin yolundur.",
+      en:"A grand soul with universal consciousness and deep altruism. Your path is to inspire, illuminate, and complete karmic cycles with grace.",
+      ru:"Великодушная душа с космическим сознанием. Твоя миссия — вдохновлять, нести свет и завершать кармические циклы."
+    }
+  },
+  11: { 
+    title:{tr:"Usta Sezgi (11)",en:"The Master Intuitive (11)",ru:"Мастер интуиции (11)"},
+    archetype:{tr:"✦ Kozmik Kanal",en:"✦ Cosmic Channel",ru:"✦ Космический проводник"},
+    freq:"741 Hz",
+    planet:{tr:"Neptün & Ay ☽",en:"Neptune & Moon ☽",ru:"Нептун и Луна ☽"},
+    chakra:{tr:"Üçüncü Göz & Taç 👁️",en:"Third Eye & Crown 👁️",ru:"Аджна 👁️"},
+    text:{
+      tr:"Usta titreşim taşıyorsun; yüksek boyutlu sezgilere ve ilham verici bir enerjiye sahipsin. İnsanların ruhsal uyanışına rehberlik eden bir ışıksın.",
+      en:"You carry a master vibration — a direct channel of celestial insight and prophetic intuition. You illuminate the spiritual awakening of others.",
+      ru:"Ты несёшь мастер-вибрацию — прямой канал высшей интуиции и духовного озарения, ведущий других к пробуждению."
+    }
+  },
+  22: { 
+    title:{tr:"Usta Mimar (22)",en:"The Master Builder (22)",ru:"Мастер-строитель (22)"},
+    archetype:{tr:"✦ Gerçeklik İnşacısı",en:"✦ Architect of Reality",ru:"✦ Создатель реальности"},
+    freq:"852 Hz",
+    planet:{tr:"Uranüs & Plüton ♅",en:"Uranus & Pluto ♅",ru:"Уран и Плутон ♅"},
+    chakra:{tr:"Tüm Çakraların Birliği 🌐",en:"Chakra Synthesis 🌐",ru:"Синтез чакр 🌐"},
+    text:{
+      tr:"Kozmik vizyonları somut ve devasa projelere dönüştürebilen nadir bir potansiyelin var. Dünyayı daha iyi bir yer kılacak sistemler inşa etme gücündesin.",
+      en:"The supreme master builder able to ground transcendent visions into tangible reality. You possess the power to reshape the world.",
+      ru:"Великий мастер-строитель, способный воплощать грандиозные космические видения в осязаемую реальность."
+    }
+  },
+  33: { 
+    title:{tr:"Usta Rehber (33)",en:"The Master Avatar (33)",ru:"Мастер-учитель (33)"},
+    archetype:{tr:"✦ Koşulsuz Şifa Kaynağı",en:"✦ Universal Healer",ru:"✦ Источник исцеления"},
+    freq:"963 Hz",
+    planet:{tr:"Evrensel Merkez ☀️",en:"Universal Center ☀️",ru:"Вселенский центр ☀️"},
+    chakra:{tr:"Kozmik Kalp Çakrası 💖",en:"Cosmic Heart 💖",ru:"Космическое сердце 💖"},
+    text:{
+      tr:"En yüksek sevgi ve ruhsal şifa frekansını taşıyorsun. Koşulsuz şefkatinle çevrendeki herkesi dönüştürür, sevginin saf gücünü yayarsın.",
+      en:"Carrying the highest frequency of universal love and spiritual healing. You embody unconditional compassion and elevate collective vibration.",
+      ru:"Носитель наивысшей вибрации вселенской любви и духовного исцеления. Ты воплощаешь безусловное сострадание."
+    }
+  }
+};
+
+/* ---- Chinese zodiac: 12 animals with authentic kanji, lucky traits & elements ---- */
+const CHINESE_ANIMALS = [
+  { key:"rat", kanji:"子", polarity:"Yang", name:{tr:"Fare (Rat)",en:"Rat",ru:"Крыса"}, luckyNums:"2, 3", luckyColors:{tr:"Mavi, Altın, Zümrüt",en:"Blue, Gold, Emerald",ru:"Синий, Золотой, Изумруд"},
+    text:{tr:"Zeki, hızlı kavrayan ve fırsatları mükemmel sezgilerle değerlendiren bir ruhun var.", en:"Quick-witted, remarkably sharp, and blessed with keen strategic intuition.", ru:"Сообразительный, проницательный и обладающий превосходным стратегическим чутьём."}},
+  { key:"ox", kanji:"丑", polarity:"Yin", name:{tr:"Öküz (Ox)",en:"Ox",ru:"Бык"}, luckyNums:"1, 4", luckyColors:{tr:"Beyaz, Sarı, Yeşil",en:"White, Yellow, Green",ru:"Белый, Жёлтый, Зелёный"},
+    text:{tr:"Sabırlı, sarsılmaz derecede güvenilir ve sağlam temeller üzerine yükselen bir güce sahipsin.", en:"Patient, deeply dependable, and blessed with unstoppable determination.", ru:"Терпеливый, надёжный и обладающий непоколебимой стойкостью."}},
+  { key:"tiger", kanji:"寅", polarity:"Yang", name:{tr:"Kaplan (Tiger)",en:"Tiger",ru:"Тигр"}, luckyNums:"1, 3, 4", luckyColors:{tr:"Mavi, Gri, Turuncu",en:"Blue, Gray, Orange",ru:"Синий, Серый, Оранжевый"},
+    text:{tr:"Cesur, manyetik bir karizmaya sahip ve risk almaktan korkmayan lider ruhlu birisin.", en:"Bold, passionate, and naturally magnetic — challenges ignite your fierce strength.", ru:"Смелый, страстный и магнетический — любые вызовы лишь раскрывают твою силу."}},
+  { key:"rabbit", kanji:"卯", polarity:"Yin", name:{tr:"Tavşan (Rabbit)",en:"Rabbit",ru:"Кролик"}, luckyNums:"3, 4, 6", luckyColors:{tr:"Kırmızı, Pembe, Mor",en:"Red, Pink, Purple",ru:"Красный, Розовый, Фиолетовый"},
+    text:{tr:"Zarif, diplomatik ve yüksek sezgilere sahip huzur verici bir enerjin var.", en:"Graceful, deeply intuitive, and blessed with serene emotional refinement.", ru:"Изящный, тонко чувствующий и наполняющий пространство гармонией."}},
+  { key:"dragon", kanji:"辰", polarity:"Yang", name:{tr:"Ejderha (Dragon)",en:"Dragon",ru:"Дракон"}, luckyNums:"1, 6, 7", luckyColors:{tr:"Altın, Gümüş, Ametist",en:"Gold, Silver, Amethyst",ru:"Золотой, Серебряный, Аметист"},
+    text:{tr:"Karizmatik, kudretli ve doğuştan yüksek hedeflerin peşinden giden bir vizyonersin.", en:"Magnificent, powerful, and driven by an immense celestial vision.", ru:"Величественный, харизматичный и вдохновляемый масштабными целями."}},
+  { key:"snake", kanji:"巳", polarity:"Yin", name:{tr:"Yılan (Snake)",en:"Snake",ru:"Змея"}, luckyNums:"2, 8, 9", luckyColors:{tr:"Kırmızı, Altın, Siyah",en:"Red, Gold, Black",ru:"Красный, Золотой, Чёрный"},
+    text:{tr:"Derin bir bilgeliğe, gizemli bir çekime ve keskin bir analiz yeteneğine sahipsin.", en:"Mysterious, profoundly wise, and carrying razor-sharp intuitive perception.", ru:"Мудрый, загадочный и обладающий глубочайшей проницательностью."}},
+  { key:"horse", kanji:"午", polarity:"Yang", name:{tr:"At (Horse)",en:"Horse",ru:"Лошадь"}, luckyNums:"2, 3, 7", luckyColors:{tr:"Sarı, Yeşil, Kehribar",en:"Yellow, Green, Amber",ru:"Жёлтый, Зелёный, Янтарный"},
+    text:{tr:"Özgür ruhlu, dinamik ve yeni ufuklara dörtnala koşan tutkulu bir enerjiye sahipsin.", en:"Free-spirited, dynamic, and energized by exploring boundless horizons.", ru:"Свободолюбивый, динамичный и вдохновляемый покорением новых далей."}},
+  { key:"goat", kanji:"未", polarity:"Yin", name:{tr:"Keçi (Goat)",en:"Goat",ru:"Коза"}, luckyNums:"2, 7", luckyColors:{tr:"Kahve, Mor, Gül Kurusu",en:"Brown, Purple, Rose",ru:"Коричневый, Пурпурный, Розовый"},
+    text:{tr:"Yaratıcı, sanatsal inceliği yüksek ve şefkatli bağlar kurabilen derin bir ruhsun.", en:"Artistic, gentle, and blessed with profound empathy and creative refinement.", ru:"Творческий, чуткий и обладающий тонким художественным вкусом."}},
+  { key:"monkey", kanji:"申", polarity:"Yang", name:{tr:"Maymun (Monkey)",en:"Monkey",ru:"Обезьяна"}, luckyNums:"4, 9", luckyColors:{tr:"Beyaz, Mavi, Altın",en:"White, Blue, Gold",ru:"Белый, Синий, Золотой"},
+    text:{tr:"Kıvrak zekalı, çok yönlü ve imkansız görünen sorunları oyun gibi çözen birisin.", en:"Brilliant, versatile, and masterful at turning challenges into victories.", ru:"Блестящий, находчивый и виртуозно решающий любые головоломки."}},
+  { key:"rooster", kanji:"酉", polarity:"Yin", name:{tr:"Horoz (Rooster)",en:"Rooster",ru:"Петух"}, luckyNums:"5, 7, 8", luckyColors:{tr:"Altın Sarısı, Toprak, Zümrüt",en:"Gold, Earthy Brown, Emerald",ru:"Золотой, Земляной, Изумрудный"},
+    text:{tr:"Özgüvenli, detaylara hakim, dürüst ve işini mükemmellikle taçlandıran bir karaktere sahipsin.", en:"Confident, exceptionally organized, honest, and striving for perfection.", ru:"Уверенный, проницательный, честный и стремящийся к безупречности."}},
+  { key:"dog", kanji:"戌", polarity:"Yang", name:{tr:"Köpek (Dog)",en:"Dog",ru:"Собака"}, luckyNums:"3, 4, 9", luckyColors:{tr:"Yeşil, Kırmızı, Safir",en:"Green, Red, Sapphire",ru:"Зелёный, Красный, Сапфир"},
+    text:{tr:"Sadık, adalet duygusu sarsılmaz ve sevdiklerini koruma konusunda tavizsiz bir dostsun.", en:"Fiercely loyal, honest, and standing unconditionally for justice and loved ones.", ru:"Преданный, благородный и непоколебимо защищающий справедливость."}},
+  { key:"pig", kanji:"亥", polarity:"Yin", name:{tr:"Domuz (Pig)",en:"Pig",ru:"Свинья"}, luckyNums:"2, 5, 8", luckyColors:{tr:"Sarı, Gri, Lavanta",en:"Yellow, Gray, Lavender",ru:"Жёлтый, Серый, Лавандовый"},
+    text:{tr:"Cömert, samimi ve yaşamın güzelliklerini sevdikleriyle paylaşmayı bilen bereketli bir ruhsun.", en:"Generous, noble-hearted, and radiating warmth and prosperity everywhere.", ru:"Щедрый, искренний и несущий тепло, уют и процветание."}}
+];
+
+/* ---- Chinese zodiac: 5 elements (10-year sub-cycle by last digit of year) ---- */
+const CHINESE_ELEMENTS = [
+  { key:"wood", kanji:"木", color:"#10B981", name:{tr:"Ahşap (Wood)",en:"Wood",ru:"Дерево"},
+    trait:{tr:"Ahşap elementi büyümeye, esnekliğe ve sürekli yenilenen vizyoner bir genişlemeye işaret eder.", en:"The Wood element infuses flexible growth, compassion, and visionary expansion.", ru:"Стихия Дерева наделяет гибкостью, постоянным ростом и визионерством."}},
+  { key:"fire", kanji:"火", color:"#EF4444", name:{tr:"Ateş (Fire)",en:"Fire",ru:"Огонь"},
+    trait:{tr:"Ateş elementi tutkuyu, manyetik sahne ışığını ve dönüştürücü liderlik gücünü simgeler.", en:"The Fire element fuels intense passion, magnetic radiance, and transformative drive.", ru:"Стихия Огня зажигает страсть, магнетизм и преображающую энергию лидера."}},
+  { key:"earth", kanji:"土", color:"#F59E0B", name:{tr:"Toprak (Earth)",en:"Earth",ru:"Земля"},
+    trait:{tr:"Toprak elementi istikrarı, besleyici bereketi ve sarsılmaz bir zemin inşa etmeyi getirir.", en:"The Earth element brings grounded stability, nurturing abundance, and enduring roots.", ru:"Стихия Земли дарует стабильность, изобилие и прочную опору во всём."}},
+  { key:"metal", kanji:"金", color:"#E2E8F0", name:{tr:"Metal (Metal)",en:"Metal",ru:"Металл"},
+    trait:{tr:"Metal elementi keskin zihinsel odağı, kararlılığı ve saf kalite arayışını güçlendirir.", en:"The Metal element brings sharp clarity, unyielding resolve, and impeccable precision.", ru:"Стихия Металла приносит кристальную ясность ума, решимость и безупречность."}},
+  { key:"water", kanji:"水", color:"#3B82F6", name:{tr:"Su (Water)",en:"Water",ru:"Вода"},
+    trait:{tr:"Su elementi derin sezgileri, akışkan bilgeliği ve sınırsız duygusal zekayı besler.", en:"The Water element enriches profound intuition, adaptability, and fluid emotional depth.", ru:"Стихия Воды наделяет глубокой интуицией, гибкостью и мудростью потока."}}
+];
+
+/* ---- Western Zodiac Signs Data ---- */
+const WESTERN_SIGNS_DATA = {
+  aries: { glyph:"♈", name:{tr:"Koç (Aries)",en:"Aries",ru:"Овен"}, element:{tr:"Ateş 🔥",en:"Fire 🔥",ru:"Огонь 🔥"}, planet:{tr:"Mars ♂",en:"Mars ♂",ru:"Марс ♂"}, decan:{tr:"Öncü Ateş • Cesur Liderlik",en:"Cardinal Fire • Bold Leadership",ru:"Кардинальный огонь • Смелость"}, intuition:84, charm:92, focus:90, desc:{tr:"Öncü, cesur ve ilk adımı atmaktan korkmayan saf bir kozmik ateş enerjisi taşıyorsun.",en:"Pioneering, courageous, and carrying pure initiating cosmic fire.",ru:"Первопроходец, смелый и наделённый чистой энергией космического огня."} },
+  taurus: { glyph:"♉", name:{tr:"Boğa (Taurus)",en:"Taurus",ru:"Телец"}, element:{tr:"Toprak 🌍",en:"Earth 🌍",ru:"Земля 🌍"}, planet:{tr:"Venüs ♀",en:"Venus ♀",ru:"Венера ♀"}, decan:{tr:"Sabit Toprak • Maddi Bereket",en:"Fixed Earth • Solid Abundance",ru:"Фиксированная земля • Изобилие"}, intuition:82, charm:94, focus:95, desc:{tr:"Sabırlı, estetik duyarlılığı yüksek ve sarsılmaz temeller inşa eden bir berekete sahipsin.",en:"Patient, sensory, and rooted in unwavering strength and luxury.",ru:"Терпеливый, чувственный и созидающий несокрушимый фундамент и изобилие."} },
+  gemini: { glyph:"♊", name:{tr:"İkizler (Gemini)",en:"Gemini",ru:"Близнецы"}, element:{tr:"Hava 🌪️",en:"Air 🌪️",ru:"Воздух 🌪️"}, planet:{tr:"Merkür ☿",en:"Mercury ☿",ru:"Меркурий ☿"}, decan:{tr:"Değişken Hava • Kıvrak Zeka",en:"Mutable Air • Razor Wit",ru:"Мутабельный воздух • Острый ум"}, intuition:88, charm:96, focus:83, desc:{tr:"Meraklı, iletişimi güçlü ve zihinsel hızıyla evrenin tüm frekanslarına bağlanan birisin.",en:"Curious, brilliantly communicative, and lightning-quick in mind.",ru:"Любознательный, общительный и мгновенно улавливающий любые идеи."} },
+  cancer: { glyph:"♋", name:{tr:"Yengeç (Cancer)",en:"Cancer",ru:"Рак"}, element:{tr:"Su 💧",en:"Water 💧",ru:"Вода 💧"}, planet:{tr:"Ay ☽",en:"Moon ☽",ru:"Луна ☽"}, decan:{tr:"Öncü Su • Derin Duygusal Güç",en:"Cardinal Water • Emotional Depth",ru:"Кардинальная вода • Глубокая сила"}, intuition:97, charm:89, focus:86, desc:{tr:"Derin bir sezgiye, şefkatli bir koruyuculuğa ve güçlü bir ruhsal antene sahipsin.",en:"Deeply intuitive, fiercely protective, and carrying profound psychic antennae.",ru:"Обладаешь тончайшей интуицией, состраданием и мощным духовным радаром."} },
+  leo: { glyph:"♌", name:{tr:"Aslan (Leo)",en:"Leo",ru:"Лев"}, element:{tr:"Ateş 🔥",en:"Fire 🔥",ru:"Огонь 🔥"}, planet:{tr:"Güneş ☉",en:"Sun ☉",ru:"Солнце ☉"}, decan:{tr:"Sabit Ateş • Kraliyet Işığı",en:"Fixed Fire • Regal Radiance",ru:"Фиксированный огонь • Королевский свет"}, intuition:85, charm:98, focus:91, desc:{tr:"Kalbinin ışığıyla parıldayan, cömert ve çevresine ilham ile güven saçan bir kralsın.",en:"Radiant, generously warm-hearted, and commanding natural admiration.",ru:"Сияющий щедрым светом сердца, благородный и вдохновляющий лидер."} },
+  virgo: { glyph:"♍", name:{tr:"Başak (Virgo)",en:"Virgo",ru:"Дева"}, element:{tr:"Toprak 🌍",en:"Earth 🌍",ru:"Земля 🌍"}, planet:{tr:"Merkür ☿",en:"Mercury ☿",ru:"Меркурий ☿"}, decan:{tr:"Değişken Toprak • Kusursuz Analiz",en:"Mutable Earth • Pure Precision",ru:"Мутабельная земля • Идеальная точность"}, intuition:90, charm:85, focus:98, desc:{tr:"Detayların ardındaki düzeni gören, analitik zekası keskin ve şifa veren bir zihne sahipsin.",en:"Meticulous, masterfully analytical, and devoted to refining excellence.",ru:"Мастер деталей, безупречного анализа и практической мудрости."} },
+  libra: { glyph:"♎", name:{tr:"Terazi (Libra)",en:"Libra",ru:"Весы"}, element:{tr:"Hava 🌪️",en:"Air 🌪️",ru:"Воздух 🌪️"}, planet:{tr:"Venüs ♀",en:"Venus ♀",ru:"Венера ♀"}, decan:{tr:"Öncü Hava • Kozmik Zarafet",en:"Cardinal Air • Cosmic Grace",ru:"Кардинальный воздух • Грация"}, intuition:89, charm:97, focus:84, desc:{tr:"Estetik, adalet ve uyum dengesini her adımda kurabilen çekici bir ruhsun.",en:"Diplomatic, aesthetically refined, and weaving perfect harmony everywhere.",ru:"Дипломатичный, утончённый и создающий идеальный баланс красоты и справедливости."} },
+  scorpio: { glyph:"♏", name:{tr:"Akrep (Scorpio)",en:"Scorpio",ru:"Скорпион"}, element:{tr:"Su 💧",en:"Water 💧",ru:"Вода 💧"}, planet:{tr:"Plüton & Mars ♂",en:"Pluto & Mars ♂",ru:"Плутон и Марс ♂"}, decan:{tr:"Sabit Su • Manyetik Dönüşüm",en:"Fixed Water • Magnetic Alchemy",ru:"Фиксированная вода • Алхимия"}, intuition:99, charm:95, focus:96, desc:{tr:"Görünmeyenin ardındaki sırları çözen, manyetik aurası güçlü ve dönüştürücü bir ruhsun.",en:"Piercingly perceptive, magnetically intense, and master of profound alchemy.",ru:"Обладаешь колоссальным магнетизмом, проницательностью и силой трансформации."} },
+  sagittarius: { glyph:"♐", name:{tr:"Yay (Sagittarius)",en:"Sagittarius",ru:"Стрелец"}, element:{tr:"Ateş 🔥",en:"Fire 🔥",ru:"Огонь 🔥"}, planet:{tr:"Jüpiter ♃",en:"Jupiter ♃",ru:"Юпитер ♃"}, decan:{tr:"Değişken Ateş • Felsefi Ufuk",en:"Mutable Fire • Boundless Truth",ru:"Мутабельный огонь • Поиск истины"}, intuition:91, charm:93, focus:87, desc:{tr:"Özgürlük aşığı, felsefi derinliği olan ve hayatın büyük hakikatlerini kovalayan bir seyyahsın.",en:"Optimistic, philosophically vast, and aiming true arrows at highest truth.",ru:"Оптимистичный, мудрый странник, стремящийся к высшим истинам и свободе."} },
+  capricorn: { glyph:"♑", name:{tr:"Oğlak (Capricorn)",en:"Capricorn",ru:"Оглак / Козерог"}, element:{tr:"Toprak 🌍",en:"Earth 🌍",ru:"Земля 🌍"}, planet:{tr:"Satürn ♄",en:"Saturn ♄",ru:"Сатурн ♄"}, decan:{tr:"Öncü Toprak • Zirve Azmi",en:"Cardinal Earth • Master of Heights",ru:"Кардинальная земля • Покоритель вершин"}, intuition:86, charm:88, focus:99, desc:{tr:"Hedefine sabırla ve kararlılıkla tırmanan, zirveleri yönetmeye doğmuş güçlü bir karaktere sahipsin.",en:"Architectural, fiercely disciplined, and ascending methodically to the peaks.",ru:"Невероятно целеустремлённый, дисциплинированный покоритель высот."} },
+  aquarius: { glyph:"♒", name:{tr:"Kova (Aquarius)",en:"Aquarius",ru:"Водолей"}, element:{tr:"Hava 🌪️",en:"Air 🌪️",ru:"Воздух 🌪️"}, planet:{tr:"Uranüs ♅",en:"Uranus ♅",ru:"Уран ♅"}, decan:{tr:"Sabit Hava • Geleceğin Vizyonu",en:"Fixed Air • Visionary Genius",ru:"Фиксированный воздух • Гений будущего"}, intuition:94, charm:91, focus:90, desc:{tr:"Çağının ötesinde düşünen, özgün ve insanlığı geleceğe taşıyacak devrimci bir zekasın.",en:"Visionary, fiercely original, and channeling the blueprint of the future.",ru:"Оригинальный, опережающий время визионер с революционным мышлением."} },
+  pisces: { glyph:"♓", name:{tr:"Balık (Pisces)",en:"Pisces",ru:"Рыбы"}, element:{tr:"Su 💧",en:"Water 💧",ru:"Вода 💧"}, planet:{tr:"Neptün ♆",en:"Neptune ♆",ru:"Neptune ♆"}, decan:{tr:"Değişken Su • Kozmik Birlik",en:"Mutable Water • Cosmic Dreamer",ru:"Мутабельная вода • Космический сон"}, intuition:99, charm:94, focus:82, desc:{tr:"Ruhsal alemlerle doğrudan bağlantılı, sonsuz şefkat ve sınırsız bir hayal gücüne sahipsin.",en:"Mystically boundless, artistically transcendent, and connected to the ocean of oneness.",ru:"Обладаешь мистической связью с вселенной, безграничным воображением и состраданием."} }
+};
+
+function getWesternZodiac(day, month) {
+  if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return "aries";
+  if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return "taurus";
+  if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return "gemini";
+  if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return "cancer";
+  if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return "leo";
+  if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return "virgo";
+  if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return "libra";
+  if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return "scorpio";
+  if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return "sagittarius";
+  if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return "capricorn";
+  if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return "aquarius";
+  return "pisces";
+}
+
+/* ---- 2026 cosmic calendar: real, researched dates ---- */
+const MERCURY_RETROGRADES_2026 = [
+  { start:"2026-02-26", end:"2026-03-20", sign:{tr:"Balık",en:"Pisces",ru:"Рыбы"} },
+  { start:"2026-06-29", end:"2026-07-23", sign:{tr:"Yengeç",en:"Cancer",ru:"Рак"} },
+  { start:"2026-10-24", end:"2026-11-13", sign:{tr:"Akrep",en:"Scorpio",ru:"Скорпион"} }
+];
+const ECLIPSES_2026 = [
+  { date:"2026-03-03", labelKey:"eclipseTotalLunar", isLunar:true },
+  { date:"2026-08-12", labelKey:"eclipseTotalSolar", isLunar:false },
+  { date:"2026-08-28", labelKey:"eclipsePartialLunar", isLunar:true }
+];
+
+/* ---- Numerology & Chinese Math ---- */
+function reduceNum(n){
+  while (n > 9 && n !== 11 && n !== 22 && n !== 33) {
+    n = String(n).split("").reduce(function(a,b){ return a + parseInt(b,10); }, 0);
+  }
+  return n;
+}
+
+function lifePathNumber(day, month, year){
+  const rDay = reduceNum(day);
+  const rMonth = reduceNum(month);
+  const rYear = reduceNum(year);
+  return reduceNum(rDay + rMonth + rYear);
+}
+
+function getChineseZodiac(year){
+  const animalIdx = ((year - 2020) % 12 + 12) % 12;
+  const lastDigit = ((year % 10) + 10) % 10;
+  const elementMap = {0:"metal",1:"metal",2:"water",3:"water",4:"wood",5:"wood",6:"fire",7:"fire",8:"earth",9:"earth"};
+  return { animalIdx: animalIdx, elementKey: elementMap[lastDigit] };
+}
+
+/* ---- Interactive JS Effects & Counters ---- */
+function animateNumberCounter(el, targetNum, duration = 1100) {
+  const startTime = performance.now();
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = Math.floor(ease * targetNum);
+    el.textContent = current;
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = targetNum;
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+function triggerCalcSparkles(x, y) {
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement("div");
+    p.className = "sparkle-particle";
+    const angle = (Math.PI * 2 / 16) * i + (Math.random() * 0.2);
+    const dist = 35 + Math.random() * 65;
+    const dx = Math.cos(angle) * dist + "px";
+    const dy = Math.sin(angle) * dist + "px";
+    p.style.setProperty("--dx", dx);
+    p.style.setProperty("--dy", dy);
+    p.style.left = (x || (window.innerWidth / 2)) + "px";
+    p.style.top = (y || (window.innerHeight / 3)) + "px";
+    p.style.background = i % 2 === 0 ? "var(--gold-bright)" : "#c084fc";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 900);
+  }
+}
+
+/* ---- Render: 3-in-1 Astrological Birth Matrix ---- */
+function renderNumerologyResult(num, day, month, year) {
+  const lang = state.lang;
+  const data = NUMEROLOGY[num] || NUMEROLOGY[1];
+  document.getElementById("numeroEmpty").style.display = "none";
+  const resEl = document.getElementById("numeroResult");
+  resEl.style.display = "block";
+  
+  const numEl = document.getElementById("numeroNumber");
+  animateNumberCounter(numEl, num, 1100);
+
+  document.getElementById("numeroFreqBadge").textContent = data.freq;
+  document.getElementById("numeroArchetypeBadge").textContent = data.archetype[lang];
+  document.getElementById("numeroResultTitle").textContent = data.title[lang];
+  
+  const dStr = day < 10 ? "0" + day : day;
+  const mStr = month < 10 ? "0" + month : month;
+  document.getElementById("numeroFormulaChip").textContent = `${dStr}.${mStr}.${year} ➔ ${day}+${month}+${year} = ${day+month+year} ➔ ${num}`;
+  document.getElementById("numeroDesc").textContent = data.text[lang];
+  document.getElementById("numeroPlanetVal").textContent = data.planet[lang];
+  document.getElementById("numeroChakraVal").textContent = data.chakra[lang];
+}
+
+function renderChineseResult(animalIdx, elementKey) {
+  const lang = state.lang;
+  const animal = CHINESE_ANIMALS[animalIdx];
+  const element = CHINESE_ELEMENTS.find(function(e){ return e.key === elementKey; }) || CHINESE_ELEMENTS[0];
+  
+  document.getElementById("chineseEmpty").style.display = "none";
+  document.getElementById("chineseResult").style.display = "block";
+  
+  document.getElementById("chinesePolarityBadge").textContent = `${animal.polarity} ${element.name[lang]} ${element.kanji}`;
+  document.getElementById("chineseKanji").textContent = animal.kanji;
+  document.getElementById("chineseAnimal").textContent = animal.name[lang];
+  
+  const glow = document.getElementById("chineseSealGlow");
+  if (glow) glow.style.background = `radial-gradient(circle, ${element.color}55, transparent 70%)`;
+  
+  const pill = document.getElementById("chineseElementPill");
+  if (pill) {
+    pill.style.borderColor = element.color + "66";
+    pill.style.color = element.color;
+    pill.style.background = element.color + "18";
+  }
+  const dot = document.getElementById("chineseElDot");
+  if (dot) {
+    dot.style.background = element.color;
+    dot.style.boxShadow = `0 0 8px ${element.color}`;
+  }
+  document.getElementById("chineseElement").textContent = `${element.name[lang]} • ${element.kanji}`;
+  document.getElementById("chineseDesc").textContent = animal.text[lang] + " " + element.trait[lang];
+  document.getElementById("chineseLuckyNums").textContent = animal.luckyNums;
+  document.getElementById("chineseLuckyColors").textContent = animal.luckyColors[lang];
+}
+
+function renderWesternResult(day, month) {
+  const lang = state.lang;
+  const signKey = getWesternZodiac(day, month);
+  const data = WESTERN_SIGNS_DATA[signKey];
+  
+  document.getElementById("westernEmpty").style.display = "none";
+  document.getElementById("westernResult").style.display = "block";
+  
+  document.getElementById("westernElementBadge").textContent = data.element[lang];
+  document.getElementById("westernGlyph").textContent = data.glyph;
+  document.getElementById("westernSignName").textContent = data.name[lang];
+  document.getElementById("westernDecanChip").textContent = data.decan[lang];
+  document.getElementById("westernDesc").textContent = data.desc[lang];
+  
+  document.getElementById("barIntuitionVal").textContent = data.intuition + "%";
+  document.getElementById("barCharmVal").textContent = data.charm + "%";
+  document.getElementById("barFocusVal").textContent = data.focus + "%";
+  
+  setTimeout(() => {
+    const b1 = document.getElementById("barIntuitionFill");
+    const b2 = document.getElementById("barCharmFill");
+    const b3 = document.getElementById("barFocusFill");
+    if (b1) b1.style.width = data.intuition + "%";
+    if (b2) b2.style.width = data.charm + "%";
+    if (b3) b3.style.width = data.focus + "%";
+  }, 100);
+}
+
+function calculatePersonalTools(event) {
+  const input = document.getElementById("toolsBirthDate");
+  if (!input.value) { input.focus(); return; }
+  
+  if (event && event.clientX) {
+    triggerCalcSparkles(event.clientX, event.clientY);
+  } else {
+    const rect = input.getBoundingClientRect();
+    triggerCalcSparkles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+  }
+
+  const parts = input.value.split("-");
+  const year = parseInt(parts[0], 10), month = parseInt(parts[1], 10), day = parseInt(parts[2], 10);
+  state.lastBirthDate = { day: day, month: month, year: year };
+
+  const lp = lifePathNumber(day, month, year);
+  renderNumerologyResult(lp, day, month, year);
+
+  const cz = getChineseZodiac(year);
+  renderChineseResult(cz.animalIdx, cz.elementKey);
+
+  renderWesternResult(day, month);
+
+  setTimeout(() => {
+    const matrixContainer = document.getElementById("birthMatrixResults");
+    if (matrixContainer) {
+      matrixContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, 150);
+}
+
+/* ---- Cosmic calendar ---- */
+function getMercuryStatus(now){
+  for (let i=0; i<MERCURY_RETROGRADES_2026.length; i++){
+    const r = MERCURY_RETROGRADES_2026[i];
+    const start = new Date(r.start + "T00:00:00");
+    const end = new Date(r.end + "T23:59:59");
+    if (now >= start && now <= end) {
+      const daysLeft = Math.ceil((end - now) / 86400000);
+      return { retrograde:true, period:r, daysLeft:daysLeft };
+    }
+  }
+  for (let i=0; i<MERCURY_RETROGRADES_2026.length; i++){
+    const r = MERCURY_RETROGRADES_2026[i];
+    const start = new Date(r.start + "T00:00:00");
+    if (now < start) {
+      const daysUntil = Math.ceil((start - now) / 86400000);
+      return { retrograde:false, next:r, daysUntil:daysUntil };
+    }
+  }
+  return { retrograde:false, next:null, daysUntil:null };
+}
+
+function renderCosmicCalendar(){
+  const lang = state.lang;
+  const now = new Date();
+  const status = getMercuryStatus(now);
+  const statusEl = document.getElementById("cosmicStatus");
+  if (status.retrograde) {
+    statusEl.innerHTML = '<div class="cosmic-status-dot retro"></div>'+
+      '<div class="cosmic-status-text"><div class="cosmic-status-headline">'+UI[lang].cosmicRetroActive+'</div>'+
+      '<div class="cosmic-status-sub">'+status.period.sign[lang]+' — '+status.daysLeft+' '+UI[lang].cosmicDaysLeft+'</div></div>';
+  } else {
+    let sub = "";
+    if (status.next) { sub = status.daysUntil + " " + UI[lang].cosmicDaysLeft + " " + UI[lang].cosmicUntilNext; }
+    statusEl.innerHTML = '<div class="cosmic-status-dot direct"></div>'+
+      '<div class="cosmic-status-text"><div class="cosmic-status-headline">'+UI[lang].cosmicRetroDirect+'</div>'+
+      '<div class="cosmic-status-sub">'+sub+'</div></div>';
+  }
+
+  const localeMap = {tr:"tr-TR", en:"en-US", ru:"ru-RU"};
+  const retroListEl = document.getElementById("retroList");
+  let rhtml = "";
+  MERCURY_RETROGRADES_2026.forEach(function(r){
+    const s = new Date(r.start + "T00:00:00");
+    const e = new Date(r.end + "T00:00:00");
+    const sStr = s.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long"});
+    const eStr = e.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long"});
+    rhtml += '<div class="cosmic-event"><div class="cosmic-event-icon">'+icon("temperance",17)+'</div>'+
+      '<div><div class="cosmic-event-title">'+sStr+' – '+eStr+'</div><div class="cosmic-event-sub">'+r.sign[lang]+'</div></div></div>';
+  });
+  retroListEl.innerHTML = rhtml;
+
+  const eclipseListEl = document.getElementById("eclipseList");
+  let ehtml = "";
+  ECLIPSES_2026.forEach(function(ev){
+    const d = new Date(ev.date + "T00:00:00");
+    const dStr = d.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long"});
+    ehtml += '<div class="cosmic-event eclipse"><div class="cosmic-event-icon">'+icon(ev.isLunar?"moon":"sun",17)+'</div>'+
+      '<div><div class="cosmic-event-title">'+dStr+'</div><div class="cosmic-event-sub">'+UI[lang][ev.labelKey]+'</div></div></div>';
+  });
+  eclipseListEl.innerHTML = ehtml;
+}
+
+/* ---- Moon calendar (uses getMoonPhaseIndex + moonIconSVG from main.js) ---- */
+function renderMoonCalendar(){
+  const lang = state.lang;
+  const year = state.moonCalYear, month = state.moonCalMonth;
+  const monthKeys = ["monthJan","monthFeb","monthMar","monthApr","monthMay","monthJun","monthJul","monthAug","monthSep","monthOct","monthNov","monthDec"];
+  document.getElementById("mooncalLabel").textContent = UI[lang][monthKeys[month]] + " " + year;
+
+  const wdKeys = ["wdMon","wdTue","wdWed","wdThu","wdFri","wdSat","wdSun"];
+  const firstDay = new Date(year, month, 1);
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+  let html = "";
+  wdKeys.forEach(function(k){ html += '<div class="mooncal-wd">' + UI[lang][k] + '</div>'; });
+  for (let i=0; i<startOffset; i++){ html += '<div class="mooncal-day empty"></div>'; }
+  for (let d=1; d<=daysInMonth; d++){
+    const dateObj = new Date(year, month, d);
+    const phaseIdx = getMoonPhaseIndex(dateObj);
+    const isToday = isCurrentMonth && today.getDate() === d;
+    html += '<div class="mooncal-day' + (isToday ? ' today' : '') + '" title="' + (isToday ? UI[lang].moonCalToday : '') + '">' +
+      moonIconSVG(phaseIdx, "cal" + year + month + d) +
+      '<span class="mooncal-day-num">' + d + '</span></div>';
+  }
+  document.getElementById("mooncalGrid").innerHTML = html;
+}
+
+function navigateMoonMonth(dir){
+  state.moonCalMonth += dir;
+  if (state.moonCalMonth < 0) { state.moonCalMonth = 11; state.moonCalYear--; }
+  if (state.moonCalMonth > 11) { state.moonCalMonth = 0; state.moonCalYear++; }
+  renderMoonCalendar();
+}
+
+/* ---- Language switching ---- */
+function setLang(lang){
+  applyLangToDOM(lang);
+  if (state.lastBirthDate) {
+    const { day, month, year } = state.lastBirthDate;
+    const lp = lifePathNumber(day, month, year);
+    renderNumerologyResult(lp, day, month, year);
+    const cz = getChineseZodiac(year);
+    renderChineseResult(cz.animalIdx, cz.elementKey);
+    renderWesternResult(day, month);
+  }
+  renderCosmicCalendar();
+  renderMoonCalendar();
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  setLang(state.lang);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  state.moonCalYear = new Date().getFullYear();
+  state.moonCalMonth = new Date().getMonth();
+  createStars(70);
+  buildBgConstellation();
+  renderCosmicCalendar();
+  renderMoonCalendar();
+  initToTopButton();
+  initScrollReveal(".section-title, .section-text, .tools-form, .tool-card, .cosmic-status, .cosmic-event, .mooncal-wrap");
+  if (!reduceMotion) {
+    initSparkleTrail();
+    setInterval(function(){ if (Math.random() < 0.6) spawnShootingStar(); }, 4500);
+  }
+  document.addEventListener("click", function(e){
+    const nav = document.getElementById("siteNav");
+    const toggle = document.getElementById("navToggle");
+    if (!nav || !nav.classList.contains("open")) return;
+    if (nav.contains(e.target) || (toggle && toggle.contains(e.target))) return;
+    closeNav();
+  });
+  let resizeTimer;
+  window.addEventListener("resize", function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildBgConstellation, 400);
+  });
+});
+</script>
+
+<script type="module" src="firebase-config.js"></script>
+</body>
+</html>
