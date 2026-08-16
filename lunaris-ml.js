@@ -2757,13 +2757,13 @@
     var resonanceLevels = {
       tr: resonanceScore >= 88 ? 'olağanüstü yüksek' : (resonanceScore >= 75 ? 'oldukça güçlü ve net' : (resonanceScore >= 60 ? 'dengeli ve yapıcı' : 'içsel odaklanma gerektiren')),
       en: resonanceScore >= 88 ? 'exceptionally high' : (resonanceScore >= 75 ? 'powerfully aligned' : (resonanceScore >= 60 ? 'balanced and constructive' : 'introspective')),
-      ru: resonanceScore >= 88 ? 'исключительно высокий' : (resonanceScore >= 75 ? 'очень мощный и ясный' : (resonanceScore >= 60 ? 'сбалансированный' : 'требующий концентрации'))
+      ru: resonanceScore >= 88 ? 'исключительно высокой' : (resonanceScore >= 75 ? 'очень мощной и ясной' : (resonanceScore >= 60 ? 'сбалансированной и гармоничной' : 'требующей концентрации'))
     };
 
     var resonanceExplanation = {
       tr: "Kozmik Rezonans Skoru (%" + resonanceScore + "); seçtiğin 3 Büyük Arkana arketipinin (" + c0.icon + " " + c1.icon + " " + c2.icon + "), şu anki " + pHourName + " saati, " + moonName + " fazı ve gökyüzündeki gezegen asaletiyle " + resonanceLevels.tr + " bir kozmik senkronizasyon içinde olduğunu gösterir.",
       en: "Cosmic Resonance Score (" + resonanceScore + "%); verifies that your 3 Major Arcana archetypes (" + c0.icon + " " + c1.icon + " " + c2.icon + ") resonate in " + resonanceLevels.en + " synchronicity with today's " + pHourName + " hour, " + moonName + " phase, and planetary dignities.",
-      ru: "Космический резонанс (" + resonanceScore + "%); подтверждает, что 3 архетипа Старших Арканов (" + c0.icon + " " + c1.icon + " " + c2.icon + ") находятся в " + resonanceLevels.ru + " синхронизации с часом " + pHourName + ", " + moonName + " и планетарными достоинствами."
+      ru: "Космический резонанс (" + resonanceScore + "%); подтверждает, что 3 архетипа Старших Арканов (" + c0.icon + " " + c1.icon + " " + c2.icon + ") находятся в " + resonanceLevels.ru + " синхронизации с текущим часом (" + pHourName + "), фазой Луны (" + moonName + ") и планетарными достоинствами."
     };
 
     // 8. MLP Sinir Ağı İleri Yayılımı & Kategori Dağılımı (v3.0 Multi-Factor Model)
@@ -2856,13 +2856,24 @@
     var p1 = c1.present[lang];
     var p2 = c2.future[lang];
 
-    var synthesisText = 
-      "✦ **Geçmişin Kökü (" + c0.icon + " " + n0 + "):** " + p0 + "\n\n" +
-      "✦ **Şimdinin Simyası (" + c1.icon + " " + n1 + "):** " + p1 + " " +
-      (lang === 'tr' ? "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı bu dönüşüm sürecini doğrudan destekliyor." :
-       (lang === 'ru' ? "Текущий **час " + pHourName + "** и фаза **" + moonName + "** мягко поддерживают эту трансформацию." :
-        "Today's **" + pHourName + " planetary hour** and **" + moonName + "** phase directly fuel this alchemical pivot.")) + "\n\n" +
-      "✦ **Geleceğin Kapısı (" + c2.icon + " " + n2 + "):** " + p2;
+    var sectionLabels = {
+      past:    { tr: 'Geçmişin Kökü',   en: 'Root of the Past',    ru: 'Корень Прошлого'      },
+      present: { tr: 'Şimdinin Simyası', en: "Present's Alchemy",   ru: 'Алхимия Настоящего'   },
+      future:  { tr: 'Geleceğin Kapısı', en: 'Gateway to the Future', ru: 'Врата Будущего'    }
+    };
+    var lbl = function(k) { return sectionLabels[k][lang] || sectionLabels[k].tr; };
+
+    var presentSuffix = {
+      tr: "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı bu dönüşüm sürecini doğrudan destekliyor.",
+      en: "Today's **" + pHourName + " planetary hour** and **" + moonName + "** phase directly fuel this alchemical pivot.",
+      ru: "Текущий **час " + pHourName + "** и фаза **" + moonName + "** мягко поддерживают эту трансформацию."
+    };
+
+    var synthesisText =
+      "✦ **" + lbl('past')    + " (" + c0.icon + " " + n0 + "):** " + p0 + "\n\n" +
+      "✦ **" + lbl('present') + " (" + c1.icon + " " + n1 + "):** " + p1 + " " +
+      (presentSuffix[lang] || presentSuffix.tr) + "\n\n" +
+      "✦ **" + lbl('future')  + " (" + c2.icon + " " + n2 + "):** " + p2;
 
     var celestialImpact = {
       tr: "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı, bu açılımın enerjisini %" + resonanceScore + " oranında göksel akışla senkronize ediyor.",
