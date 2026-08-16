@@ -60,7 +60,7 @@ Klasörde yer alan 7 dosya birbiriyle entegre olarak çalışır:
 
 
 ================================================================================
-🧠 2. MAKİNE ÖĞRENMESİ & ALGORİTMA MOTORU (`lunaris-ml.js`)
+🧠 2. MAKİNE ÖĞRENMESİ & ALGORİTMA MOTORU (`lunaris-ml.js` v2.0)
 ================================================================================
 
 Tüm fonksiyonlar `window.LunarisML` küresel nesnesi üzerinden erişilebilir durumdadır.
@@ -70,115 +70,81 @@ A) Matematiksel Çekirdek Fonksiyonlar (Dahili Yardımcılar):
 --------------------------------------------------------------------------------
 • `sigmoid(x)`
   - Formül: 1 / (1 + e^(-x))
-  - Görevi: Ham ağırlıklı skorları 0.0 ile 1.0 arasında olasılıksal enerjiye normalize eder.
+  - Görevi: Ham ağırlıklı skorları 0.0 ile 1.0 arasında normalize eder.
+
+• `relu(x)` & `leakyRelu(x)`
+  - Formül: max(0, x) / (x > 0 ? x : 0.01 * x)
+  - Görevi: MLP gizli katmanlarında non-lineer aktivasyon sağlar.
 
 • `dot(vectorA, vectorB)`
   - Formül: ∑ (A[i] * B[i])
-  - Görevi: Burç vektörü ile zamansal/kategori ağırlık vektörünün skaler çarpımını alır.
+  - Görevi: Vektörlerin skaler çarpımını alır.
 
-• `normalize(vector)`
-  - Formül: V / ||V|| (Öklid normu ile birim vektöre dönüştürme)
+• `matVecMul(matrix, vector)`
+  - Formül: M × V matris-vektör çarpımı
+  - Görevi: MLP katmanları arası tensör dönüşümü.
 
-• `cosineSimilarity(a, b)`
-  - Formül: dot(normalize(a), normalize(b))
-  - Görevi: İki astrolojik enerji vektörünün uzamsal benzerliğini hesaplar (-1 ile +1 arası).
+• `normalize(vector)` & `cosineSimilarity(a, b)`
+  - Formül: Öklid normu ve kosinüs benzerliği hesabı.
 
 • `hashStr(seedString)`
-  - Deterministik DJB2 tabanlı hash algoritması. Aynı tarih + burç girdisinde her zaman
-    aynı kararlı sonucu üretir; gün değiştiğinde ise tamamen yeni yorum seçer.
+  - Deterministik DJB2 tabanlı hash algoritması. Kararlı sonuç üretir.
 
 • `julianDay(date)`
-  - Verilen miladi tarihi Jülyen Gün Sayısına (Astronomical Julian Date) çevirir.
+  - Verilen miladi tarihi Astronomik Jülyen Gün Sayısına çevirir.
 
 --------------------------------------------------------------------------------
-B) Vektör Uzayı & Katman Mimarisi:
+B) Vektör Uzayı & 16 Katmanlı Mimari:
 --------------------------------------------------------------------------------
 1. 8 Boyutlu Burç Vektörü (`SIGN_VECTORS`):
    Boyutlar: [0: Enerji, 1: İstikrar, 2: Macera, 3: Pratiklik, 4: Sosyallik, 5: Sezgi, 6: Liderlik, 7: Duyarlılık]
-   Örnekler:
-   - Koç (Aries):    [0.95, 0.20, 0.90, 0.30, 0.65, 0.25, 0.95, 0.20] (Yüksek enerji & liderlik)
-   - Boğa (Taurus):  [0.30, 0.95, 0.20, 0.95, 0.55, 0.40, 0.40, 0.65] (Yüksek istikrar & pratiklik)
-   - Akrep (Scorpio):[0.85, 0.75, 0.65, 0.55, 0.40, 0.95, 0.75, 0.85] (Yüksek sezgi & derinlik)
-   - Balık (Pisces): [0.40, 0.45, 0.55, 0.30, 0.70, 0.95, 0.30, 0.95] (Maksimum duyarlılık & sezgi)
 
-2. Kategori Ağırlık Matrisi (`CATEGORY_WEIGHTS`):
-   Aşk (Love), Şans (Luck), Kariyer (Career), Sağlık (Health), Günlük (Daily) ve Para (Money)
-   alanlarının her biri için 8 boyutlu özel katsayılar tanımlanmıştır.
+2. Element & Modalite Uyum Matrisi (`ELEMENT_HARMONY`, `MODALITY_HARMONY`):
+   Ateş, Toprak, Hava ve Su elementleri; Kardinal, Sabit ve Değişken modaliteler arası sinerji.
+
+3. 3-Katmanlı MLP (Multi-Layer Perceptron) Modeli:
+   - Input Layer (16D): 8D Burç Vektörü + 8D Temporal Vektör
+   - Hidden Layer 1 (12D, Leaky ReLU + Natal Attention)
+   - Hidden Layer 2 (8D, Leaky ReLU)
+   - Output Layer (6D, Sigmoid): Aşk, Şans, Kariyer, Sağlık, Para, Günlük
+
+4. Aspect Engine (Gezegen Açıları):
+   Kavuşum (0°), Sekstil (60°), Kare (90°), Üçgen (120°), Karşıt (180°) açı tespiti ve orbsal etki hesabı.
+
+5. Gelişmiş Retrograd & Gölge Periyodu Sistemi:
+   5 gezegen (Merkür, Venüs, Mars, Jüpiter, Satürn) için tarih bazlı retro ve gölge dönemleri.
+
+6. 5-Seviyeli Metin Havuzu:
+   Peak (≥0.82), High (≥0.65), Mid (≥0.42), Low (≥0.25), Critical (<0.25) olmak üzere 80+ zengin metin.
 
 --------------------------------------------------------------------------------
 C) Dışa Açık API Fonksiyonları (`LunarisML`):
 --------------------------------------------------------------------------------
 
 1. `LunarisML.generateDeepReading(signKey, lang, birthDate, birthHour)`
-   - Parametreler:
-     * `signKey` (string): 'aries', 'taurus', ... 'pisces'
-     * `lang` (string): 'tr' | 'en' | 'ru'
-     * `birthDate` (Date nesnesi): Kullanıcının doğum tarihi
-     * `birthHour` (number, opsiyonel): Doğum saati (0-23.99)
-   - İşleyiş:
-     1. `calcNatalScores()` ile Güneş, Ay ve Yükselen burçları ile natal vektör hesaplanır.
-     2. `getTemporalVector()` ile günün gezegen saati, Ay fazı, mevsim ve gün katsayısı çıkarılır.
-     3. Her kategori için Dot-Product + Sigmoid ile 0-1 arası normalize skorlar üretilir.
-     4. `pickTextByScore()` ile skor dilimine göre en uygun zengin metin seçilir.
-     5. Retrograd analizi yapılarak aktif uyarılar eklenir.
-   - Dönüş Değeri (Object):
-     {
-       scores: { love, luck, career, health, money, daily },
-       texts: { love, luck, career, health },
-       luckyNum: 1-9 arası sayı,
-       luckyColor: "Altın Sarısı" vb.,
-       totalEnergy: 0-100 arası genel yüzde,
-       retrogradWarning: "Merkür Retrosu Uyarısı" veya null,
-       moonPhase: { tr, en, ru, fraction },
-       planetaryHour: "sun" | "moon" | "mars" vb.,
-       natal: { sunSign, moonSign, ascSign, profile, natalVector },
-       transits: { positions, mercRetro, venusRetro }
-     }
+   - Günlük detaylı ML yorumu, radar verisi, retrograd/aspect uyarıları ve şanslı öğeleri üretir.
 
-2. `LunarisML.calcNatalScores(birthDate, birthHour)`
-   - Parametreler: `birthDate` (Date), `birthHour` (number)
-   - İşleyiş:
-     * Güneş Burcu: Doğum gün/ay aralığına göre belirlenir.
-     * Ay Burcu: Jülyen gün farkı üzerinden 29.53 günlük Ay döngüsünün hangi 12'lik evrede olduğu hesaplanır.
-     * Yükselen Burç: Doğum saati 2 saatlik bloklara bölünerek Güneş burcundan itibaren ötelenir.
-     * Natal Vektör: %50 Güneş + %30 Ay + %20 Yükselen ağırlıklı ortalamasıyla 8 boyutlu profil oluşturulur.
-   - Dönüş Değeri:
-     {
-       sunSign: string,
-       moonSign: string,
-       ascSign: string,
-       natalVector: Array(8),
-       profile: { energy, stability, adventure, practicality, social, intuition, leadership, sensitivity } (0-100 değerleri)
-     }
+2. `LunarisML.generateWeeklyReading(signKey, lang, birthDate, birthHour)`
+   - 7 günlük detaylı tahmin, gün bazında puanlama, hafta teması, en iyi ve en zorlu gün analizi.
 
-3. `LunarisML.generateEnergyTimeline(signKey, natalVector)`
-   - Parametreler: `signKey` (string), `natalVector` (Array(8) veya null)
-   - İşleyiş: Mevcut aydan başlayarak gelecek 12 ayın her biri için ay ortası tarihi baz alınır.
-     O ayın mevsimsel vektörü ve burç vektörü çarpılarak aylık Enerji, Aşk, Kariyer ve Şans skorları üretilir.
-   - Dönüş Değeri:
-     Array of 12 objects: [ { month, label: {tr,en,ru}, energy, love, career, luck, isCurrent } ]
+3. `LunarisML.generateMonthlyReading(signKey, lang, birthDate, birthHour)`
+   - 30 günlük trend analizi, 4 haftalık kırılım, ay teması ve retrograd takibi.
 
-4. `LunarisML.getCategoryScores(signKey, date, natalVector)`
-   - Parametreler: `signKey` (string), `date` (Date), `natalVector` (Array)
-   - Belirtilen gün için burcun 6 kategorideki matematiksel skorlarını döner.
+4. `LunarisML.calculateDeepCompatibility(sign1, sign2, lang)`
+   - İki burç arasında çok boyutlu uyum analizi: Vektörel Benzerlik, Element, Modalite, Gezegen Sinerjisi;
+   - Kategori skorları: Aşk, İletişim, Güven, Tutku, Uzun Vade; Doğal Güçler & Sürtüşme Noktaları.
 
-5. `LunarisML.getProfileInsight(profile, lang)`
-   - Parametreler: `profile` (8 boyutlu obje), `lang` ('tr'|'en'|'ru')
-   - En yüksek puana sahip boyutu tespit ederek `strength` (Doğal Güç),
-     en düşük puana sahip boyutu tespit ederek `challenge` (Gelişim Alanı) rehberlik metnini döner.
+5. `LunarisML.calcNatalScores(birthDate, birthHour)`
+   - Güneş, Ay ve Yükselen Burç hesaplayıp 8 boyutlu natal profil üretir.
 
-6. `LunarisML.getCurrentPlanetaryHour(date)`
-   - Parametre: `date` (Date)
-   - Haftanın günü ve saatin toplamından Keldani sırasına göre o anki yönetici gezegeni bulur.
-   - Dönüş Değeri: 'sun' | 'moon' | 'mars' | 'mercury' | 'jupiter' | 'venus' | 'saturn'
+6. `LunarisML.generateEnergyTimeline(signKey, natalVector)`
+   - Gelecek 12 ayın Enerji, Aşk, Kariyer, Şans ve Para projeksiyonunu döner.
 
-7. `LunarisML.calcTransits(date)`
-   - J2000 efemeris yaklaşımıyla Güneş, Ay, Merkür, Venüs, Mars, Jüpiter ve Satürn'ün
-     gök boylamlarını (0-360°) ve retrograd durumlarını hesaplar.
+7. `LunarisML.getCategoryScores(signKey, date, natalVector)`
+   - 6 kategoride hibrit (MLP + Legacy + Transit + Aspect) matematiksel skorları döner.
 
-8. `LunarisML.getMoonPhaseName(date)`
-   - Güncel Ay döngüsünün 8 evresinden birini döner (Yeni Ay, Büyüyen Hilal, İlk Dördün,
-     Büyüyen Ay, Dolunay, Küçülen Ay, Son Dördün, Küçülen Hilal).
+8. `LunarisML.getRetrogrades(date)` & `LunarisML.calcAspects(date)`
+   - Aktif gezegen retrogradları, gölge dönemleri ve anlık gezegen açıları.
 
 
 ================================================================================

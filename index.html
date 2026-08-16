@@ -1317,12 +1317,31 @@ function checkCompatibility(){
   const result = getCompatibility(sign1, sign2);
   const text = pick(result.data[lang], todayKey()+"-compat-"+result.key+"-"+sign1+"-"+sign2);
 
+  let deepDetails = "";
+  if (window.LunarisML && typeof window.LunarisML.calculateDeepCompatibility === "function") {
+    const deep = window.LunarisML.calculateDeepCompatibility(sign1, sign2, lang);
+    if (deep && deep.categories) {
+      const cats = deep.categories;
+      const catLabels = (deep.labels && deep.labels.categories) ? deep.labels.categories : {
+        love: "Aşk", communication: "İletişim", trust: "Güven", passion: "Tutku", longTerm: "Uzun Vade"
+      };
+      deepDetails = '<div class="compat-deep-breakdown" style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);">' +
+        '<div class="compat-deep-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 4px;text-align:center;"><div style="font-size:10px;opacity:0.7;margin-bottom:4px;">' + catLabels.love + '</div><div style="font-size:15px;font-weight:700;color:var(--gold,#f4c430);">' + cats.love + '%</div></div>' +
+        '<div class="compat-deep-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 4px;text-align:center;"><div style="font-size:10px;opacity:0.7;margin-bottom:4px;">' + catLabels.communication + '</div><div style="font-size:15px;font-weight:700;color:var(--gold,#f4c430);">' + cats.communication + '%</div></div>' +
+        '<div class="compat-deep-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 4px;text-align:center;"><div style="font-size:10px;opacity:0.7;margin-bottom:4px;">' + catLabels.trust + '</div><div style="font-size:15px;font-weight:700;color:var(--gold,#f4c430);">' + cats.trust + '%</div></div>' +
+        '<div class="compat-deep-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 4px;text-align:center;"><div style="font-size:10px;opacity:0.7;margin-bottom:4px;">' + catLabels.passion + '</div><div style="font-size:15px;font-weight:700;color:var(--gold,#f4c430);">' + cats.passion + '%</div></div>' +
+        '<div class="compat-deep-item" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 4px;text-align:center;"><div style="font-size:10px;opacity:0.7;margin-bottom:4px;">' + catLabels.longTerm + '</div><div style="font-size:15px;font-weight:700;color:var(--gold,#f4c430);">' + cats.longTerm + '%</div></div>' +
+      '</div>';
+    }
+  }
+
   const el = document.getElementById("compatResult");
   el.innerHTML =
     '<div class="compat-ring-wrap">'+compatRingSVG(result.score)+'<div class="compat-ring-num">'+result.score+'%</div></div>'+
     '<div class="compat-tier">'+compatTier(result.score, lang)+'</div>'+
     '<div class="compat-pair-names">'+z1.glyph+' '+z1.name[lang]+' + '+z2.glyph+' '+z2.name[lang]+'</div>'+
-    '<p class="compat-text">'+text+'</p>';
+    '<p class="compat-text">'+text+'</p>' +
+    deepDetails;
   el.style.display = "block";
   el.classList.remove("visible");
   void el.offsetWidth;
@@ -2039,7 +2058,8 @@ function renderDeepReadingUI(data) {
       { key: "love", icon: "💖", label: UI[lang].deepCatLove },
       { key: "luck", icon: "✨", label: UI[lang].deepCatLuck },
       { key: "career", icon: "⚡", label: UI[lang].deepCatCareer },
-      { key: "health", icon: "🌿", label: UI[lang].deepCatHealth }
+      { key: "health", icon: "🌿", label: UI[lang].deepCatHealth },
+      { key: "money", icon: "💰", label: UI[lang].deepCatMoney || "Para" }
     ];
     let catsHtml = "";
     catKeys.forEach(function(c) {

@@ -148,30 +148,38 @@ firebase deploy
 
 ---
 
-## 🧠 ML Motoru Mimarisi
+## 🧠 ML Motoru Mimarisi (v2.0)
 
-Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`) **sıfır dış bağımlılık** ile çalışan saf JavaScript deterministik bir sistemdir.
+Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`), **sıfır dış bağımlılık** ile çalışan 16 katmanlı saf JavaScript deterministik bir yapay zeka sistemidir.
 
 ```
-┌─────────────────────────────────────────────────┐
-│              LunarisML Motor                     │
-├─────────────────────────────────────────────────┤
-│  Matematiksel Çekirdek                          │
-│  ├── sigmoid(x)         → Normalize (0-1)       │
-│  ├── dot(a, b)          → Skaler çarpım         │
-│  ├── cosineSimilarity() → Vektör benzerliği      │
-│  └── julianDay()        → Astronomik tarih       │
-├─────────────────────────────────────────────────┤
-│  Vektör Uzayı                                    │
-│  ├── 12 × 8D Burç Vektörleri (SIGN_VECTORS)     │
-│  └── 6 × 8D Kategori Ağırlıkları                │
-├─────────────────────────────────────────────────┤
-│  Algoritmalar                                    │
-│  ├── Natal Harita (Güneş %50 + Ay %30 + Yük %20)│
-│  ├── Keldani Gezegensel Saat                     │
-│  ├── J2000 Gezegen Transitleri                   │
-│  └── 12 Aylık Enerji Simülasyonu                 │
-└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                   LunarisML v2.0 Motor                      │
+├─────────────────────────────────────────────────────────────┤
+│  Matematiksel Çekirdek                                      │
+│  ├── sigmoid(x), leakyRelu(x)   → Non-lineer Aktivasyon     │
+│  ├── matVecMul(M, V), dot(A, B) → Tensör & Vektör Cebiri    │
+│  ├── cosineSimilarity()         → Uzamsal Benzerlik         │
+│  └── julianDay()                → Astronomik Jülyen Hesabı  │
+├─────────────────────────────────────────────────────────────┤
+│  Vektör Uzayı & Bilgi Tabanı                                │
+│  ├── 12 × 8D Burç Vektörleri (SIGN_VECTORS)                 │
+│  ├── Element & Modalite Uyum Matrisleri                     │
+│  └── 6 × 8D Kategori Ağırlık Matrisleri                     │
+├─────────────────────────────────────────────────────────────┤
+│  3-Katmanlı MLP (Multi-Layer Perceptron)                    │
+│  ├── Input Layer (16D)  : Burç (8D) + Temporal (8D)         │
+│  ├── Hidden Layer 1 (12D): Leaky ReLU + Natal Attention     │
+│  ├── Hidden Layer 2 (8D) : Leaky ReLU                       │
+│  └── Output Layer (6D)   : Sigmoid Kategori Skorları        │
+├─────────────────────────────────────────────────────────────┤
+│  Kozmik Algoritmalar & Motorlar                             │
+│  ├── Aspect Engine        : Gezegen Açıları & Orblar        │
+│  ├── Retrograd Engine     : 5 Gezegen + Gölge Dönemleri     │
+│  ├── Deep Compatibility   : Çok Boyutlu Burç Uyumu          │
+│  ├── Weekly & Monthly     : 7 Günlük & 30 Günlük Trendler   │
+│  └── 12 Aylık Simülasyon  : Gelecek Enerji Projeksiyonu     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
