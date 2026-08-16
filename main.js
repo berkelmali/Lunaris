@@ -127,6 +127,7 @@ const UI = {
     deepNatalTitle: "Natal Haritanın Üç Sütunu",
     deepSunLabel: "Güneş Burcu", deepMoonLabel: "Ay Burcu", deepAscLabel: "Yükselen Burç",
     deepProfileTitle: "Kişilik Profil Radarı",
+    deepReadingTitle: "ML ile Üretilmiş Günlük Derin Yorum",
     deepCatLove: "Aşk", deepCatLuck: "Şans", deepCatCareer: "Kariyer", deepCatHealth: "Sağlık", deepCatMoney: "Para",
     deepStatsTitle: "Kozmik Anlık Durum",
     deepPlanetHourLabel: "Şu Anki Gezegen Saati",
