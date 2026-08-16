@@ -319,9 +319,89 @@
     <button class="btn-primary" id="drawBtn" onclick="drawSpread()" data-i18n="drawBtn">Kartları Çek</button>
   </div>
   <div class="tarot-spread" id="tarotSpread"></div>
-  <div class="combo-reading" id="comboReading" style="display:none;">
-    <div class="combo-title" data-i18n="comboTitle">Kartlarının Birleşik Yorumu</div>
-    <p class="combo-text" id="comboText"></p>
+  <div class="combo-reading tarot-ml-card" id="comboReading" style="display:none;">
+    <div class="tarot-ml-header">
+      <div class="tarot-ml-badge">
+        <span class="tml-pulse"></span>
+        <span data-i18n="tarotMlTitle">✦ ML Nöral Tarot Sentezi & Kozmik Rezonans</span>
+      </div>
+      <div class="tarot-ml-version">v2.1 Neural Engine</div>
+    </div>
+
+    <!-- Rezonans ve Kozmik Çevre -->
+    <div class="tarot-ml-meta-grid">
+      <div class="tml-meta-box">
+        <div class="tml-meta-label" data-i18n="tarotResonanceLabel">Kozmik Rezonans Skoru</div>
+        <div class="tml-meta-val" id="tarotMlResonance"><span class="tml-score-num">--</span>%</div>
+        <div class="tml-score-bar-wrap">
+          <div class="tml-score-bar" id="tarotMlResonanceBar" style="width: 0%;"></div>
+        </div>
+      </div>
+      <div class="tml-meta-box">
+        <div class="tml-meta-label" data-i18n="tarotPlanetaryImpact">Gezegen Saati & Ay Fazı Rezonansı</div>
+        <div class="tml-meta-sub" id="tarotMlCelestial">--</div>
+      </div>
+    </div>
+
+    <!-- Element Simyası Çubukları -->
+    <div class="tarot-alchemy-box">
+      <div class="tml-alchemy-head">
+        <span class="tml-alchemy-title" data-i18n="tarotAlchemyTitle">Elementel Simya Dağılımı</span>
+        <span class="tml-alchemy-desc" id="tarotMlAlchemyDesc">--</span>
+      </div>
+      <div class="tml-elements-grid">
+        <div class="tml-elem-item elem-fire">
+          <span class="tml-elem-icon">🔥</span>
+          <span class="tml-elem-name">Ateş</span>
+          <div class="tml-elem-bar-wrap"><div class="tml-elem-bar" id="tarotElemFire" style="width:0%"></div></div>
+          <span class="tml-elem-val" id="tarotElemFireVal">0%</span>
+        </div>
+        <div class="tml-elem-item elem-water">
+          <span class="tml-elem-icon">💧</span>
+          <span class="tml-elem-name">Su</span>
+          <div class="tml-elem-bar-wrap"><div class="tml-elem-bar" id="tarotElemWater" style="width:0%"></div></div>
+          <span class="tml-elem-val" id="tarotElemWaterVal">0%</span>
+        </div>
+        <div class="tml-elem-item elem-air">
+          <span class="tml-elem-icon">💨</span>
+          <span class="tml-elem-name">Hava</span>
+          <div class="tml-elem-bar-wrap"><div class="tml-elem-bar" id="tarotElemAir" style="width:0%"></div></div>
+          <span class="tml-elem-val" id="tarotElemAirVal">0%</span>
+        </div>
+        <div class="tml-elem-item elem-earth">
+          <span class="tml-elem-icon">🌿</span>
+          <span class="tml-elem-name">Toprak</span>
+          <div class="tml-elem-bar-wrap"><div class="tml-elem-bar" id="tarotElemEarth" style="width:0%"></div></div>
+          <span class="tml-elem-val" id="tarotElemEarthVal">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nöral Sentez Hikayesi -->
+    <div class="tarot-synthesis-body">
+      <p class="combo-text" id="comboText"></p>
+    </div>
+
+    <!-- Kategori Enerji Dağılım Hapları -->
+    <div class="tarot-energy-pills" id="tarotEnergyPills">
+      <div class="te-pill" data-cat="love"><span class="te-icon">💖</span><span data-i18n="tarotEnergyLove">Aşk</span> <strong id="teScoreLove">--</strong></div>
+      <div class="te-pill" data-cat="career"><span class="te-icon">⚡</span><span data-i18n="tarotEnergyCareer">Kariyer</span> <strong id="teScoreCareer">--</strong></div>
+      <div class="te-pill" data-cat="luck"><span class="te-icon">✨</span><span data-i18n="tarotEnergyLuck">Şans</span> <strong id="teScoreLuck">--</strong></div>
+      <div class="te-pill" data-cat="health"><span class="te-icon">🌿</span><span data-i18n="tarotEnergyHealth">Şifa & Ruh</span> <strong id="teScoreHealth">--</strong></div>
+      <div class="te-pill" data-cat="money"><span class="te-icon">💰</span><span data-i18n="tarotEnergyMoney">Maddiyat</span> <strong id="teScoreMoney">--</strong></div>
+    </div>
+
+    <!-- ML Eylem Direktifi & Günün Mantrası -->
+    <div class="tarot-footer-grid">
+      <div class="tml-advice-card">
+        <div class="tml-card-tag" data-i18n="tarotAdviceTitle">🎯 ML Nöral Eylem Rehberi</div>
+        <p id="tarotMlAdvice" class="tml-advice-text">--</p>
+      </div>
+      <div class="tml-mantra-card">
+        <div class="tml-card-tag" data-i18n="tarotMantraTitle">🔮 Günün Kozmik Mantrası</div>
+        <p id="tarotMlMantra" class="tml-mantra-text">--</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1520,8 +1600,68 @@ function renderSpread(animate) {
   const comboEl = document.getElementById("comboReading");
   const comboTextEl = document.getElementById("comboText");
   if (comboEl && comboTextEl) {
-    const comboResult = renderComboReading(state.spread, lang);
-    comboTextEl.textContent = comboResult;
+    let mlResult = null;
+    let natalVec = null;
+    if (typeof lastDeepReadingData !== "undefined" && lastDeepReadingData && lastDeepReadingData.reading && lastDeepReadingData.reading.natal) {
+      natalVec = lastDeepReadingData.reading.natal.natalVector;
+    }
+    if (window.LunarisML && typeof window.LunarisML.interpretTarotSpread === "function") {
+      mlResult = window.LunarisML.interpretTarotSpread(state.spread, lang, { natalVector: natalVec });
+    }
+
+    let comboResult = "";
+    if (mlResult) {
+      comboResult = mlResult.synthesisNarrative;
+      comboTextEl.textContent = mlResult.synthesisNarrative;
+
+      // Rezonans
+      const resEl = document.getElementById("tarotMlResonance");
+      if (resEl) resEl.innerHTML = '<span class="tml-score-num">' + mlResult.resonanceScore + '</span>%';
+      const resBar = document.getElementById("tarotMlResonanceBar");
+      if (resBar) resBar.style.width = mlResult.resonanceScore + "%";
+
+      // Gezegensel Etki
+      const celEl = document.getElementById("tarotMlCelestial");
+      if (celEl) celEl.innerHTML = mlResult.celestialImpact;
+
+      // Element Simyası
+      const alcDesc = document.getElementById("tarotMlAlchemyDesc");
+      if (alcDesc) alcDesc.textContent = mlResult.alchemyDescription;
+
+      const fBar = document.getElementById("tarotElemFire"), fVal = document.getElementById("tarotElemFireVal");
+      if (fBar) fBar.style.width = mlResult.elementPct.fire + "%";
+      if (fVal) fVal.textContent = mlResult.elementPct.fire + "%";
+
+      const wBar = document.getElementById("tarotElemWater"), wVal = document.getElementById("tarotElemWaterVal");
+      if (wBar) wBar.style.width = mlResult.elementPct.water + "%";
+      if (wVal) wVal.textContent = mlResult.elementPct.water + "%";
+
+      const aBar = document.getElementById("tarotElemAir"), aVal = document.getElementById("tarotElemAirVal");
+      if (aBar) aBar.style.width = mlResult.elementPct.air + "%";
+      if (aVal) aVal.textContent = mlResult.elementPct.air + "%";
+
+      const eBar = document.getElementById("tarotElemEarth"), eVal = document.getElementById("tarotElemEarthVal");
+      if (eBar) eBar.style.width = mlResult.elementPct.earth + "%";
+      if (eVal) eVal.textContent = mlResult.elementPct.earth + "%";
+
+      // Enerji Skorları
+      const sLove = document.getElementById("teScoreLove"); if (sLove) sLove.textContent = "%" + mlResult.energyScores.love;
+      const sCareer = document.getElementById("teScoreCareer"); if (sCareer) sCareer.textContent = "%" + mlResult.energyScores.career;
+      const sLuck = document.getElementById("teScoreLuck"); if (sLuck) sLuck.textContent = "%" + mlResult.energyScores.luck;
+      const sHealth = document.getElementById("teScoreHealth"); if (sHealth) sHealth.textContent = "%" + mlResult.energyScores.health;
+      const sMoney = document.getElementById("teScoreMoney"); if (sMoney) sMoney.textContent = "%" + mlResult.energyScores.money;
+
+      // Tavsiye ve Mantra
+      const advEl = document.getElementById("tarotMlAdvice");
+      if (advEl) advEl.textContent = mlResult.actionDirective;
+
+      const mtrEl = document.getElementById("tarotMlMantra");
+      if (mtrEl) mtrEl.textContent = mlResult.mantra;
+    } else {
+      comboResult = renderComboReading(state.spread, lang);
+      comboTextEl.textContent = comboResult;
+    }
+
     if (animate && window.LunarisAuth && window.LunarisAuth.isLoggedIn()) {
       window.LunarisAuth.saveReading(state.spread.map(function(c){return c.key;}), comboResult, lang);
     }

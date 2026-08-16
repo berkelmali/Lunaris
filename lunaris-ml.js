@@ -2031,6 +2031,258 @@
     };
   }
 
+  /* ══════════════════════════════════════════════════
+     KATMAN 17 — NEURAL TAROT ENGINE (Nöral Tarot Sentezi)
+     22 Büyük Arkana Kartı için 8D Embedding + Astro-Gezegensel
+     Rezonans + Çok Katmanlı Nöral Sentez (MLP)
+  ══════════════════════════════════════════════════ */
+
+  var TAROT_FEATURE_VECTORS = {
+    fool:          { vec: [0.85, 0.15, 0.98, 0.10, 0.70, 0.80, 0.30, 0.60], element: 'air',   ruler: 'uranus', weight: 1.0, archetype: { tr: 'Cesur Başlangıç & Saf Güven', en: 'Bold Leap & Pure Trust', ru: 'Смелый Шаг & Доверие Неизвестному' } },
+    magician:      { vec: [0.90, 0.60, 0.75, 0.85, 0.75, 0.80, 0.90, 0.40], element: 'air',   ruler: 'mercury', weight: 1.1, archetype: { tr: 'Tezahür Gücü & Zihinsel Ustalık', en: 'Manifestation & Willpower', ru: 'Сила Манифестации & Воля' } },
+    highpriestess: { vec: [0.30, 0.70, 0.20, 0.35, 0.25, 0.99, 0.35, 0.95], element: 'water', ruler: 'moon', weight: 1.2, archetype: { tr: 'Derin Sezgi & Gizli Bilgelik', en: 'Inner Knowing & Hidden Wisdom', ru: 'Тайная Мудрость & Интуиция' } },
+    empress:       { vec: [0.65, 0.85, 0.40, 0.75, 0.85, 0.75, 0.60, 0.90], element: 'earth', ruler: 'venus', weight: 1.1, archetype: { tr: 'Bolluk & Yaratıcı Doğum', en: 'Abundance & Creative Nurturing', ru: 'Изобилие & Творческое Рождение' } },
+    emperor:       { vec: [0.85, 0.95, 0.30, 0.95, 0.50, 0.30, 0.98, 0.25], element: 'fire',  ruler: 'mars', weight: 1.1, archetype: { tr: 'Otorite & Sarsılmaz Düzen', en: 'Structure & Unshakable Order', ru: 'Авторитет & Незыблемый Порядок' } },
+    hierophant:    { vec: [0.45, 0.90, 0.20, 0.85, 0.65, 0.60, 0.75, 0.50], element: 'earth', ruler: 'venus', weight: 1.0, archetype: { tr: 'Geleneksel Rehberlik & Öğreti', en: 'Spiritual Guidance & Wisdom', ru: 'Духовное Наставничество & Традиция' } },
+    lovers:        { vec: [0.70, 0.50, 0.65, 0.40, 0.95, 0.80, 0.50, 0.92], element: 'air',   ruler: 'mercury', weight: 1.1, archetype: { tr: 'Kalp Hizalanması & Birlik', en: 'Heart Alignment & Divine Union', ru: 'Выбор Сердца & Единство' } },
+    chariot:       { vec: [0.95, 0.80, 0.85, 0.70, 0.55, 0.50, 0.92, 0.40], element: 'water', ruler: 'moon', weight: 1.1, archetype: { tr: 'Zafer & Odaklanmış İrade', en: 'Triumphant Willpower & Focus', ru: 'Триумфальная Воля & Фокус' } },
+    strength:      { vec: [0.85, 0.85, 0.50, 0.60, 0.65, 0.75, 0.85, 0.80], element: 'fire',  ruler: 'sun', weight: 1.1, archetype: { tr: 'İçsel Zarafet & Şefkatli Güç', en: 'Gentle Mastery & Inner Resilience', ru: 'Мягкая Сила & Стойкость Духа' } },
+    hermit:        { vec: [0.25, 0.80, 0.25, 0.60, 0.15, 0.95, 0.40, 0.75], element: 'earth', ruler: 'mercury', weight: 1.1, archetype: { tr: 'İçsel Işık & Ruhsal Yolculuk', en: 'Solitary Illumination & Insight', ru: 'Свет Внутри & Духовный Поиск' } },
+    wheel:         { vec: [0.80, 0.40, 0.85, 0.50, 0.70, 0.75, 0.60, 0.55], element: 'fire',  ruler: 'jupiter', weight: 1.2, archetype: { tr: 'Kader Çarkı & Kozmik Döngü', en: 'Karmic Cycles & Sudden Shift', ru: 'Колесо Судьбы & Космический Сдвиг' } },
+    justice:       { vec: [0.60, 0.90, 0.30, 0.90, 0.60, 0.65, 0.80, 0.50], element: 'air',   ruler: 'venus', weight: 1.1, archetype: { tr: 'Karmik Denge & Hakikat', en: 'Karmic Balance & Clarity of Truth', ru: 'Кармический Баланс & Истина' } },
+    hangedman:     { vec: [0.20, 0.75, 0.30, 0.30, 0.20, 0.95, 0.20, 0.85], element: 'water', ruler: 'neptune', weight: 1.0, archetype: { tr: 'Teslimiyet & Bakış Açısı Dönüşümü', en: 'Surrender & Transcendent Perspective', ru: 'Принятие & Смена Перспективы' } },
+    death:         { vec: [0.75, 0.60, 0.70, 0.50, 0.30, 0.90, 0.70, 0.80], element: 'water', ruler: 'pluto', weight: 1.3, archetype: { tr: 'Küllerinden Doğuş & Büyük Dönüşüm', en: 'Rebirth & Profound Transformation', ru: 'Возрождение из Пепла & Перерождение' } },
+    temperance:    { vec: [0.60, 0.85, 0.45, 0.75, 0.70, 0.85, 0.60, 0.80], element: 'fire',  ruler: 'jupiter', weight: 1.1, archetype: { tr: 'Simyasal Denge & Akış', en: 'Alchemical Balance & Flow', ru: 'Алхимическая Гармония & Поток' } },
+    devil:         { vec: [0.85, 0.70, 0.60, 0.70, 0.60, 0.40, 0.75, 0.65], element: 'earth', ruler: 'saturn', weight: 1.0, archetype: { tr: 'Gölgeyi Aydınlatma & Özgürleşme', en: 'Breaking Chains & Shadow Mastery', ru: 'Освобождение от Оков & Тень' } },
+    tower:         { vec: [0.98, 0.15, 0.90, 0.30, 0.40, 0.65, 0.80, 0.60], element: 'fire',  ruler: 'mars', weight: 1.3, archetype: { tr: 'Radikal Uyanış & İllüzyonların Yıkılışı', en: 'Radical Awakening & Sudden Insight', ru: 'Прозрение & Крушение Иллюзий' } },
+    star:          { vec: [0.65, 0.70, 0.75, 0.45, 0.80, 0.95, 0.55, 0.90], element: 'air',   ruler: 'uranus', weight: 1.2, archetype: { tr: 'Kozmik İlham & Şifa', en: 'Cosmic Hope & Radiant Healing', ru: 'Космическое Вдохновение & Исцеление' } },
+    moon:          { vec: [0.40, 0.45, 0.60, 0.30, 0.40, 0.98, 0.30, 0.98], element: 'water', ruler: 'moon', weight: 1.1, archetype: { tr: 'Bilinçdışı & Rüyaların Fısıltısı', en: 'Subconscious Depths & Intuitive Illusions', ru: 'Тайны Подсознания & Голос Снов' } },
+    sun:           { vec: [0.98, 0.85, 0.85, 0.75, 0.95, 0.70, 0.95, 0.60], element: 'fire',  ruler: 'sun', weight: 1.3, archetype: { tr: 'Saf Aydınlık, Neşe & Zirve', en: 'Radiant Clarity, Joy & Vitality', ru: 'Чистый Свет, Радость & Триумф' } },
+    judgement:     { vec: [0.90, 0.75, 0.80, 0.65, 0.70, 0.92, 0.90, 0.75], element: 'fire',  ruler: 'pluto', weight: 1.2, archetype: { tr: 'Ruhsal Uyanış & Yüksek Çağrı', en: 'Higher Calling & Spiritual Awakening', ru: 'Зов Души & Духовное Пробуждение' } },
+    world:         { vec: [0.92, 0.95, 0.80, 0.90, 0.90, 0.90, 0.92, 0.85], element: 'earth', ruler: 'saturn', weight: 1.4, archetype: { tr: 'Kozmik Bütünlük & Döngü Tamamlanması', en: 'Cosmic Wholeness & Ultimate Triumph', ru: 'Космическая Целостность & Завершение' } }
+  };
+
+  var TAROT_MANTRAS = {
+    tr: [
+      "Evrenin bilgeliği adımlarıma eşlik ediyor; içimdeki ışık her kapıyı açmaya yetiyor.",
+      "Geçmişin yükünü serbest bırakıyor, şimdiki anın gücünü ve geleceğin mucizelerini kucaklıyorum.",
+      "Kozmik akış beni tam olmam gereken yere taşıyor; kalbimin sesine güveniyorum.",
+      "İçimdeki sezgi ve irade birleştiğinde evrende hiçbir engel kalıcı olamaz.",
+      "Bugün açılan her kapı, ruhumun en yüksek potansiyelini yaşaması için bir davettir."
+    ],
+    en: [
+      "The wisdom of the cosmos guides my steps; my inner light unlocks every doorway.",
+      "I release the weight of the past, embracing the power of the now and future miracles.",
+      "The cosmic flow carries me exactly where I need to be; I trust my heart's intuition.",
+      "When inner intuition and willpower unite, no obstacle in the universe remains immovable.",
+      "Every doorway opening today is an invitation for my soul to manifest its highest potential."
+    ],
+    ru: [
+      "Мудрость космоса направляет мои шаги; внутренний свет открывает любые двери.",
+      "Я отпускаю груз прошлого, принимая силу настоящего и чудеса грядущего.",
+      "Космический поток ведёт меня именно туда, где мне суждено быть; я доверяю сердцу.",
+      "Когда интуиция соединяется с волей, во вселенной не остаётся непреодолимых преград.",
+      "Каждая дверь, открывающаяся сегодня — приглашение душе раскрыть свой высший потенциал."
+    ]
+  };
+
+  /**
+   * 3 Kartlık Tarot Açılımını Nöral Ağ & Astrolojik Vektörlerle Yorumlar
+   * @param {Array} spread — 3 kart objesi veya key'leri
+   * @param {String} lang — 'tr' | 'en' | 'ru'
+   * @param {Object} options — { natalVector, sunSign, date }
+   */
+  function interpretTarotSpread(spread, lang, options) {
+    if (!spread || spread.length < 3) return null;
+    lang = (lang === 'en' || lang === 'ru') ? lang : 'tr';
+    var now = (options && options.date) ? options.date : new Date();
+
+    // Kart key'lerini çözümle
+    var k0 = typeof spread[0] === 'string' ? spread[0] : (spread[0].key || 'fool');
+    var k1 = typeof spread[1] === 'string' ? spread[1] : (spread[1].key || 'magician');
+    var k2 = typeof spread[2] === 'string' ? spread[2] : (spread[2].key || 'star');
+
+    var c0 = TAROT_FEATURE_VECTORS[k0] || TAROT_FEATURE_VECTORS.fool;
+    var c1 = TAROT_FEATURE_VECTORS[k1] || TAROT_FEATURE_VECTORS.magician;
+    var c2 = TAROT_FEATURE_VECTORS[k2] || TAROT_FEATURE_VECTORS.star;
+
+    // 1. Ağırlıklı Tarot Yayılım Vektörü: Geçmiş(0.5) + Şimdi(0.85) + Gelecek(1.35)
+    var spreadVec = [];
+    for (var i = 0; i < 8; i++) {
+      spreadVec.push(c0.vec[i] * 0.50 + c1.vec[i] * 0.85 + c2.vec[i] * 1.35);
+    }
+    spreadVec = normalize(spreadVec);
+
+    // 2. Güncel Gökyüzü Temporal Vektörü & Gezegen Saati
+    var tempVec = getTemporalVector(now);
+    var planetHourKey = getCurrentPlanetaryHour(now);
+    var planetNamesLocal = {
+      sun: { tr: 'Güneş', en: 'Sun', ru: 'Солнце' },
+      moon: { tr: 'Ay', en: 'Moon', ru: 'Луна' },
+      mars: { tr: 'Mars', en: 'Mars', ru: 'Марс' },
+      mercury: { tr: 'Merkür', en: 'Mercury', ru: 'Меркурий' },
+      jupiter: { tr: 'Jüpiter', en: 'Jupiter', ru: 'Юпитер' },
+      venus: { tr: 'Venüs', en: 'Venus', ru: 'Венера' },
+      saturn: { tr: 'Satürn', en: 'Saturn', ru: 'Сатурн' }
+    };
+    var pHourName = (planetNamesLocal[planetHourKey] && planetNamesLocal[planetHourKey][lang]) ? planetNamesLocal[planetHourKey][lang] : planetHourKey;
+    var moonObj = getMoonPhaseName(now);
+    var moonName = moonObj[lang] || moonObj.tr;
+
+    // 3. Kozmik Rezonans Skoru (Kosinüs Benzerliği: Spread vs Gökyüzü)
+    var sim = cosineSimilarity(spreadVec, tempVec);
+    var resonanceScore = Math.min(99, Math.max(65, Math.round((sim * 0.40 + 0.60) * 100)));
+
+    // 4. MLP Sinir Ağı İleri Yayılımı (Kategori Dağılımı)
+    var mlpOutputs = mlpForward(spreadVec, tempVec, options && options.natalVector ? options.natalVector : null);
+    var energyScores = {
+      love:   Math.min(99, Math.max(45, Math.round(mlpOutputs[0] * 100))),
+      luck:   Math.min(99, Math.max(45, Math.round(mlpOutputs[1] * 100))),
+      career: Math.min(99, Math.max(45, Math.round(mlpOutputs[2] * 100))),
+      health: Math.min(99, Math.max(45, Math.round(mlpOutputs[3] * 100))),
+      money:  Math.min(99, Math.max(45, Math.round(mlpOutputs[4] * 100)))
+    };
+
+    // 5. Element Simyası Hesabı
+    var elemCounts = { fire: 0, water: 0, air: 0, earth: 0 };
+    [c0, c1, c2].forEach(function(c) {
+      if (elemCounts[c.element] !== undefined) elemCounts[c.element]++;
+    });
+    var totalCards = 3;
+    var elemPct = {
+      fire:  Math.round((elemCounts.fire / totalCards) * 100),
+      water: Math.round((elemCounts.water / totalCards) * 100),
+      air:   Math.round((elemCounts.air / totalCards) * 100),
+      earth: Math.round((elemCounts.earth / totalCards) * 100)
+    };
+
+    var dominantElem = Object.keys(elemCounts).reduce(function(a, b) {
+      return elemCounts[a] > elemCounts[b] ? a : b;
+    });
+
+    var alchemyDescriptions = {
+      fire: {
+        tr: '🔥 Ateş Ağırlıklı Simya: Tutku, cesaret ve hızlı eylem ivmesi yükseliyor.',
+        en: '🔥 Fire-Dominant Alchemy: Passion, courage, and rapid action momentum are rising.',
+        ru: '🔥 Огненная Алхимия: Страсть, смелость и импульс решительных действий на подъёме.'
+      },
+      water: {
+        tr: '💧 Su Ağırlıklı Simya: Derin sezgi, duygusal şifa ve arınma ön planda.',
+        en: '💧 Water-Dominant Alchemy: Deep intuition, emotional healing, and purification lead the way.',
+        ru: '💧 Водная Алхимия: Глубокая интуиция, эмоциональное исцеление и очищение на первом плане.'
+      },
+      air: {
+        tr: '💨 Hava Ağırlıklı Simya: Zihinsel berraklık, stratejik vizyon ve yeni fikirler parlıyor.',
+        en: '💨 Air-Dominant Alchemy: Mental clarity, strategic vision, and breakthrough ideas illuminate.',
+        ru: '💨 Воздушная Алхимия: Ясность мысли, стратегическое видение и новые идеи озаряют путь.'
+      },
+      earth: {
+        tr: '🌿 Toprak Ağırlıklı Simya: Maddi istikrar, sabır ve sağlam köklenme fazı devrede.',
+        en: '🌿 Earth-Dominant Alchemy: Material grounding, patience, and solid manifestation are active.',
+        ru: '🌿 Земная Алхимия: Материальная стабильность, терпение и прочное укоренение в силе.'
+      }
+    };
+
+    // 6. Kart İsimleri ve Arketip İfadeleri
+    var n0 = spread[0].name ? spread[0].name[lang] : c0.archetype[lang];
+    var n1 = spread[1].name ? spread[1].name[lang] : c1.archetype[lang];
+    var n2 = spread[2].name ? spread[2].name[lang] : c2.archetype[lang];
+
+    var e0 = spread[0].essence ? spread[0].essence[lang] : c0.archetype[lang];
+    var e1 = spread[1].essence ? spread[1].essence[lang] : c1.archetype[lang];
+    var e2 = spread[2].essence ? spread[2].essence[lang] : c2.archetype[lang];
+
+    // 7. Çok Boyutlu Nöral Sentez Hikayesi
+    var seedKey = k0 + '-' + k1 + '-' + k2 + '-' + todayKey();
+    var hashVal = hashStr(seedKey);
+
+    var synthesisTemplates = {
+      tr: [
+        "Geçmişin kökünde yatan **" + n0 + "** (" + e0 + "), bugünün enerjisinde **" + n1 + "** (" + e1 + ") ile derin bir dönüşüme uğruyor. Nöral matris analizi, bu kozmik köprünün seni doğrudan **" + n2 + "** (" + e2 + ") kapısına taşıdığını gösteriyor.",
+        "Açılımın zaman ekseni incelendiğinde; **" + n0 + "** ile atılan tohumlar, şu an **" + n1 + "** bilinciyle olgunlaşıyor. Evrenin frekansı bu süreci **" + n2 + "** vizyonuyla taçlandıracak.",
+        "Geçmişte seni şekillendiren **" + n0 + "** dersi, bugün **" + n1 + "** eşliğinde net bir eyleme dönüşüyor. Gökyüzü vektörleri, önündeki yolun **" + n2 + "** gücüyle aydınlanacağını müjdeliyor.",
+        "Kozmik arkana döngüsünde **" + n0 + "** geride kalırken, bugünkü varlığın **" + n1 + "** titreşimiyle yankılanıyor. Bu enerjiyi doğru kanalize ettiğinde, nihai varış noktan **" + n2 + "** olacak."
+      ],
+      en: [
+        "Rooted in the past with **" + n0 + "** (" + e0 + "), your journey merges today with **" + n1 + "** (" + e1 + "). Neural matrix synthesis indicates this cosmic bridge leads directly to the manifestation of **" + n2 + "** (" + e2 + ").",
+        "Analyzing the timeline of this spread; seeds sown through **" + n0 + "** are now ripening under the conscious guidance of **" + n1 + "**. The universe's resonance is crowning this path with **" + n2 + "**.",
+        "The past lesson of **" + n0 + "** transforms today into deliberate action with **" + n1 + "**. Celestial vectors reveal your road ahead is brightly illuminated by the archetypal force of **" + n2 + "**.",
+        "As the cycle of **" + n0 + "** completes, your present presence resonates with **" + n1 + "**. Channeling this flow purposefully ensures your destination aligns with **" + n2 + "**."
+      ],
+      ru: [
+        "Уходя корнями в прошлое через **" + n0 + "** (" + e0 + "), твой путь сегодня соединяется с **" + n1 + "** (" + e1 + "). Нейросетевой анализ показывает, что этот космический мост ведёт прямо к вратам **" + n2 + "** (" + e2 + ").",
+        "Анализ временной оси расклада: семена, заложенные картой **" + n0 + "**, созревают под влиянием **" + n1 + "**. Космический резонанс увенчает этот цикл триумфом **" + n2 + "**.",
+        "Урок прошлого **" + n0 + "** сегодня трансформируется в осознанное действие с **" + n1 + "**. Небесные векторы возвещают, что путь впереди ярко освещён силой **" + n2 + "**.",
+        "Цикл карты **" + n0 + "** завершается, пока твое настоящее вибрирует на частоте **" + n1 + "**. Направив этот поток верно, ты непременно раскроешь потенциал **" + n2 + "**."
+      ]
+    };
+
+    var synthesisText = synthesisTemplates[lang][hashVal % synthesisTemplates[lang].length];
+
+    // 8. Gezegensel Saat ve Ay Fazı Etkileşimi
+    var celestialImpact = {
+      tr: "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı, bu açılımın enerjisini %" + resonanceScore + " oranında göksel akışla senkronize ediyor.",
+      en: "The current **" + pHourName + " hour** and **" + moonName + "** phase synchronize this reading with cosmic flow at " + resonanceScore + "% alignment.",
+      ru: "Текущий **час " + pHourName + "** и **" + moonName + "** синхронизируют энергию этого расклада с небесным потоком на " + resonanceScore + "%."
+    };
+
+    // 9. Nöral Eylem Rehberliği (Action Advice)
+    var highestCat = Object.keys(energyScores).reduce(function(a, b) {
+      return energyScores[a] > energyScores[b] ? a : b;
+    });
+
+    var actionDirectives = {
+      love: {
+        tr: "💖 Kalbini ve sezgilerini dinle; gururu bir kenara bırakıp içten bir iletişim adımı at.",
+        en: "💖 Listen to your heart and intuition; step forward with vulnerability and genuine connection.",
+        ru: "💖 Доверься голосу сердца и интуиции; сделай шаг к искреннему общению без гордости."
+      },
+      career: {
+        tr: "⚡ Kararlılıkla stratejini uygula; geciktirdiğin önemli adımı bugün atmak için tam zamanı.",
+        en: "⚡ Execute your strategy with conviction; now is the exact moment to make that delayed leap.",
+        ru: "⚡ Действуй решительно и по плану; настал момент сделать шаг, который ты откладывал."
+      },
+      luck: {
+        tr: "✨ Karşına çıkan beklenmedik fırsatlara ve tesadüflere açık ol; evren senin lehine çalışıyor.",
+        en: "✨ Stay receptive to spontaneous synchronicities; the universe is actively conspiring in your favor.",
+        ru: "✨ Будь открыт неожиданным совпадениям и шансам; вселенная работает на тебя."
+      },
+      health: {
+        tr: "🌿 Zihnini ve bedenini arındır; doğada vakit geçir ve içsel sessizliğe alan tanı.",
+        en: "🌿 Nurture your body and mind; reconnect with nature and honor your inner silence.",
+        ru: "🌿 Очисти мысли и тело; побудь наедине с природой и позволь себе тишину."
+      },
+      money: {
+        tr: "💰 Kaynaklarını akıllıca yönet; gereksiz harcamaları kısıp değer üretecek alanlara odaklan.",
+        en: "💰 Steward your resources wisely; prune excess and invest focus into long-term value.",
+        ru: "💰 Разумно распоряжайся ресурсами; избегай импульсивных трат и фокусируйся на ценном."
+      }
+    };
+
+    var mantraList = TAROT_MANTRAS[lang] || TAROT_MANTRAS.tr;
+    var mantra = mantraList[hashVal % mantraList.length];
+
+    return {
+      cards: [
+        { key: k0, name: n0, archetype: c0.archetype[lang], element: c0.element, ruler: c0.ruler },
+        { key: k1, name: n1, archetype: c1.archetype[lang], element: c1.element, ruler: c1.ruler },
+        { key: k2, name: n2, archetype: c2.archetype[lang], element: c2.element, ruler: c2.ruler }
+      ],
+      resonanceScore: resonanceScore,
+      dominantElement: dominantElem,
+      elementPct: elemPct,
+      alchemyDescription: alchemyDescriptions[dominantElem][lang],
+      energyScores: energyScores,
+      dominantCategory: highestCat,
+      synthesisNarrative: synthesisText,
+      celestialImpact: celestialImpact[lang],
+      actionDirective: actionDirectives[highestCat][lang],
+      mantra: mantra,
+      planetaryHour: pHourName,
+      moonPhase: moonName
+    };
+  }
+
 
   /* ══════════════════════════════════════════════════
      PUBLIC API
@@ -2088,6 +2340,10 @@
 
     /* ── v2 API (yeni özellikler) ── */
 
+    /** Nöral Tarot Yorum Motoru (22 Büyük Arkana + Gezegen Rezonansı + MLP) */
+    interpretTarotSpread: interpretTarotSpread,
+    TAROT_VECTORS: TAROT_FEATURE_VECTORS,
+
     /** Haftalık okuma — 7 günlük detaylı analiz */
     generateWeeklyReading: generateWeeklyReading,
 
@@ -2115,9 +2371,10 @@
     ASPECT_NAMES: ASPECT_NAMES,
 
     /** Versiyon */
-    VERSION: '2.0.0'
+    VERSION: '2.1.0'
   };
 
   global.LunarisML = LunarisML;
 
 })(typeof window !== 'undefined' ? window : this);
+
