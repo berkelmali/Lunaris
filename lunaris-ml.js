@@ -2032,34 +2032,496 @@
   }
 
   /* ══════════════════════════════════════════════════
-     KATMAN 17 — NEURAL TAROT ENGINE (Nöral Tarot Sentezi)
-     22 Büyük Arkana Kartı için 8D Embedding + Astro-Gezegensel
-     Rezonans + Çok Katmanlı Nöral Sentez (MLP)
+     KATMAN 17 — ENHANCED NEURAL TAROT ENGINE (Nöral Tarot Sentezi v2.5)
+     22 Büyük Arkana Kartı için 8D Embedding + Konumsal Derin Anlamlar +
+     Arketipsel Gerilim Matrisi + Çok Katmanlı Nöral Sentez (MLP)
   ══════════════════════════════════════════════════ */
 
-  var TAROT_FEATURE_VECTORS = {
-    fool:          { vec: [0.85, 0.15, 0.98, 0.10, 0.70, 0.80, 0.30, 0.60], element: 'air',   ruler: 'uranus', weight: 1.0, archetype: { tr: 'Cesur Başlangıç & Saf Güven', en: 'Bold Leap & Pure Trust', ru: 'Смелый Шаг & Доверие Неизвестному' } },
-    magician:      { vec: [0.90, 0.60, 0.75, 0.85, 0.75, 0.80, 0.90, 0.40], element: 'air',   ruler: 'mercury', weight: 1.1, archetype: { tr: 'Tezahür Gücü & Zihinsel Ustalık', en: 'Manifestation & Willpower', ru: 'Сила Манифестации & Воля' } },
-    highpriestess: { vec: [0.30, 0.70, 0.20, 0.35, 0.25, 0.99, 0.35, 0.95], element: 'water', ruler: 'moon', weight: 1.2, archetype: { tr: 'Derin Sezgi & Gizli Bilgelik', en: 'Inner Knowing & Hidden Wisdom', ru: 'Тайная Мудрость & Интуиция' } },
-    empress:       { vec: [0.65, 0.85, 0.40, 0.75, 0.85, 0.75, 0.60, 0.90], element: 'earth', ruler: 'venus', weight: 1.1, archetype: { tr: 'Bolluk & Yaratıcı Doğum', en: 'Abundance & Creative Nurturing', ru: 'Изобилие & Творческое Рождение' } },
-    emperor:       { vec: [0.85, 0.95, 0.30, 0.95, 0.50, 0.30, 0.98, 0.25], element: 'fire',  ruler: 'mars', weight: 1.1, archetype: { tr: 'Otorite & Sarsılmaz Düzen', en: 'Structure & Unshakable Order', ru: 'Авторитет & Незыблемый Порядок' } },
-    hierophant:    { vec: [0.45, 0.90, 0.20, 0.85, 0.65, 0.60, 0.75, 0.50], element: 'earth', ruler: 'venus', weight: 1.0, archetype: { tr: 'Geleneksel Rehberlik & Öğreti', en: 'Spiritual Guidance & Wisdom', ru: 'Духовное Наставничество & Традиция' } },
-    lovers:        { vec: [0.70, 0.50, 0.65, 0.40, 0.95, 0.80, 0.50, 0.92], element: 'air',   ruler: 'mercury', weight: 1.1, archetype: { tr: 'Kalp Hizalanması & Birlik', en: 'Heart Alignment & Divine Union', ru: 'Выбор Сердца & Единство' } },
-    chariot:       { vec: [0.95, 0.80, 0.85, 0.70, 0.55, 0.50, 0.92, 0.40], element: 'water', ruler: 'moon', weight: 1.1, archetype: { tr: 'Zafer & Odaklanmış İrade', en: 'Triumphant Willpower & Focus', ru: 'Триумфальная Воля & Фокус' } },
-    strength:      { vec: [0.85, 0.85, 0.50, 0.60, 0.65, 0.75, 0.85, 0.80], element: 'fire',  ruler: 'sun', weight: 1.1, archetype: { tr: 'İçsel Zarafet & Şefkatli Güç', en: 'Gentle Mastery & Inner Resilience', ru: 'Мягкая Сила & Стойкость Духа' } },
-    hermit:        { vec: [0.25, 0.80, 0.25, 0.60, 0.15, 0.95, 0.40, 0.75], element: 'earth', ruler: 'mercury', weight: 1.1, archetype: { tr: 'İçsel Işık & Ruhsal Yolculuk', en: 'Solitary Illumination & Insight', ru: 'Свет Внутри & Духовный Поиск' } },
-    wheel:         { vec: [0.80, 0.40, 0.85, 0.50, 0.70, 0.75, 0.60, 0.55], element: 'fire',  ruler: 'jupiter', weight: 1.2, archetype: { tr: 'Kader Çarkı & Kozmik Döngü', en: 'Karmic Cycles & Sudden Shift', ru: 'Колесо Судьбы & Космический Сдвиг' } },
-    justice:       { vec: [0.60, 0.90, 0.30, 0.90, 0.60, 0.65, 0.80, 0.50], element: 'air',   ruler: 'venus', weight: 1.1, archetype: { tr: 'Karmik Denge & Hakikat', en: 'Karmic Balance & Clarity of Truth', ru: 'Кармический Баланс & Истина' } },
-    hangedman:     { vec: [0.20, 0.75, 0.30, 0.30, 0.20, 0.95, 0.20, 0.85], element: 'water', ruler: 'neptune', weight: 1.0, archetype: { tr: 'Teslimiyet & Bakış Açısı Dönüşümü', en: 'Surrender & Transcendent Perspective', ru: 'Принятие & Смена Перспективы' } },
-    death:         { vec: [0.75, 0.60, 0.70, 0.50, 0.30, 0.90, 0.70, 0.80], element: 'water', ruler: 'pluto', weight: 1.3, archetype: { tr: 'Küllerinden Doğuş & Büyük Dönüşüm', en: 'Rebirth & Profound Transformation', ru: 'Возрождение из Пепла & Перерождение' } },
-    temperance:    { vec: [0.60, 0.85, 0.45, 0.75, 0.70, 0.85, 0.60, 0.80], element: 'fire',  ruler: 'jupiter', weight: 1.1, archetype: { tr: 'Simyasal Denge & Akış', en: 'Alchemical Balance & Flow', ru: 'Алхимическая Гармония & Поток' } },
-    devil:         { vec: [0.85, 0.70, 0.60, 0.70, 0.60, 0.40, 0.75, 0.65], element: 'earth', ruler: 'saturn', weight: 1.0, archetype: { tr: 'Gölgeyi Aydınlatma & Özgürleşme', en: 'Breaking Chains & Shadow Mastery', ru: 'Освобождение от Оков & Тень' } },
-    tower:         { vec: [0.98, 0.15, 0.90, 0.30, 0.40, 0.65, 0.80, 0.60], element: 'fire',  ruler: 'mars', weight: 1.3, archetype: { tr: 'Radikal Uyanış & İllüzyonların Yıkılışı', en: 'Radical Awakening & Sudden Insight', ru: 'Прозрение & Крушение Иллюзий' } },
-    star:          { vec: [0.65, 0.70, 0.75, 0.45, 0.80, 0.95, 0.55, 0.90], element: 'air',   ruler: 'uranus', weight: 1.2, archetype: { tr: 'Kozmik İlham & Şifa', en: 'Cosmic Hope & Radiant Healing', ru: 'Космическое Вдохновение & Исцеление' } },
-    moon:          { vec: [0.40, 0.45, 0.60, 0.30, 0.40, 0.98, 0.30, 0.98], element: 'water', ruler: 'moon', weight: 1.1, archetype: { tr: 'Bilinçdışı & Rüyaların Fısıltısı', en: 'Subconscious Depths & Intuitive Illusions', ru: 'Тайны Подсознания & Голос Снов' } },
-    sun:           { vec: [0.98, 0.85, 0.85, 0.75, 0.95, 0.70, 0.95, 0.60], element: 'fire',  ruler: 'sun', weight: 1.3, archetype: { tr: 'Saf Aydınlık, Neşe & Zirve', en: 'Radiant Clarity, Joy & Vitality', ru: 'Чистый Свет, Радость & Триумф' } },
-    judgement:     { vec: [0.90, 0.75, 0.80, 0.65, 0.70, 0.92, 0.90, 0.75], element: 'fire',  ruler: 'pluto', weight: 1.2, archetype: { tr: 'Ruhsal Uyanış & Yüksek Çağrı', en: 'Higher Calling & Spiritual Awakening', ru: 'Зов Души & Духовное Пробуждение' } },
-    world:         { vec: [0.92, 0.95, 0.80, 0.90, 0.90, 0.90, 0.92, 0.85], element: 'earth', ruler: 'saturn', weight: 1.4, archetype: { tr: 'Kozmik Bütünlük & Döngü Tamamlanması', en: 'Cosmic Wholeness & Ultimate Triumph', ru: 'Космическая Целостность & Завершение' } }
+  var TAROT_CARDS_META = {
+    fool: {
+      num: '0', icon: '🃏',
+      name: { tr: 'Deli', en: 'The Fool', ru: 'Шут' },
+      vec: [0.85, 0.15, 0.98, 0.10, 0.70, 0.80, 0.30, 0.60],
+      element: 'air', ruler: 'uranus', weight: 1.0,
+      archetype: { tr: 'Cesur Başlangıç & Saf Güven', en: 'Bold Leap & Pure Trust', ru: 'Смелый Шаг & Доверие' },
+      past: {
+        tr: 'Geçmişte bilinmeyene doğru attığın cesur adım, seni eski sınırlarından koparıp yepyeni bir enerji alanına taşıdı.',
+        en: 'A leap of pure trust in your past broke you free from old limitations and transported you into a brand new field of possibility.',
+        ru: 'Смелый шаг в неизвестность в прошлом освободил тебя от старых ограничений и открыл неизведанные горизонты.'
+      },
+      present: {
+        tr: 'Şu anda hayat seni sıfır noktasında, yargısız ve özgür bir zihinle yeni bir yolculuğa başlamaya davet ediyor.',
+        en: 'Right now, the cosmos places you at point zero, inviting you to begin a fresh adventure with an open and unburdened heart.',
+        ru: 'Сейчас вселенная ставит тебя в исходную точку, призывая начать новый путь с чистым сердцем и открытым разумом.'
+      },
+      future: {
+        tr: 'Geleceğin eşiğinde, tüm korkuları ardında bırakarak evrenin kollarına güvenle atlayacağın parlak bir uyanış duruyor.',
+        en: 'On the horizon awaits a luminous awakening where leaving fears behind allows you to soar with complete cosmic trust.',
+        ru: 'Впереди тебя ждёт светлое пробуждение: отпустив все страхи, ты сделаешь смелый шаг навстречу истинному призванию.'
+      }
+    },
+    magician: {
+      num: 'I', icon: '🪄',
+      name: { tr: 'Büyücü', en: 'The Magician', ru: 'Маг' },
+      vec: [0.90, 0.60, 0.75, 0.85, 0.75, 0.80, 0.90, 0.40],
+      element: 'air', ruler: 'mercury', weight: 1.1,
+      archetype: { tr: 'Tezahür Gücü & Zihinsel Ustalık', en: 'Manifestation & Willpower', ru: 'Сила Манифестации & Воля' },
+      past: {
+        tr: 'Geçmişte içindeki potansiyeli ve araçları fark ederek somut bir irade ortaya koydun.',
+        en: 'In the past, you recognized your latent powers and channeled your focused willpower into reality.',
+        ru: 'В прошлом ты осознал свои скрытые ресурсы и проявил сильную волю для создания желаемого.'
+      },
+      present: {
+        tr: 'Bugün gökyüzü zihnini ve eylemlerini hizalıyor; ihtiyacın olan her güç ve araç zaten senin elinde.',
+        en: 'Today, celestial currents align your thoughts and actions; every tool you need to manifest your intent is already in your hands.',
+        ru: 'Сегодня космические потоки направляют твою мысль и действие: все нужные инструменты уже в твоих руках.'
+      },
+      future: {
+        tr: 'Gelecekte niyetini gerçeğe dönüştürme ustalığın zirveye ulaşacak ve kendi gerçekliğini bizzat sen inşa edeceksin.',
+        en: 'Ahead lies the pinnacle of your manifestation mastery, where you will consciously shape your destiny with precision.',
+        ru: 'Впереди — расцвет твоей созидательной силы, когда ты сможешь воплотить в реальность самые смелые замыслы.'
+      }
+    },
+    highpriestess: {
+      num: 'II', icon: '📜',
+      name: { tr: 'Başrahibe', en: 'The High Priestess', ru: 'Верховная Жрица' },
+      vec: [0.30, 0.70, 0.20, 0.35, 0.25, 0.99, 0.35, 0.95],
+      element: 'water', ruler: 'moon', weight: 1.2,
+      archetype: { tr: 'Derin Sezgi & Gizli Bilgelik', en: 'Inner Knowing & Hidden Wisdom', ru: 'Тайная Мудрость & Интуиция' },
+      past: {
+        tr: 'Geçmişte sessizliğe çekilip iç sesini dinlemen, seni görünmeyen tehlikelerden korudu ve derin bir sezgi kazandırdı.',
+        en: 'In your past, listening to inner silence protected you from hidden storms and awakened a profound intuitive sight.',
+        ru: 'В прошлом погружение в тишину и голос интуиции уберегли тебя от скрытых ловушек и дали глубокую мудрость.'
+      },
+      present: {
+        tr: 'Şu anda cevaplar dışarıda değil, ruhunun dingin sularında saklı; rüyalarına ve ilk hislerine kulak ver.',
+        en: 'Right now, answers lie not in external noise but in the still waters of your soul; trust your dreams and subtle feelings.',
+        ru: 'Сейчас ответы скрыты не в суете внешнего мира, а в тишине твоей души — доверься снам и первым ощущениям.'
+      },
+      future: {
+        tr: 'Gelecekte perdeler aralanacak, gizli kalan gerçekler açığa çıkacak ve ruhsal bilgeliğin en büyük pusulan olacak.',
+        en: 'In the future, cosmic veils will lift, hidden truths will illuminate, and your inner knowing will be your supreme guide.',
+        ru: 'Впереди завеса тайн приоткроется: скрытая правда прояснится, а интуиция станет твоим верным компасом.'
+      }
+    },
+    empress: {
+      num: 'III', icon: '👑',
+      name: { tr: 'İmparatoriçe', en: 'The Empress', ru: 'Императрица' },
+      vec: [0.65, 0.85, 0.40, 0.75, 0.85, 0.75, 0.60, 0.90],
+      element: 'earth', ruler: 'venus', weight: 1.1,
+      archetype: { tr: 'Bolluk & Yaratıcı Doğum', en: 'Abundance & Creative Nurturing', ru: 'Изобилие & Творчество' },
+      past: {
+        tr: 'Geçmişte sevgiyle beslediğin bir fikir, ilişki ya da emek, bugün meyve vermeye hazır verimli bir toprağa dönüştü.',
+        en: 'An intention or bond nurtured with love in your past has blossomed into fertile ground ready for harvest.',
+        ru: 'Идея или отношения, взращенные с любовью в прошлом, создали плодородную почву для сегодняшнего роста.'
+      },
+      present: {
+        tr: 'Bugün hayatında bereket ve yaratıcılık kapıları ardına kadar açık; kendine şefkat göster ve büyümeye izin ver.',
+        en: 'Today, the gates of abundance and creativity swing wide open; embrace self-compassion and allow natural expansion.',
+        ru: 'Сегодня врата изобилия и вдохновения распахнуты: прояви заботу к себе и позволь жизни расцветать.'
+      },
+      future: {
+        tr: 'Gelecekte sabırla ektiğin tohumların görkemli bir bolluk ve huzurla taçlandığına şahit olacaksın.',
+        en: 'Ahead lies a season of lush fulfillment, where patient nurturing yields rich material and emotional abundance.',
+        ru: 'Впереди тебя ждёт пора щедрого урожая, когда посеянные с любовью семена принесут радость и процветание.'
+      }
+    },
+    emperor: {
+      num: 'IV', icon: '🏛️',
+      name: { tr: 'İmparator', en: 'The Emperor', ru: 'Император' },
+      vec: [0.85, 0.95, 0.30, 0.95, 0.50, 0.30, 0.98, 0.25],
+      element: 'fire', ruler: 'mars', weight: 1.1,
+      archetype: { tr: 'Otorite & Sarsılmaz Düzen', en: 'Structure & Unshakable Order', ru: 'Авторитет & Порядок' },
+      past: {
+        tr: 'Geçmişte koyduğun net sınırlar ve disiplinli duruş, bugünkü sağlam temelinin harcını oluşturdu.',
+        en: 'Clear boundaries and principled discipline in your past built the bedrock foundation you stand upon today.',
+        ru: 'Чёткие границы и внутренняя дисциплина в прошлом заложили прочный фундамент твоего сегодняшнего положения.'
+      },
+      present: {
+        tr: 'Şu an hayatında kararsızlığa yer yok; liderliğini ele al, düzen kur ve kontrolü kendi ellerine çek.',
+        en: 'Right now is the time for decisive sovereignty; take the helm, construct structure, and stand in your authority.',
+        ru: 'Сейчас не время для сомнений: возьми управление в свои руки, навели порядок и прояви твёрдость.'
+      },
+      future: {
+        tr: 'Gelecekte kurduğun sistemler ve gösterdiğin sarsılmaz irade seni kalıcı bir başarı ve saygınlığa ulaştıracak.',
+        en: 'In the future, the frameworks you build with unbending resolve will bring lasting stability and profound respect.',
+        ru: 'Впереди построенные тобой структуры и непоколебимая воля приведут к заслуженному триумфу и авторитету.'
+      }
+    },
+    hierophant: {
+      num: 'V', icon: '🗝️',
+      name: { tr: 'Aziz', en: 'The Hierophant', ru: 'Иерофант' },
+      vec: [0.45, 0.90, 0.20, 0.85, 0.65, 0.60, 0.75, 0.50],
+      element: 'earth', ruler: 'venus', weight: 1.0,
+      archetype: { tr: 'Kadim Rehberlik & Öğreti', en: 'Spiritual Wisdom & Guidance', ru: 'Мудрость & Наставничество' },
+      past: {
+        tr: 'Geçmişte geleneksel değerlerden veya bir akıl hocasından aldığın dersler ruhsal olgunluğuna yön verdi.',
+        en: 'Lessons from timeless traditions or trusted mentors in your past shaped your spiritual maturity.',
+        ru: 'Уроки традиций или мудрого наставника в прошлом помогли сформировать твой внутренний моральный компас.'
+      },
+      present: {
+        tr: 'Bugün evren seni köklü bilgelikle buluşturuyor; kuralları sorgulamadan önce onların özünü anlamayı dene.',
+        en: 'Today invites alignment with deeper truths; seek understanding within proven wisdom before seeking to reinvent it.',
+        ru: 'Сегодня вселенная призывает обратиться к проверенной мудрости: пойми суть правил, прежде чем их менять.'
+      },
+      future: {
+        tr: 'Gelecekte öğrendiklerini başkalarına aktaran, güvenilir bir rehber ve ilham kaynağı konumuna geleceksin.',
+        en: 'Ahead, you will embody the role of a trusted guide, sharing enlightened wisdom that illuminates others’ pathways.',
+        ru: 'Впереди ты сам станешь источником мудрости и надёжным наставником для тех, кто ищет верный путь.'
+      }
+    },
+    lovers: {
+      num: 'VI', icon: '💖',
+      name: { tr: 'Aşıklar', en: 'The Lovers', ru: 'Влюблённые' },
+      vec: [0.70, 0.50, 0.65, 0.40, 0.95, 0.80, 0.50, 0.92],
+      element: 'air', ruler: 'mercury', weight: 1.1,
+      archetype: { tr: 'Kalp Hizalanması & Kutsal Birlik', en: 'Heart Alignment & Divine Union', ru: 'Выбор Сердца & Единство' },
+      past: {
+        tr: 'Geçmişte kalbinle verdiğin kritik bir karar, değerlerinle tam uyumlu bir dönüşüm yolunu başlattı.',
+        en: 'A pivotal choice made from deep heart resonance in your past set you upon a transformative personal path.',
+        ru: 'Решение, принятое сердцем в прошлом, направило тебя по пути глубокой внутренней трансформации.'
+      },
+      present: {
+        tr: 'Bugün duygusal ve zihinsel bir kavşaktasın; mantığınla sezgilerini birleştiren kalpten seçimi yapma zamanı.',
+        en: 'Today presents an alchemical crossroads; choose the path that harmonizes your deepest passion with pure integrity.',
+        ru: 'Сегодня ты на развилке: сделай выбор, в котором разум и искренние чувства звучат в унисон.'
+      },
+      future: {
+        tr: 'Gelecekte ruh ikizinle ya da en büyük tutkunla derin bir bütünleşme, içsel ve dışsal bir uyum seni bekliyor.',
+        en: 'In the future, a profound harmony of soul and purpose awaits, uniting dualities into breathtaking wholeness.',
+        ru: 'Впереди тебя ждёт глубокий союз, взаимная гармония и исцеляющее единение с тем, что тебе по-настоящему дорого.'
+      }
+    },
+    chariot: {
+      num: 'VII', icon: '🛡️',
+      name: { tr: 'Savaş Arabası', en: 'The Chariot', ru: 'Колесница' },
+      vec: [0.95, 0.80, 0.85, 0.70, 0.55, 0.50, 0.92, 0.40],
+      element: 'water', ruler: 'moon', weight: 1.1,
+      archetype: { tr: 'Zafer & Odaklanmış İrade', en: 'Triumphant Willpower & Focus', ru: 'Триумф & Фокус' },
+      past: {
+        tr: 'Geçmişte zıt yönlere çeken zorlukları iradenle dizginleyip kararlılıkla ilerlemeyi başardın.',
+        en: 'In your past, you harnessed conflicting forces through sheer will and drove forward toward your aim.',
+        ru: 'В прошлом ты обуздал противоречивые обстоятельства и уверенно преодолел сложный отрезок пути.'
+      },
+      present: {
+        tr: 'Şu anda kontrol tamamen sende; dikkatini dağıtacak her şeyi arkanda bırak ve hedefine kilitlen.',
+        en: 'Right now, the reins of destiny are firmly in your grasp; discard distractions and accelerate toward your goal.',
+        ru: 'Сейчас поводья судьбы в твоих руках: отбрось сомнения и сфокусируйся на главной цели.'
+      },
+      future: {
+        tr: 'Gelecekte karşına çıkan tüm engeller kararlılığın karşısında eriyecek ve kesin bir zafer kazanacaksın.',
+        en: 'Ahead lies undeniable breakthrough; your unbroken momentum will carry you over any obstacle to victory.',
+        ru: 'Впереди любые преграды отступят перед твоей целеустремленностью, приведя к заслуженной победе.'
+      }
+    },
+    strength: {
+      num: 'VIII', icon: '🦁',
+      name: { tr: 'Güç', en: 'Strength', ru: 'Сила' },
+      vec: [0.85, 0.85, 0.50, 0.60, 0.65, 0.75, 0.85, 0.80],
+      element: 'fire', ruler: 'sun', weight: 1.1,
+      archetype: { tr: 'İçsel Zarafet & Şefkatli Güç', en: 'Gentle Mastery & Inner Resilience', ru: 'Мягкая Сила & Стойкость' },
+      past: {
+        tr: 'Geçmişte öfke veya zorbalık yerine sabır ve şefkatle hareket etmen, en zor krizleri bile dindirdi.',
+        en: 'Responding with patient compassion rather than force in your past tamed the fiercest challenges.',
+        ru: 'В прошлом терпение и доброта вместо грубой силы помогли тебе с достоинством пройти через бури.'
+      },
+      present: {
+        tr: 'Bugün en büyük gücün sakinliğin ve içsel dengen; kaba kuvvet değil, zarafet ve anlayış kazanacak.',
+        en: 'Today, your superpower is serene composure; gentleness and emotional mastery will conquer what aggression cannot.',
+        ru: 'Сегодня твоя главная сила — внутреннее спокойствие: нежность и мудрость преодолеют любые препятствия.'
+      },
+      future: {
+        tr: 'Gelecekte tüm içsel gölgelerinle barışacak, sarsılmaz bir özgüven ve kalıcı bir huzur inşa edeceksin.',
+        en: 'In the future, total peace with your inner shadow will grant you invincible confidence and boundless warmth.',
+        ru: 'Впереди гармония с самим собой подарит тебе непоколебимую уверенность и глубокое душевное спокойствие.'
+      }
+    },
+    hermit: {
+      num: 'IX', icon: '🏮',
+      name: { tr: 'Ermiş', en: 'The Hermit', ru: 'Отшельник' },
+      vec: [0.25, 0.80, 0.25, 0.60, 0.15, 0.95, 0.40, 0.75],
+      element: 'earth', ruler: 'mercury', weight: 1.1,
+      archetype: { tr: 'İçsel Işık & Ruhsal Yolculuk', en: 'Solitary Illumination & Insight', ru: 'Внутренний Свет & Поиск' },
+      past: {
+        tr: 'Geçmişte kalabalıktan uzaklaşıp kendi içine yönelmen, sana paha biçilemez bir berraklık sağladı.',
+        en: 'Stepping back from external noise in your past allowed your own inner lantern to illuminate the true path.',
+        ru: 'Уединение и самопознание в прошлом помогли отсеять лишнее и обрести ясность взгляда.'
+      },
+      present: {
+        tr: 'Şu an dışarıdaki telaşı susturup kendi bilgeliğine danışma vakti; yalnızlık şu an senin en kutsal tapınağın.',
+        en: 'Right now, quiet the outer chatter and consult your deep soul wisdom; sacred solitude is your greatest ally.',
+        ru: 'Сейчас время замедлиться и прислушаться к себе: тишина станет источником глубоких озарений.'
+      },
+      future: {
+        tr: 'Gelecekte edindiğin derin içgörüler karanlık yolları aydınlatacak ve başkalarına da fener olacaksın.',
+        en: 'Ahead, the truths you discover in quiet reflection will illuminate not only your path but also guide others.',
+        ru: 'Впереди обретённые в тишине истины осветят твой путь и послужат маяком для окружающих.'
+      }
+    },
+    wheel: {
+      num: 'X', icon: '🎡',
+      name: { tr: 'Kader Çarkı', en: 'Wheel of Fortune', ru: 'Колесо Фортуны' },
+      vec: [0.80, 0.40, 0.85, 0.50, 0.70, 0.75, 0.60, 0.55],
+      element: 'fire', ruler: 'jupiter', weight: 1.2,
+      archetype: { tr: 'Kader Çarkı & Kozmik Döngü', en: 'Karmic Cycles & Sudden Shift', ru: 'Колесо Судьбы & Сдвиг' },
+      past: {
+        tr: 'Geçmişte yaşanan ani bir döngü değişimi, seni kontrolün ötesindeki kozmik bir plana teslim etti.',
+        en: 'A sudden turning of life’s wheel in your past swept away stagnation and realigned you with destiny.',
+        ru: 'Неожиданный поворот событий в прошлом вывел тебя из застоя и направил к новым возможностям.'
+      },
+      present: {
+        tr: 'Bugün çark lehine dönüyor; tesadüf gibi görünen olayların ardındaki kozmik senkronizasyonu fark et ve akışa güven.',
+        en: 'Today, the cosmic gears turn in your favor; welcome synchronicity and ride the rising wave of fortune.',
+        ru: 'Сегодня колесо фортуны вращается в твою пользу: доверься счастливому стечению обстоятельств.'
+      },
+      future: {
+        tr: 'Gelecekte kaderin kapıları hiç beklemediğin bir anda ardına kadar açılacak ve yeni bir dönem başlayacak.',
+        en: 'In the future, unexpected cosmic alignment will unlock doors you thought closed, elevating your life journey.',
+        ru: 'Впереди тебя ждёт счастливый прорыв и начало нового благоприятного жизненного цикла.'
+      }
+    },
+    justice: {
+      num: 'XI', icon: '⚖️',
+      name: { tr: 'Adalet', en: 'Justice', ru: 'Справедливость' },
+      vec: [0.60, 0.90, 0.30, 0.90, 0.60, 0.65, 0.80, 0.50],
+      element: 'air', ruler: 'venus', weight: 1.1,
+      archetype: { tr: 'Karmik Denge & Hakikat', en: 'Karmic Balance & Clarity of Truth', ru: 'Кармический Баланс & Истина' },
+      past: {
+        tr: 'Geçmişte dürüstlükle ve vicdanla aldığın kararlar, bugünkü karmik dengeni lehindeki ağırlıkla doldurdu.',
+        en: 'Honest and principled actions taken in your past have balanced the scales of cause and effect in your favor.',
+        ru: 'Честность и верность принципам в прошлом обеспечили тебе поддержку закона кармической справедливости.'
+      },
+      present: {
+        tr: 'Bugün objektif olma ve hakikati cesaretle kabullenme zamanı; terazi şeffaflıkla tartıyor.',
+        en: 'Today calls for rigorous clarity and ethical truth; look at facts without illusion and trust impartial fairness.',
+        ru: 'Сегодня важно сохранять объективность и смотреть правде в глаза: справедливость на твоей стороне.'
+      },
+      future: {
+        tr: 'Gelecekte hak ettiğin adaleti, karşılığını ve karmik ödülü eksiksiz bir dengeyle teslim alacaksın.',
+        en: 'Ahead lies rightful resolution; karmic restitution and harmonious clarity will restore total balance to your world.',
+        ru: 'Впереди тебя ждёт полное восстановление справедливости, заслуженная награда и душевный баланс.'
+      }
+    },
+    hangedman: {
+      num: 'XII', icon: '⏳',
+      name: { tr: 'Asılan Adam', en: 'The Hanged Man', ru: 'Повешенный' },
+      vec: [0.20, 0.75, 0.30, 0.30, 0.20, 0.95, 0.20, 0.85],
+      element: 'water', ruler: 'neptune', weight: 1.0,
+      archetype: { tr: 'Teslimiyet & Bakış Açısı Dönüşümü', en: 'Surrender & Transcendent Perspective', ru: 'Принятие & Новое Видение' },
+      past: {
+        tr: 'Geçmişteki mecburi duraklama ve bekleyiş, dünyaya bambaşka bir pencereden bakmanı sağladı.',
+        en: 'A pause or sacrifice in your past flipped your worldview upside down, revealing pearls of wisdom.',
+        ru: 'Вынужденная пауза в прошлом позволила взглянуть на вещи под совершенно иным углом.'
+      },
+      present: {
+        tr: 'Şu an olayları zorlamak yerine akışa teslim ol; bu askıda kalış hali aslında zihninin yeniden doğuşudur.',
+        en: 'Right now, stop fighting against the current; surrender expectations, for this suspension is a sacred rebirth.',
+        ru: 'Сейчас не стоит форсировать события: отпусти контроль, ведь эта пауза готовит тебя к новому этапу.'
+      },
+      future: {
+        tr: 'Gelecekte olaylara kazandığın bu eşsiz perspektif sayesinde herkesin tıkandığı noktada sen kolayca çıkış bulacaksın.',
+        en: 'In the future, your enlightened perspective will illuminate effortless breakthroughs where others see only walls.',
+        ru: 'Впереди твой обновленный взгляд на жизнь позволит легко найти выход там, где другие видят тупик.'
+      }
+    },
+    death: {
+      num: 'XIII', icon: '🦋',
+      name: { tr: 'Ölüm', en: 'Death', ru: 'Смерть' },
+      vec: [0.75, 0.60, 0.70, 0.50, 0.30, 0.90, 0.70, 0.80],
+      element: 'water', ruler: 'pluto', weight: 1.3,
+      archetype: { tr: 'Küllerinden Doğuş & Büyük Dönüşüm', en: 'Rebirth & Profound Transformation', ru: 'Перерождение & Трансформация' },
+      past: {
+        tr: 'Geçmişte miadını doldurmuş bir dönemi kapatıp ardında bırakman, ruhunun prangalarından kurtulmasını sağladı.',
+        en: 'Closing the door on an outdated chapter in your past released stagnant bonds and freed your soul to evolve.',
+        ru: 'Завершение устаревшего этапа в прошлом освободило тебя от отживших привязанностей.'
+      },
+      present: {
+        tr: 'Bugün eskinin kabuğunu kırma devrindesin; gitmesi gerekene direnme, yeni olanın doğması için yer aç.',
+        en: 'Today is a sacred shedding of old skin; do not cling to what is passing, for vast new life demands room to bloom.',
+        ru: 'Сегодня время сбросить старую оболочку: не держись за уходящее, чтобы освободить место новому.'
+      },
+      future: {
+        tr: 'Gelecekte küllerinden doğan bir anka kuşu gibi eskisinden çok daha güçlü, özgür ve parlak bir şekilde parlayacaksın.',
+        en: 'Ahead lies phoenix-like resurrection; you will emerge profoundly empowered, unburdened, and revitalized.',
+        ru: 'Впереди, подобно фениксу, ты возродишься более сильным, мудрым и свободным, чем когда-либо.'
+      }
+    },
+    temperance: {
+      num: 'XIV', icon: '🏺',
+      name: { tr: 'Denge', en: 'Temperance', ru: 'Умеренность' },
+      vec: [0.60, 0.85, 0.45, 0.75, 0.70, 0.85, 0.60, 0.80],
+      element: 'fire', ruler: 'jupiter', weight: 1.1,
+      archetype: { tr: 'Simyasal Denge & Akış', en: 'Alchemical Balance & Flow', ru: 'Алхимия & Гармония' },
+      past: {
+        tr: 'Geçmişte aşırılıklardan kaçınıp altın orta yolu bulman, içsel huzurunun temellerini sağlamlaştırdı.',
+        en: 'Cultivating moderation and inner harmony in your past anchored serene stability within your core.',
+        ru: 'Стремление к золотой середине и спокойствию в прошлом укрепило твой внутренний баланс.'
+      },
+      present: {
+        tr: 'Bugün zıt kutupları sabırla harmanlama zamanı; acele etme, evrenin simyası her şeyi kusursuz bir dengeye oturtuyor.',
+        en: 'Today invites gentle alchemy; blend opposing dynamics patiently, for cosmic equilibrium is taking shape.',
+        ru: 'Сегодня важно соединить противоположности в гармоничный союз: не спеши, всё складывается вовремя.'
+      },
+      future: {
+        tr: 'Gelecekte ruhsal şifa, kusursuz bir içsel uyum ve kalıcı bir duygusal sükunet hayatını sarmalayacak.',
+        en: 'In the future, profound spiritual healing and effortless grace will permeate every dimension of your life.',
+        ru: 'Впереди тебя ждёт глубокое исцеление, душевная безмятежность и безупречный жизненный ритм.'
+      }
+    },
+    devil: {
+      num: 'XV', icon: '⛓️',
+      name: { tr: 'Şeytan', en: 'The Devil', ru: 'Дьявол' },
+      vec: [0.85, 0.70, 0.60, 0.70, 0.60, 0.40, 0.75, 0.65],
+      element: 'earth', ruler: 'saturn', weight: 1.0,
+      archetype: { tr: 'Gölgeyi Aydınlatma & Özgürleşme', en: 'Breaking Chains & Shadow Mastery', ru: 'Освобождение от Оков' },
+      past: {
+        tr: 'Geçmişte seni sınırlandıran bağımlılıkların veya korkuların farkına varman, özgürlük yürüyüşünü başlattı.',
+        en: 'Recognizing illusions and self-imposed limitations in your past ignited your quest for authentic sovereignty.',
+        ru: 'Осознание ложных привязанностей и страхов в прошлом положило начало твоему освобождению.'
+      },
+      present: {
+        tr: 'Bugün seni tutsak hissettiren zincirlerin aslında ne kadar gevşek olduğunu gör; kontrol senin iradende.',
+        en: 'Today reveals that the chains binding you are an illusion; reclaim your power and dissolve false dependencies.',
+        ru: 'Сегодня ты видишь, что сковывающие тебя цепи — лишь иллюзия: твоя воля способна их разрушить.'
+      },
+      future: {
+        tr: 'Gelecekte tüm gölge yanlarınla yüzleşip onları güce dönüştürecek ve tam bir manevi özgürlüğe kavuşacaksın.',
+        en: 'Ahead lies total liberation; integrating your shadow will grant you unstoppable magnetism and freedom.',
+        ru: 'Впереди принятие своей тени и освобождение от оков подарят тебе невероятную внутреннюю силу.'
+      }
+    },
+    tower: {
+      num: 'XVI', icon: '⚡',
+      name: { tr: 'Kule', en: 'The Tower', ru: 'Башня' },
+      vec: [0.98, 0.15, 0.90, 0.30, 0.40, 0.65, 0.80, 0.60],
+      element: 'fire', ruler: 'mars', weight: 1.3,
+      archetype: { tr: 'Radikal Uyanış & İllüzyonların Yıkılışı', en: 'Radical Awakening & Sudden Insight', ru: 'Прозрение & Крушение Иллюзий' },
+      past: {
+        tr: 'Geçmişte yaşanan ani bir sarsıntı, çürük temeller üzerine kurulu sahte güvenleri yıkarak seni hakikate uyandırdı.',
+        en: 'A sudden lightning-strike disruption in your past shattered false illusions to make way for absolute truth.',
+        ru: 'Внезапный слом старых иллюзий в прошлом очистил пространство для истинного развития.'
+      },
+      present: {
+        tr: 'Bugün çökmesi gereken hiçbir şeye tutunma; yıkım gibi görünen bu an, aslında özgürleştirici bir aydınlanmadır.',
+        en: 'Today, release your grip on collapsing paradigms; what feels like breakdown is in truth a liberating breakthrough.',
+        ru: 'Сегодня не держись за то, что рушится: этот кризис на самом деле освобождает тебя от заблуждений.'
+      },
+      future: {
+        tr: 'Gelecekte toz dindiğinde, altından eskisinden bin kat daha sağlam ve sahici bir temel yükselecek.',
+        en: 'In the future, once the dust clears, you will build upon rock-solid ground with absolute clarity and invulnerability.',
+        ru: 'Впереди, когда утихнет буря, на очищенном месте ты построишь несокрушимый и честный фундамент жизни.'
+      }
+    },
+    star: {
+      num: 'XVII', icon: '🌟',
+      name: { tr: 'Yıldız', en: 'The Star', ru: 'Звезда' },
+      vec: [0.65, 0.70, 0.75, 0.45, 0.80, 0.95, 0.55, 0.90],
+      element: 'air', ruler: 'uranus', weight: 1.2,
+      archetype: { tr: 'Kozmik İlham & Şifa', en: 'Cosmic Hope & Radiant Healing', ru: 'Надежда & Исцеление' },
+      past: {
+        tr: 'Geçmişteki en karanlık gecenin ardından bile kalbinde yeşerttiğin umut, seni bugünkü aydınlığa ulaştırdı.',
+        en: 'Unwavering hope nurtured through your darkest nights has carried you safely to today’s radiant shore.',
+        ru: 'Вера и надежда, сохраненные в самые темные времена прошлого, привели тебя к свету.'
+      },
+      present: {
+        tr: 'Bugün evrenin şifa dolu ışığı tam üzerinde parlıyor; ilhamına güven ve geleceğe inançla bak.',
+        en: 'Today, stellar blessing and restorative healing envelop you; trust your inspiration and dream fearlessly.',
+        ru: 'Сегодня целительный свет звезд направлен на тебя: доверься вдохновению и откройся чудесам.'
+      },
+      future: {
+        tr: 'Gelecekte hayallerin somut birer mucizeye dönüşecek, ruhun arınmış bir mutlulukla parıldayacak.',
+        en: 'Ahead lies the tangible realization of your highest dreams, enveloped in serene peace and cosmic grace.',
+        ru: 'Впереди твои самые сокровенные мечты воплотятся в жизнь, наполнив сердце чистой радостью.'
+      }
+    },
+    moon: {
+      num: 'XVIII', icon: '🌙',
+      name: { tr: 'Ay', en: 'The Moon', ru: 'Луна' },
+      vec: [0.40, 0.45, 0.60, 0.30, 0.40, 0.98, 0.30, 0.98],
+      element: 'water', ruler: 'moon', weight: 1.1,
+      archetype: { tr: 'Bilinçdışı & Rüyaların Fısıltısı', en: 'Subconscious Depths & Intuitive Illusions', ru: 'Тайны Подсознания & Сны' },
+      past: {
+        tr: 'Geçmişte belirsizlik ve yanılsamalarla dolu sisli yollardan geçerek bilinçaltının derinlikleriyle yüzleştin.',
+        en: 'Navigating through foggy uncertainties and deceptive shadows in your past strengthened your inner radar.',
+        ru: 'В прошлом блуждание в тумане сомнений и иллюзий научило тебя слышать тонкие сигналы подсознания.'
+      },
+      present: {
+        tr: 'Bugün her şey göründüğü gibi olmayabilir; acele kararlar alma, gölgelerin arkasındaki gerçek sezgine güven.',
+        en: 'Today, things may not be as they seem on the surface; avoid hasty judgments and trust your subconscious instincts.',
+        ru: 'Сегодня не всё лежит на поверхности: избегай поспешных выводов и доверься чутью, а не иллюзиям.'
+      },
+      future: {
+        tr: 'Gelecekte sis tamamen dağılacak, tüm gizemler aydınlanacak ve sezgisel gücün sana şaşmaz bir rehber olacak.',
+        en: 'In the future, the mist will part entirely, revealing pristine truth and cementing your intuitive gifts.',
+        ru: 'Впереди туман рассеется, обнажив чистую истину, а интуиция станет твоим верным щитом.'
+      }
+    },
+    sun: {
+      num: 'XIX', icon: '☀️',
+      name: { tr: 'Güneş', en: 'The Sun', ru: 'Солнце' },
+      vec: [0.98, 0.85, 0.85, 0.75, 0.95, 0.70, 0.95, 0.60],
+      element: 'fire', ruler: 'sun', weight: 1.3,
+      archetype: { tr: 'Saf Aydınlık, Neşe & Zirve', en: 'Radiant Clarity, Joy & Vitality', ru: 'Свет, Радость & Триумф' },
+      past: {
+        tr: 'Geçmişte sergilediğin samimi neşe, özgüven ve canlılık, etrafındaki tüm karanlıkları aydınlattı.',
+        en: 'Vibrant warmth, authenticity, and joyful courage in your past dissolved shadows and forged glorious memories.',
+        ru: 'Искренняя радость, уверенность и жизнелюбие в прошлом озарили твой путь и согрели окружающих.'
+      },
+      present: {
+        tr: 'Bugün hayatında saf bir başarı, netlik ve kutlama enerjisi parlıyor; ışığını kimseden saklama.',
+        en: 'Today radiates unclouded joy, vitality, and triumphant clarity; step proudly into the spotlight.',
+        ru: 'Сегодня день триумфа, кристальной ясности и чистой радости: смело сияй своим истинным светом.'
+      },
+      future: {
+        tr: 'Gelecekte tüm emeklerin görkemli bir başarı ve içsel tatminle taçlanacak, mutluluğun zirvesini yaşayacaksın.',
+        en: 'Ahead lies radiant success, absolute vitality, and warm fulfillment crowning your entire journey.',
+        ru: 'Впереди тебя ждет безусловный успех, крепкое здоровье и лучезарное счастье.'
+      }
+    },
+    judgement: {
+      num: 'XX', icon: '🎺',
+      name: { tr: 'Mahkeme', en: 'Judgement', ru: 'Суд' },
+      vec: [0.90, 0.75, 0.80, 0.65, 0.70, 0.92, 0.90, 0.75],
+      element: 'fire', ruler: 'pluto', weight: 1.2,
+      archetype: { tr: 'Ruhsal Uyanış & Yüksek Çağrı', en: 'Higher Calling & Spiritual Awakening', ru: 'Пробуждение & Зов Души' },
+      past: {
+        tr: 'Geçmişini dürüstçe değerlendirip kendini affetmen, ruhunun yeni bir bilince sıçramasına kapı açtı.',
+        en: 'Honest self-reckoning and deep forgiveness in your past unburdened your soul for higher evolution.',
+        ru: 'Прощение себя и переоценка прошлого открыли путь к духовному возрождению.'
+      },
+      present: {
+        tr: 'Bugün evren seni yüksek yaşam amacına çağırıyor; eski kimliğini bırak ve bu kutsal uyanışı kucakla.',
+        en: 'Today, the cosmic trumpet sounds your soul’s awakening; shed past guilt and answer your true calling.',
+        ru: 'Сегодня вселенная призывает тебя к высшему призванию: оставь прошлое позади и шагни в новую жизнь.'
+      },
+      future: {
+        tr: 'Gelecekte hayatının amacını eksiksiz bulmuş olarak, tamamen yenilenmiş ve özgürleşmiş bir varoluşa adım atacaksın.',
+        en: 'In the future, reborn with crystalline clarity, you will step boldly into your ultimate soul mission.',
+        ru: 'Впереди тебя ждет полное обновление, обретение истинной миссии и свобода духа.'
+      }
+    },
+    world: {
+      num: 'XXI', icon: '🌍',
+      name: { tr: 'Dünya', en: 'The World', ru: 'Мир' },
+      vec: [0.92, 0.95, 0.80, 0.90, 0.90, 0.90, 0.92, 0.85],
+      element: 'earth', ruler: 'saturn', weight: 1.4,
+      archetype: { tr: 'Kozmik Bütünlük & Döngü Tamamlanması', en: 'Cosmic Wholeness & Ultimate Triumph', ru: 'Целостность & Завершение' },
+      past: {
+        tr: 'Geçmişte tamamladığın büyük bir hayat döngüsü, sana evrensel bir olgunluk ve bilgelik kazandırdı.',
+        en: 'Completing a monumental karmic cycle in your past integrated wisdom and brought you to wholeness.',
+        ru: 'Завершение важного жизненного цикла в прошлом принесло тебе глубокую мудрость и опыт.'
+      },
+      present: {
+        tr: 'Bugün tüm taşlar yerine oturuyor; başarıyı, tamamlanmışlığı ve evrenle bir olma duygusunu kutla.',
+        en: 'Today, all cosmic pieces align harmoniously; celebrate triumphant closure and universal oneness.',
+        ru: 'Сегодня все элементы мозаики сходятся воедино: празднуй триумф, целостность и гармонию с миром.'
+      },
+      future: {
+        tr: 'Gelecekte bu döngünün muazzam başarısıyla yepyeni ve çok daha yüksek bir kozmik boyuta adım atacaksın.',
+        en: 'Ahead lies ultimate fulfillment: standing at the summit of one great cycle, boundless new worlds await.',
+        ru: 'Впереди тебя ждет вершина успеха, признание и открытие еще более грандиозных горизонтов.'
+      }
+    }
   };
 
   var TAROT_MANTRAS = {
@@ -2068,26 +2530,29 @@
       "Geçmişin yükünü serbest bırakıyor, şimdiki anın gücünü ve geleceğin mucizelerini kucaklıyorum.",
       "Kozmik akış beni tam olmam gereken yere taşıyor; kalbimin sesine güveniyorum.",
       "İçimdeki sezgi ve irade birleştiğinde evrende hiçbir engel kalıcı olamaz.",
-      "Bugün açılan her kapı, ruhumun en yüksek potansiyelini yaşaması için bir davettir."
+      "Bugün açılan her kapı, ruhumun en yüksek potansiyelini yaşaması için bir davettir.",
+      "Niyetim berrak, kalbim açık; gökyüzünün tüm cömertliği bugün bana akıyor."
     ],
     en: [
       "The wisdom of the cosmos guides my steps; my inner light unlocks every doorway.",
       "I release the weight of the past, embracing the power of the now and future miracles.",
       "The cosmic flow carries me exactly where I need to be; I trust my heart's intuition.",
       "When inner intuition and willpower unite, no obstacle in the universe remains immovable.",
-      "Every doorway opening today is an invitation for my soul to manifest its highest potential."
+      "Every doorway opening today is an invitation for my soul to manifest its highest potential.",
+      "My intention is clear, my heart is receptive; cosmic grace flows into my life effortlessly."
     ],
     ru: [
       "Мудрость космоса направляет мои шаги; внутренний свет открывает любые двери.",
       "Я отпускаю груз прошлого, принимая силу настоящего и чудеса грядущего.",
       "Космический поток ведёт меня именно туда, где мне суждено быть; я доверяю сердцу.",
       "Когда интуиция соединяется с волей, во вселенной не остаётся непреодолимых преград.",
-      "Каждая дверь, открывающаяся сегодня — приглашение душе раскрыть свой высший потенциал."
+      "Каждая дверь, открывающаяся сегодня — приглашение душе раскрыть свой высший потенциал.",
+      "Моё намерение чисто, а сердце открыто; вселенское изобилие наполняет мою жизнь."
     ]
   };
 
   /**
-   * 3 Kartlık Tarot Açılımını Nöral Ağ & Astrolojik Vektörlerle Yorumlar
+   * 3 Kartlık Tarot Açılımını Nöral Ağ & Astrolojik Vektörlerle Yorumlar (v2.5)
    * @param {Array} spread — 3 kart objesi veya key'leri
    * @param {String} lang — 'tr' | 'en' | 'ru'
    * @param {Object} options — { natalVector, sunSign, date }
@@ -2102,9 +2567,9 @@
     var k1 = typeof spread[1] === 'string' ? spread[1] : (spread[1].key || 'magician');
     var k2 = typeof spread[2] === 'string' ? spread[2] : (spread[2].key || 'star');
 
-    var c0 = TAROT_FEATURE_VECTORS[k0] || TAROT_FEATURE_VECTORS.fool;
-    var c1 = TAROT_FEATURE_VECTORS[k1] || TAROT_FEATURE_VECTORS.magician;
-    var c2 = TAROT_FEATURE_VECTORS[k2] || TAROT_FEATURE_VECTORS.star;
+    var c0 = TAROT_CARDS_META[k0] || TAROT_CARDS_META.fool;
+    var c1 = TAROT_CARDS_META[k1] || TAROT_CARDS_META.magician;
+    var c2 = TAROT_CARDS_META[k2] || TAROT_CARDS_META.star;
 
     // 1. Ağırlıklı Tarot Yayılım Vektörü: Geçmiş(0.5) + Şimdi(0.85) + Gelecek(1.35)
     var spreadVec = [];
@@ -2117,13 +2582,13 @@
     var tempVec = getTemporalVector(now);
     var planetHourKey = getCurrentPlanetaryHour(now);
     var planetNamesLocal = {
-      sun: { tr: 'Güneş', en: 'Sun', ru: 'Солнце' },
-      moon: { tr: 'Ay', en: 'Moon', ru: 'Луна' },
-      mars: { tr: 'Mars', en: 'Mars', ru: 'Марс' },
+      sun:     { tr: 'Güneş', en: 'Sun', ru: 'Солнце' },
+      moon:    { tr: 'Ay', en: 'Moon', ru: 'Луна' },
+      mars:    { tr: 'Mars', en: 'Mars', ru: 'Марс' },
       mercury: { tr: 'Merkür', en: 'Mercury', ru: 'Меркурий' },
       jupiter: { tr: 'Jüpiter', en: 'Jupiter', ru: 'Юпитер' },
-      venus: { tr: 'Venüs', en: 'Venus', ru: 'Венера' },
-      saturn: { tr: 'Satürn', en: 'Saturn', ru: 'Сатурн' }
+      venus:   { tr: 'Venüs', en: 'Venus', ru: 'Венера' },
+      saturn:  { tr: 'Satürn', en: 'Saturn', ru: 'Сатурн' }
     };
     var pHourName = (planetNamesLocal[planetHourKey] && planetNamesLocal[planetHourKey][lang]) ? planetNamesLocal[planetHourKey][lang] : planetHourKey;
     var moonObj = getMoonPhaseName(now);
@@ -2131,16 +2596,28 @@
 
     // 3. Kozmik Rezonans Skoru (Kosinüs Benzerliği: Spread vs Gökyüzü)
     var sim = cosineSimilarity(spreadVec, tempVec);
-    var resonanceScore = Math.min(99, Math.max(65, Math.round((sim * 0.40 + 0.60) * 100)));
+    var resonanceScore = Math.min(99, Math.max(68, Math.round((sim * 0.38 + 0.62) * 100)));
+
+    var resonanceLevels = {
+      tr: resonanceScore >= 90 ? 'olağanüstü yüksek' : (resonanceScore >= 80 ? 'oldukça güçlü' : 'dengeli ve berrak'),
+      en: resonanceScore >= 90 ? 'exceptionally high' : (resonanceScore >= 80 ? 'powerfully resonant' : 'balanced and clear'),
+      ru: resonanceScore >= 90 ? 'исключительно высокий' : (resonanceScore >= 80 ? 'очень мощный' : 'гармоничный и ясный')
+    };
+
+    var resonanceExplanation = {
+      tr: "Kozmik Rezonans Skoru (%" + resonanceScore + "); çektiğin kartların arketipsel enerjisinin, şu anki " + pHourName + " saati, " + moonName + " fazı ve mevsimsel gökyüzü vektörleriyle " + resonanceLevels.tr + " bir uyumla titreştiğini doğrular. Niyetin evrensel akışla tam senkronize.",
+      en: "Cosmic Resonance Score (" + resonanceScore + "%); confirms that your drawn archetypes vibrate in " + resonanceLevels.en + " harmony with today's " + pHourName + " hour, " + moonName + " phase, and seasonal vectors. Your intention is in true cosmic synchronicity.",
+      ru: "Космический резонанс (" + resonanceScore + "%); подтверждает, что выбранные архетипы вибрируют в " + resonanceLevels.ru + " гармонии с текущим часом (" + pHourName + "), фазой Луны (" + moonName + ") и небесным потоком."
+    };
 
     // 4. MLP Sinir Ağı İleri Yayılımı (Kategori Dağılımı)
     var mlpOutputs = mlpForward(spreadVec, tempVec, options && options.natalVector ? options.natalVector : null);
     var energyScores = {
-      love:   Math.min(99, Math.max(45, Math.round(mlpOutputs[0] * 100))),
-      luck:   Math.min(99, Math.max(45, Math.round(mlpOutputs[1] * 100))),
-      career: Math.min(99, Math.max(45, Math.round(mlpOutputs[2] * 100))),
-      health: Math.min(99, Math.max(45, Math.round(mlpOutputs[3] * 100))),
-      money:  Math.min(99, Math.max(45, Math.round(mlpOutputs[4] * 100)))
+      love:   Math.min(99, Math.max(48, Math.round(mlpOutputs[0] * 100))),
+      luck:   Math.min(99, Math.max(48, Math.round(mlpOutputs[1] * 100))),
+      career: Math.min(99, Math.max(48, Math.round(mlpOutputs[2] * 100))),
+      health: Math.min(99, Math.max(48, Math.round(mlpOutputs[3] * 100))),
+      money:  Math.min(99, Math.max(48, Math.round(mlpOutputs[4] * 100)))
     };
 
     // 5. Element Simyası Hesabı
@@ -2183,43 +2660,25 @@
       }
     };
 
-    // 6. Kart İsimleri ve Arketip İfadeleri
-    var n0 = spread[0].name ? spread[0].name[lang] : c0.archetype[lang];
-    var n1 = spread[1].name ? spread[1].name[lang] : c1.archetype[lang];
-    var n2 = spread[2].name ? spread[2].name[lang] : c2.archetype[lang];
+    // 6. Kart İsimleri
+    var n0 = c0.name[lang] || c0.name.tr;
+    var n1 = c1.name[lang] || c1.name.tr;
+    var n2 = c2.name[lang] || c2.name.tr;
 
-    var e0 = spread[0].essence ? spread[0].essence[lang] : c0.archetype[lang];
-    var e1 = spread[1].essence ? spread[1].essence[lang] : c1.archetype[lang];
-    var e2 = spread[2].essence ? spread[2].essence[lang] : c2.archetype[lang];
+    // 7. Derin Poetik Nöral Sentez (3-Katmanlı Akış)
+    var p0 = c0.past[lang];
+    var p1 = c1.present[lang];
+    var p2 = c2.future[lang];
 
-    // 7. Çok Boyutlu Nöral Sentez Hikayesi
-    var seedKey = k0 + '-' + k1 + '-' + k2 + '-' + todayKey();
-    var hashVal = hashStr(seedKey);
+    var synthesisText = 
+      "✦ **Geçmişin Kökü (" + c0.icon + " " + n0 + "):** " + p0 + "\n\n" +
+      "✦ **Şimdinin Simyası (" + c1.icon + " " + n1 + "):** " + p1 + " " +
+      (lang === 'tr' ? "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı bu dönüşüm sürecini doğrudan destekliyor." :
+       (lang === 'ru' ? "Текущий **час " + pHourName + "** и фаза **" + moonName + "** мягко поддерживают эту трансформацию." :
+        "Today's **" + pHourName + " planetary hour** and **" + moonName + "** phase directly fuel this alchemical pivot.")) + "\n\n" +
+      "✦ **Geleceğin Kapısı (" + c2.icon + " " + n2 + "):** " + p2;
 
-    var synthesisTemplates = {
-      tr: [
-        "Geçmişin kökünde yatan **" + n0 + "** (" + e0 + "), bugünün enerjisinde **" + n1 + "** (" + e1 + ") ile derin bir dönüşüme uğruyor. Nöral matris analizi, bu kozmik köprünün seni doğrudan **" + n2 + "** (" + e2 + ") kapısına taşıdığını gösteriyor.",
-        "Açılımın zaman ekseni incelendiğinde; **" + n0 + "** ile atılan tohumlar, şu an **" + n1 + "** bilinciyle olgunlaşıyor. Evrenin frekansı bu süreci **" + n2 + "** vizyonuyla taçlandıracak.",
-        "Geçmişte seni şekillendiren **" + n0 + "** dersi, bugün **" + n1 + "** eşliğinde net bir eyleme dönüşüyor. Gökyüzü vektörleri, önündeki yolun **" + n2 + "** gücüyle aydınlanacağını müjdeliyor.",
-        "Kozmik arkana döngüsünde **" + n0 + "** geride kalırken, bugünkü varlığın **" + n1 + "** titreşimiyle yankılanıyor. Bu enerjiyi doğru kanalize ettiğinde, nihai varış noktan **" + n2 + "** olacak."
-      ],
-      en: [
-        "Rooted in the past with **" + n0 + "** (" + e0 + "), your journey merges today with **" + n1 + "** (" + e1 + "). Neural matrix synthesis indicates this cosmic bridge leads directly to the manifestation of **" + n2 + "** (" + e2 + ").",
-        "Analyzing the timeline of this spread; seeds sown through **" + n0 + "** are now ripening under the conscious guidance of **" + n1 + "**. The universe's resonance is crowning this path with **" + n2 + "**.",
-        "The past lesson of **" + n0 + "** transforms today into deliberate action with **" + n1 + "**. Celestial vectors reveal your road ahead is brightly illuminated by the archetypal force of **" + n2 + "**.",
-        "As the cycle of **" + n0 + "** completes, your present presence resonates with **" + n1 + "**. Channeling this flow purposefully ensures your destination aligns with **" + n2 + "**."
-      ],
-      ru: [
-        "Уходя корнями в прошлое через **" + n0 + "** (" + e0 + "), твой путь сегодня соединяется с **" + n1 + "** (" + e1 + "). Нейросетевой анализ показывает, что этот космический мост ведёт прямо к вратам **" + n2 + "** (" + e2 + ").",
-        "Анализ временной оси расклада: семена, заложенные картой **" + n0 + "**, созревают под влиянием **" + n1 + "**. Космический резонанс увенчает этот цикл триумфом **" + n2 + "**.",
-        "Урок прошлого **" + n0 + "** сегодня трансформируется в осознанное действие с **" + n1 + "**. Небесные векторы возвещают, что путь впереди ярко освещён силой **" + n2 + "**.",
-        "Цикл карты **" + n0 + "** завершается, пока твое настоящее вибрирует на частоте **" + n1 + "**. Направив этот поток верно, ты непременно раскроешь потенциал **" + n2 + "**."
-      ]
-    };
-
-    var synthesisText = synthesisTemplates[lang][hashVal % synthesisTemplates[lang].length];
-
-    // 8. Gezegensel Saat ve Ay Fazı Etkileşimi
+    // 8. Gezegensel Etki Metni
     var celestialImpact = {
       tr: "Şu anki **" + pHourName + " saati** ve **" + moonName + "** fazı, bu açılımın enerjisini %" + resonanceScore + " oranında göksel akışla senkronize ediyor.",
       en: "The current **" + pHourName + " hour** and **" + moonName + "** phase synchronize this reading with cosmic flow at " + resonanceScore + "% alignment.",
@@ -2259,16 +2718,19 @@
       }
     };
 
+    var seedKey = k0 + '-' + k1 + '-' + k2 + '-' + todayKey();
+    var hashVal = hashStr(seedKey);
     var mantraList = TAROT_MANTRAS[lang] || TAROT_MANTRAS.tr;
     var mantra = mantraList[hashVal % mantraList.length];
 
     return {
       cards: [
-        { key: k0, name: n0, archetype: c0.archetype[lang], element: c0.element, ruler: c0.ruler },
-        { key: k1, name: n1, archetype: c1.archetype[lang], element: c1.element, ruler: c1.ruler },
-        { key: k2, name: n2, archetype: c2.archetype[lang], element: c2.element, ruler: c2.ruler }
+        { key: k0, num: c0.num, icon: c0.icon, name: n0, archetype: c0.archetype[lang], element: c0.element, ruler: c0.ruler },
+        { key: k1, num: c1.num, icon: c1.icon, name: n1, archetype: c1.archetype[lang], element: c1.element, ruler: c1.ruler },
+        { key: k2, num: c2.num, icon: c2.icon, name: n2, archetype: c2.archetype[lang], element: c2.element, ruler: c2.ruler }
       ],
       resonanceScore: resonanceScore,
+      resonanceExplanation: resonanceExplanation[lang],
       dominantElement: dominantElem,
       elementPct: elemPct,
       alchemyDescription: alchemyDescriptions[dominantElem][lang],
@@ -2280,6 +2742,23 @@
       mantra: mantra,
       planetaryHour: pHourName,
       moonPhase: moonName
+    };
+  }
+
+  /**
+   * Tek bir kartın bilgilerini döndürür (Çok dilli yardımcı fonksiyon)
+   */
+  function getTarotCard(key, lang) {
+    lang = (lang === 'en' || lang === 'ru') ? lang : 'tr';
+    var c = TAROT_CARDS_META[key] || TAROT_CARDS_META.fool;
+    return {
+      key: key,
+      num: c.num,
+      icon: c.icon,
+      name: c.name[lang] || c.name.tr,
+      archetype: c.archetype[lang] || c.archetype.tr,
+      element: c.element,
+      ruler: c.ruler
     };
   }
 
@@ -2342,7 +2821,9 @@
 
     /** Nöral Tarot Yorum Motoru (22 Büyük Arkana + Gezegen Rezonansı + MLP) */
     interpretTarotSpread: interpretTarotSpread,
-    TAROT_VECTORS: TAROT_FEATURE_VECTORS,
+    getTarotCard: getTarotCard,
+    TAROT_VECTORS: TAROT_CARDS_META,
+    TAROT_CARDS_META: TAROT_CARDS_META,
 
     /** Haftalık okuma — 7 günlük detaylı analiz */
     generateWeeklyReading: generateWeeklyReading,
@@ -2371,10 +2852,11 @@
     ASPECT_NAMES: ASPECT_NAMES,
 
     /** Versiyon */
-    VERSION: '2.1.0'
+    VERSION: '2.5.0'
   };
 
   global.LunarisML = LunarisML;
 
 })(typeof window !== 'undefined' ? window : this);
+
 

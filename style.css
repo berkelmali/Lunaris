@@ -1262,21 +1262,212 @@ section { padding: var(--sp-7) var(--sp-5); max-width: 1100px; margin:0 auto; }
 .account-subtab-btn.active { background:rgba(212,175,106,0.15); color:var(--gold-bright); border:1px solid rgba(212,175,106,0.3); }
 .account-subtab-btn:hover:not(.active) { color:var(--parchment); }
 
-/* History Cards */
-.history-item-card { background:rgba(255,255,255,0.03); border:1px solid rgba(212,175,106,0.18); border-radius:var(--radius-md); padding:var(--sp-3) var(--sp-4); margin-bottom:var(--sp-3); text-align:left; transition:all 0.2s ease; }
-.history-item-card:hover { border-color:rgba(212,175,106,0.4); background:rgba(255,255,255,0.05); }
-.history-card-header { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2); margin-bottom:var(--sp-2); flex-wrap:wrap; }
-.history-sign-badge { display:inline-flex; align-items:center; gap:6px; font-family:var(--font-head); color:var(--gold-bright); font-size:1.05rem; }
-.history-date-badge { font-size:0.76rem; color:var(--mist); background:rgba(0,0,0,0.35); padding:3px 9px; border-radius:var(--radius-full); border:1px solid rgba(212,175,106,0.15); }
-.history-cards-pills { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:var(--sp-2); }
-.history-card-pill { font-size:0.78rem; padding:3px 9px; border-radius:var(--radius-full); background:rgba(139,95,191,0.2); border:1px solid rgba(139,95,191,0.35); color:var(--parchment); }
-.history-reading-text { font-size:0.88rem; color:var(--parchment); line-height:1.6; background:rgba(11,7,20,0.4); padding:var(--sp-2) var(--sp-3); border-radius:var(--radius-sm); border-left:2px solid var(--gold); }
-.history-horo-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-2); margin-top:var(--sp-2); font-size:0.84rem; }
-.history-horo-cell { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:6px 10px; border-radius:var(--radius-sm); }
-.history-horo-cell strong { color:var(--gold-bright); display:block; font-size:0.74rem; text-transform:uppercase; margin-bottom:2px; }
-.history-stats-row { display:flex; flex-wrap:wrap; gap:var(--sp-2); margin-top:var(--sp-2); font-size:0.78rem; }
-.history-stat-tag { background:rgba(255,255,255,0.04); padding:2px 8px; border-radius:var(--radius-sm); color:var(--mist); }
-.history-stat-tag strong { color:var(--parchment); }
+/* History Cards & Tarot ML Profile Summary */
+.history-item-card {
+  background: linear-gradient(135deg, rgba(25, 14, 42, 0.7), rgba(10, 5, 20, 0.9));
+  border: 1px solid rgba(212,175,106,0.22);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: var(--sp-3);
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+}
+.history-item-card:hover {
+  border-color: rgba(212,175,106,0.5);
+  background: linear-gradient(135deg, rgba(35, 20, 58, 0.8), rgba(14, 7, 28, 0.95));
+  box-shadow: 0 8px 25px rgba(212,175,106,0.15);
+  transform: translateY(-2px);
+}
+.tarot-hist-item {
+  border-left: 3px solid var(--gold-bright);
+}
+.history-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.history-sign-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-head);
+  color: var(--gold-bright);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.history-meta-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.history-res-badge {
+  font-size: 0.75rem;
+  color: var(--gold-bright);
+  background: rgba(212, 175, 106, 0.15);
+  border: 1px solid rgba(212, 175, 106, 0.4);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 10px rgba(212, 175, 106, 0.2);
+}
+.history-elem-badge {
+  font-size: 0.75rem;
+  color: #d8b4fe;
+  background: rgba(181, 128, 255, 0.12);
+  border: 1px solid rgba(181, 128, 255, 0.3);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+.history-date-badge {
+  font-size: 0.75rem;
+  color: var(--mist);
+  background: rgba(0,0,0,0.4);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(212,175,106,0.15);
+}
+.history-cards-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.history-card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(181, 128, 255, 0.12);
+  border: 1px solid rgba(181, 128, 255, 0.25);
+  color: var(--parchment);
+}
+.hcp-pos {
+  color: var(--mist);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+.hcp-icon {
+  font-size: 0.95rem;
+}
+.hcp-num {
+  color: var(--gold-bright);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.hcp-name {
+  color: #fff;
+}
+.history-reading-text {
+  font-size: 0.88rem;
+  color: #eedbff;
+  line-height: 1.65;
+  background: rgba(8, 4, 16, 0.65);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border-left: 3px solid var(--gold);
+  margin-bottom: 10px;
+}
+.hist-bold, .tml-bold {
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+.tml-spacer {
+  height: 12px;
+  margin: 8px 0;
+  border-bottom: 1px dashed rgba(212, 175, 106, 0.15);
+}
+.history-directive-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(212, 175, 106, 0.08);
+  border: 1px solid rgba(212, 175, 106, 0.25);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.84rem;
+  color: var(--starlight);
+}
+.hdb-tag {
+  color: var(--gold-bright);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hdb-text {
+  color: #e5d7f5;
+  line-height: 1.45;
+}
+.history-horo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+  font-size: 0.84rem;
+}
+.history-horo-cell {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+}
+.history-horo-cell strong {
+  color: var(--gold-bright);
+  display: block;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.history-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+  font-size: 0.78rem;
+}
+.history-stat-tag {
+  background: rgba(255,255,255,0.04);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--mist);
+}
+.history-stat-tag strong {
+  color: var(--parchment);
+}
+
+/* Tarot ML Meta Row & Explanation in Tarot Section */
+.tml-meta-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.tml-info-pill {
+  font-size: 0.7rem;
+  color: var(--gold-bright);
+  background: rgba(212, 175, 106, 0.12);
+  border: 1px solid rgba(212, 175, 106, 0.3);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+.tml-res-explanation {
+  font-size: 0.82rem;
+  color: #cfbfdf;
+  line-height: 1.5;
+  margin-top: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 106, 0.12);
+}
 
 .wall-feed { display:flex; flex-direction:column; gap: var(--sp-3); }
 .wall-post { display:flex; gap: var(--sp-3); background: var(--dusk); border:1px solid rgba(212,175,106,0.18); border-radius: 16px; padding: 14px 18px; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; animation: postSlideIn 0.3s ease-out; }

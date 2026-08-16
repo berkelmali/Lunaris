@@ -325,17 +325,21 @@
         <span class="tml-pulse"></span>
         <span data-i18n="tarotMlTitle">✦ ML Nöral Tarot Sentezi & Kozmik Rezonans</span>
       </div>
-      <div class="tarot-ml-version">v2.1 Neural Engine</div>
+      <div class="tarot-ml-version">v2.5 Neural Engine</div>
     </div>
 
     <!-- Rezonans ve Kozmik Çevre -->
     <div class="tarot-ml-meta-grid">
       <div class="tml-meta-box">
-        <div class="tml-meta-label" data-i18n="tarotResonanceLabel">Kozmik Rezonans Skoru</div>
+        <div class="tml-meta-head-row">
+          <div class="tml-meta-label" data-i18n="tarotResonanceLabel">Kozmik Rezonans Skoru</div>
+          <span class="tml-info-pill" title="Gökyüzü gezegen saatleri ve Ay fazı ile arketipsel uyum derecesi">✦ Senkronizasyon</span>
+        </div>
         <div class="tml-meta-val" id="tarotMlResonance"><span class="tml-score-num">--</span>%</div>
         <div class="tml-score-bar-wrap">
           <div class="tml-score-bar" id="tarotMlResonanceBar" style="width: 0%;"></div>
         </div>
+        <div class="tml-res-explanation" id="tarotMlResExplanation">--</div>
       </div>
       <div class="tml-meta-box">
         <div class="tml-meta-label" data-i18n="tarotPlanetaryImpact">Gezegen Saati & Ay Fazı Rezonansı</div>
@@ -1612,13 +1616,18 @@ function renderSpread(animate) {
     let comboResult = "";
     if (mlResult) {
       comboResult = mlResult.synthesisNarrative;
-      comboTextEl.textContent = mlResult.synthesisNarrative;
+      comboTextEl.innerHTML = mlResult.synthesisNarrative
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="tml-bold">$1</strong>')
+        .replace(/\n\n/g, '<div class="tml-spacer"></div>');
 
       // Rezonans
       const resEl = document.getElementById("tarotMlResonance");
       if (resEl) resEl.innerHTML = '<span class="tml-score-num">' + mlResult.resonanceScore + '</span>%';
       const resBar = document.getElementById("tarotMlResonanceBar");
       if (resBar) resBar.style.width = mlResult.resonanceScore + "%";
+
+      const resExpEl = document.getElementById("tarotMlResExplanation");
+      if (resExpEl) resExpEl.textContent = mlResult.resonanceExplanation;
 
       // Gezegensel Etki
       const celEl = document.getElementById("tarotMlCelestial");

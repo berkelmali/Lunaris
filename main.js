@@ -1186,13 +1186,13 @@ function formatHistoryDate(dateVal) {
 async function refreshUserReadings() {
   const listEl = document.getElementById("readingHistoryList");
   if (!listEl) return;
-  const lang = state.lang;
-  listEl.innerHTML = '<p class="history-loading">' + UI[lang].historyLoading + '</p>';
+  const lang = state.lang || "tr";
+  listEl.innerHTML = '<p class="history-loading">' + (UI[lang].historyLoading || "Yükleniyor...") + '</p>';
 
   try {
     const readings = await window.LunarisAuth.loadReadings();
     if (!readings || readings.length === 0) {
-      listEl.innerHTML = '<p class="history-empty">' + UI[lang].historyEmpty + '</p>';
+      listEl.innerHTML = '<p class="history-empty">' + (UI[lang].historyEmpty || "Henüz kaydedilmiş falınız bulunmuyor.") + '</p>';
       return;
     }
 
@@ -1200,21 +1200,76 @@ async function refreshUserReadings() {
     readings.forEach((r) => {
       const dateStr = formatHistoryDate(r.createdAt);
       let cardsHtml = "";
-      if (Array.isArray(r.cards)) {
+      let mlInfo = null;
+
+      if (Array.isArray(r.cards) && r.cards.length >= 3) {
+        if (window.LunarisML && typeof window.LunarisML.interpretTarotSpread === "function") {
+          try {
+            const readingDate = r.createdAt ? new Date(r.createdAt) : new Date();
+            mlInfo = window.LunarisML.interpretTarotSpread(r.cards, lang, { date: readingDate });
+          } catch (e) {}
+        }
+
         r.cards.forEach((cKey, idx) => {
           const posLabel = idx === 0 ? UI[lang].posPast : (idx === 1 ? UI[lang].posPresent : UI[lang].posFuture);
-          cardsHtml += `<span class="history-card-pill"><strong>${posLabel}:</strong> ${cKey}</span>`;
+          let cardName = cKey;
+          let cardIcon = "✦";
+          let cardNum = "";
+          if (window.LunarisML && typeof window.LunarisML.getTarotCard === "function") {
+            const cMeta = window.LunarisML.getTarotCard(cKey, lang);
+            cardName = cMeta.name;
+            cardIcon = cMeta.icon;
+            cardNum = cMeta.num;
+          }
+          cardsHtml += `
+            <span class="history-card-pill">
+              <span class="hcp-pos">${posLabel}:</span>
+              <span class="hcp-icon">${cardIcon}</span>
+              <span class="hcp-num">${cardNum}</span>
+              <strong class="hcp-name">${cardName}</strong>
+            </span>
+          `;
         });
       }
 
+      const tarotBadgeTitle = lang === "tr" ? "Tarot Açılımı" : (lang === "ru" ? "Расклад Таро" : "Tarot Reading");
+      const resLabel = lang === "tr" ? "Rezonans" : (lang === "ru" ? "Резонанс" : "Resonance");
+
+      let metaBadgesHtml = "";
+      if (mlInfo) {
+        metaBadgesHtml += `<span class="history-res-badge">✦ %${mlInfo.resonanceScore} ${resLabel}</span>`;
+        if (mlInfo.alchemyDescription) {
+          metaBadgesHtml += `<span class="history-elem-badge">${mlInfo.alchemyDescription.split(':')[0]}</span>`;
+        }
+      }
+
+      // Formatting text with markdown bold replacements for clean HTML
+      let readingText = (mlInfo ? mlInfo.synthesisNarrative : (r.comboText || ""))
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="hist-bold">$1</strong>')
+        .replace(/\n\n/g, '<br><br>');
+
+      let directiveHtml = "";
+      if (mlInfo && mlInfo.actionDirective) {
+        directiveHtml = `
+          <div class="history-directive-box">
+            <span class="hdb-tag">${UI[lang].tarotAdviceTitle || "🎯 Eylem Rehberi"}:</span>
+            <span class="hdb-text">${mlInfo.actionDirective}</span>
+          </div>
+        `;
+      }
+
       html += `
-        <div class="history-item-card">
+        <div class="history-item-card tarot-hist-item">
           <div class="history-card-header">
-            <div class="history-sign-badge">🃏 <span>Tarot Açılımı</span></div>
-            <div class="history-date-badge">${dateStr}</div>
+            <div class="history-sign-badge">🃏 <span>${tarotBadgeTitle}</span></div>
+            <div class="history-meta-right">
+              ${metaBadgesHtml}
+              <div class="history-date-badge">${dateStr}</div>
+            </div>
           </div>
           <div class="history-cards-pills">${cardsHtml}</div>
-          <p class="history-reading-text">${r.comboText || ""}</p>
+          <div class="history-reading-text">${readingText}</div>
+          ${directiveHtml}
         </div>
       `;
     });
