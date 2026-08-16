@@ -10,7 +10,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black" alt="JavaScript"/>
   <img src="https://img.shields.io/badge/Firebase-v10-FFCA28?logo=firebase&logoColor=black" alt="Firebase"/>
-  <img src="https://img.shields.io/badge/ML-Saf_JS-7B2FBE" alt="ML"/>
+  <img src="https://img.shields.io/badge/ML_Engine-v3.0_Saf_JS-7B2FBE" alt="ML Engine v3.0"/>
   <img src="https://img.shields.io/badge/Capacitor-Android_|_iOS-119EFF?logo=capacitor&logoColor=white" alt="Capacitor"/>
   <img src="https://img.shields.io/badge/Dil-TR_|_EN_|_RU-00ADB5" alt="Çoklu Dil"/>
   <img src="https://img.shields.io/badge/Lisans-MIT-green" alt="License"/>
@@ -24,7 +24,7 @@
 
 <p align="center">
   Kartların sırrı, yıldızların rehberliği.<br/>
-  Sıfır bağımlılıklı makine öğrenmesi motoru, gerçek zamanlı topluluk, Android & iOS mobil desteği ve kozmik araçlar — tek bir portalda.
+  Sıfır bağımlılıklı makine öğrenmesi motoru, Keplerian astronomik ephemeris, Keldani gezegen saatleri, 22 Büyük Arkana derin nöral tarot sentezi, gerçek zamanlı topluluk, Android & iOS mobil desteği ve kozmik araçlar — tek bir portalda.
 </p>
 
 <p align="center">
@@ -35,25 +35,32 @@
 
 ## ✨ Özellikler
 
-### 🃏 Tarot Açılımı
-- 22 kartlık Büyük Arkana destesi
-- 3'lü Açılım: **Geçmiş → Şimdi → Gelecek**
-- 3D çevirme animasyonları ve birleşik kehanet metni
+### 🃏 17-Katmanlı Nöral Tarot Motoru (v3.0)
+- **22 Büyük Arkana Kartı** için 8 boyutlu embedding matrisi (`TAROT_CARDS_META`)
+- **3'lü Kronolojik Açılım**: Geçmiş (%20) → Şimdi (%35) → Gelecek (%45) pozisyonel ağırlıklandırması
+- **Kozmik Rezonans Skoru (%35 - %98)**: Kart arketipi, gökyüzü element dengesi, gezegen asaletleri ve Keldani saati benzerliğini hesaplayan 4 sütunlu bilimsel & astrolojik indeks
+- **Elementel Simya Analizi**: Açılımdaki Ateş, Toprak, Hava ve Su oranlarının dinamik dağılımı
+- **3 Aşamalı Derin Poetik Sentez**: `✦ Geçmişin Kökü`, `✦ Şimdinin Simyası` ve `✦ Geleceğin Kapısı`
+- **Nöral Eylem Direktifi**: Açılımın öne çıkan enerjisine özel aksiyon rehberliği ve arketip mantrası
+- **Profil Geçmişi**: Kayıtlı açılımların kart hapları, rezonans rozetleri ve tam sentez özetiyle profil sekmesinde listelenmesi
 
 ### ♈ Astroloji & Burç Yorumları
 - **12 Burç İnteraktif Zodyak Çarkı** — 36° açılarla dönen gezegen yörüngeleri
 - Günlük ML destekli burç yorumu (Aşk, Kariyer, Şans, Sağlık, Para)
 - İki burç arası **Sinerji & Uyum Hesaplayıcı**
-- Günün Yıldız Haritası & NASA Astronomi Fotoğrafı
+- Günün Yıldız Haritası & NASA Astronomi Fotoğrafı (APOD)
 
 ### 🧠 ML Derin Astroloji & Doğum Haritası
-- Sıfır dış bağımlılıklı, saf JavaScript **deterministik sinir ağı simülasyonu**
-- **8 boyutlu Zodyak Feature Vector** uzayı (Enerji, İstikrar, Macera, Pratiklik, Sosyallik, Sezgi, Liderlik, Duyarlılık)
+- Sıfır dış bağımlılıklı, saf JavaScript **deterministik sinir ağı (MLP)**
+- **Keplerian Ecliptic Ephemeris**: Güneş merkez denklemi ($C_\odot$) ve Ay pertürbasyon terimleri (Evection, Variation vb.)
+- **Ptolemaik Asal Asaletler (Essential Dignities)**: Domicile (+1.0), Exaltation (+0.85), Detriment (+0.15), Fall (+0.25), Peregrine (+0.55)
+- **Gaussian Orb Ağırlıklı Açı (Aspect) Motoru**: $\exp(-\Delta\theta^2 / (2\sigma^2))$ ile hassas açı geometrisi
+- **8 Boyutlu Zodyak Feature Vector** uzayı (Enerji, İstikrar, Macera, Pratiklik, Sosyallik, Sezgi, Liderlik, Duyarlılık)
 - **Natal Harita**: Güneş, Ay ve Yükselen Burç hesaplaması
 - SVG Radar Grafiği ile kişilik profili görselleştirmesi
 - 12 aylık **Gelecek Enerji Zaman Çizelgesi**
-- Keldani Gezegensel Saat matrisi
-- J2000 referanslı Gezegen Transit & Retrograd motoru
+- Keldani (Chaldean) Gezegensel Saat matrisi
+- 5 gezegen için tarih tabanlı Retrograd & Gölge Periyodu motoru
 
 ### 🔮 Kozmik Araçlar
 - **Kutsal Numeroloji** — Yaşam Yolu Sayısı & Usta Sayılar (11, 22, 33)
@@ -76,11 +83,11 @@
 - Altın & ametist ışıltılı parçacık animasyonları
 - Kayan yıldız & fare izi efektleri
 - SVG takımyıldız çizim motoru
-- Tam responsive mobil tasarım
+- Tam responsive mobil ve tablet uyumu
 
-### 🌐 Çoklu Dil
+### 🌐 Çoklu Dil Desteği
 - **Türkçe** 🇹🇷 · **English** 🇬🇧 · **Русский** 🇷🇺
-- Anlık dil geçişi (localStorage kalıcılığı ile)
+- Tüm tarot kartları, pozisyonel anlamlar, doğum haritası ve blog içeriklerinde %100 eksiksiz dil eşitlemesi
 
 ---
 
@@ -88,18 +95,22 @@
 
 ```
 lunaris/
-├── index.html           # Ana portal (Tarot, Burçlar, ML Analiz, Topluluk)
+├── index.html           # Ana portal (Tarot, Burçlar, ML Analiz, Topluluk, Profil)
 ├── araclar.html         # Kozmik araçlar (Numeroloji, Çin Burcu, Takvim)
 ├── blog.html            # Mistik blog makaleleri
 ├── style.css            # Kozmik tasarım sistemi & animasyonlar
 ├── main.js              # Ortak arayüz, dil motoru & çekirdek kütüphane
-├── lunaris-ml.js        # ML & astroloji motoru (sıfır bağımlılık)
+├── lunaris-ml.js        # LunarisML v3.0 Makine Öğrenmesi & Astroloji motoru
+├── mobile-bridge.js     # Capacitor köprüsü (Haptic, StatusBar, Native Back)
+├── copy-web.js          # Web kaynaklarını senkronize etme scripti
 ├── firebase-config.js   # Firebase Auth, Firestore & offline demo servisi
 ├── env.js               # 🔒 Firebase credential'ları (gitignore'da)
 ├── env.example.js       # Credential şablonu
+├── capacitor.config.json # Capacitor mobil yapılandırması
 ├── firebase.json        # Firebase Hosting yapılandırması
 ├── firestore.rules      # Firestore güvenlik kuralları
-└── .firebaserc          # Firebase proje bağlantısı
+├── android/             # Native Android Studio projesi
+└── ios/                 # Native Xcode projesi
 ```
 
 ---
@@ -149,12 +160,12 @@ const ENV = {
 export default ENV;
 ```
 
-### Firebase'e Deploy
+### Firebase Hosting'e Deploy
 
 ```bash
 npm install -g firebase-tools
 firebase login
-firebase deploy
+firebase deploy --only hosting
 ```
 
 ---
@@ -184,7 +195,7 @@ npm run open:android
 # Veya doğrudan bağlı cihaza/emülatöre derleyip çalıştırın
 npm run run:android
 ```
-> **APK Üretimi:** Android Studio açıldığında `Build` $\rightarrow$ `Build Bundle(s) / APK(s)` $\rightarrow$ `Build APK(s)` seçeneğiyle doğrudan `.apk` çıktısı alabilirsiniz.
+> **APK Üretimi:** Android Studio açıldığında `Build` → `Build Bundle(s) / APK(s)` → `Build APK(s)` seçeneğiyle doğrudan `.apk` çıktısı alabilirsiniz.
 
 ### iOS Uygulamasını Açma & Derleme (macOS)
 ```bash
@@ -195,13 +206,15 @@ npm run open:ios
 npm run run:ios
 ```
 
-## 🧠 ML Motoru Mimarisi (v2.0)
+---
 
-Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`), **sıfır dış bağımlılık** ile çalışan 16 katmanlı saf JavaScript deterministik bir yapay zeka sistemidir.
+## 🧠 ML Motoru Mimarisi (v3.0)
+
+Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`), **sıfır dış bağımlılık** ile çalışan 17 katmanlı saf JavaScript deterministik bir yapay zeka sistemidir.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                   LunarisML v2.0 Motor                      │
+│                   LunarisML v3.0 Motor                      │
 ├─────────────────────────────────────────────────────────────┤
 │  Matematiksel Çekirdek                                      │
 │  ├── sigmoid(x), leakyRelu(x)   → Non-lineer Aktivasyon     │
@@ -209,19 +222,28 @@ Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`), **sıfır dış bağıml
 │  ├── cosineSimilarity()         → Uzamsal Benzerlik         │
 │  └── julianDay()                → Astronomik Jülyen Hesabı  │
 ├─────────────────────────────────────────────────────────────┤
+│  Astronomik Ephemeris & Gezegen Mekaniği                    │
+│  ├── Keplerian Ecliptic Longitudes (Güneş + Ay + Gezegenler)│
+│  ├── Ay Pertürbasyon Modeli (Evection, Variation, Ann. Eq.) │
+│  ├── Ptolemaik Asal Asaletler (Essential Dignities)         │
+│  └── Chaldean Gezegensel Saat Matrisi (Gündüz / Gece)       │
+├─────────────────────────────────────────────────────────────┤
 │  Vektör Uzayı & Bilgi Tabanı                                │
 │  ├── 12 × 8D Burç Vektörleri (SIGN_VECTORS)                 │
+│  ├── 22 × 8D Büyük Arkana Tarot Vektörleri                  │
 │  ├── Element & Modalite Uyum Matrisleri                     │
 │  └── 6 × 8D Kategori Ağırlık Matrisleri                     │
 ├─────────────────────────────────────────────────────────────┤
 │  3-Katmanlı MLP (Multi-Layer Perceptron)                    │
-│  ├── Input Layer (16D)  : Burç (8D) + Temporal (8D)         │
+│  ├── Input Layer (16D)  : Burç/Spread (8D) + Temporal (8D)  │
 │  ├── Hidden Layer 1 (12D): Leaky ReLU + Natal Attention     │
 │  ├── Hidden Layer 2 (8D) : Leaky ReLU                       │
 │  └── Output Layer (6D)   : Sigmoid Kategori Skorları        │
 ├─────────────────────────────────────────────────────────────┤
-│  Kozmik Algoritmalar & Motorlar                             │
-│  ├── Aspect Engine        : Gezegen Açıları & Orblar        │
+│  Kozmik Algoritmalar & Sentez                               │
+│  ├── Gaussian Aspect Engine: exp(-Δθ² / 2σ²) Açı Orbları    │
+│  ├── 4-Sütunlu Kozmik Rezonans: %35 - %98 İndeks Hesabı     │
+│  ├── Çok Dilli 3-Aşamalı Derin Poetik Tarot Sentezi         │
 │  ├── Retrograd Engine     : 5 Gezegen + Gölge Dönemleri     │
 │  ├── Deep Compatibility   : Çok Boyutlu Burç Uyumu          │
 │  ├── Weekly & Monthly     : 7 Günlük & 30 Günlük Trendler   │
@@ -245,10 +267,11 @@ Lunaris'in makine öğrenmesi motoru (`lunaris-ml.js`), **sıfır dış bağıml
 | Katman | Teknoloji |
 |--------|-----------|
 | **Frontend** | Vanilla HTML5, CSS3, JavaScript (ES6+) |
-| **ML Motoru** | Saf JavaScript (sıfır bağımlılık) |
+| **ML & Ephemeris Motoru** | Saf JavaScript (sıfır bağımlılık, deterministik) |
+| **Mobil Platform** | Capacitor (Android & iOS) |
 | **Kimlik Doğrulama** | Firebase Auth (E-posta, Google) |
 | **Veritabanı** | Cloud Firestore (gerçek zamanlı) |
-| **Hosting** | Firebase Hosting |
+| **Hosting** | Firebase Hosting (https://lunaris.web.app) |
 | **Tasarım** | Glassmorphism, CSS Animations, SVG |
 | **Fontlar** | Cinzel Decorative, Yeseva One, Alegreya |
 
@@ -274,3 +297,4 @@ Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
   <strong>🌙 Yıldızlar rehberin olsun.</strong><br/>
   <sub>Lunaris ile kozmik yolculuğuna başla.</sub>
 </p>
+
