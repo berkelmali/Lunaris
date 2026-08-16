@@ -8,6 +8,13 @@
       "firestore.rules",
       "**/.*",
       "**/node_modules/**",
+      "android/**",
+      "ios/**",
+      "www/**",
+      "copy-web.js",
+      "package.json",
+      "package-lock.json",
+      "capacitor.config.json",
       "OKU-BENI.txt"
     ],
     "cleanUrls": true

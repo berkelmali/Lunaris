@@ -11,13 +11,24 @@
   <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black" alt="JavaScript"/>
   <img src="https://img.shields.io/badge/Firebase-v10-FFCA28?logo=firebase&logoColor=black" alt="Firebase"/>
   <img src="https://img.shields.io/badge/ML-Saf_JS-7B2FBE" alt="ML"/>
+  <img src="https://img.shields.io/badge/Capacitor-Android_|_iOS-119EFF?logo=capacitor&logoColor=white" alt="Capacitor"/>
   <img src="https://img.shields.io/badge/Dil-TR_|_EN_|_RU-00ADB5" alt="Çoklu Dil"/>
   <img src="https://img.shields.io/badge/Lisans-MIT-green" alt="License"/>
 </p>
 
 <p align="center">
+  <a href="https://lunaris.web.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🌐_Canlı_Site-lunaris.web.app-7B2FBE?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo"/>
+  </a>
+</p>
+
+<p align="center">
   Kartların sırrı, yıldızların rehberliği.<br/>
-  Sıfır bağımlılıklı makine öğrenmesi motoru, gerçek zamanlı topluluk ve kozmik araçlar — tek bir portalda.
+  Sıfır bağımlılıklı makine öğrenmesi motoru, gerçek zamanlı topluluk, Android & iOS mobil desteği ve kozmik araçlar — tek bir portalda.
+</p>
+
+<p align="center">
+  🔗 <strong>Canlı Yayın:</strong> <a href="https://lunaris.web.app/">https://lunaris.web.app/</a>
 </p>
 
 ---
