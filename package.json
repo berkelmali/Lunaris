@@ -38,5 +38,8 @@
     "@capacitor/ios": "^7.0.1",
     "@capacitor/splash-screen": "^7.0.0",
     "@capacitor/status-bar": "^7.0.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
   }
 }

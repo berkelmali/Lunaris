@@ -13,16 +13,19 @@ en ince ayrıntısına kadar açıklar.
 Klasörde yer alan 7 dosya birbiriyle entegre olarak çalışır:
 
 1. `index.html` (Ana Portal)
-   - Tarot 3'lü Açılım (Geçmiş-Şimdi-Gelecek)
-   - 12 Burç İnteraktif Zodyak Çarkı & Günlük Yorum Paneli
+   - Carl Gustav Jung Analitik Psikolojisi & 3 Aşamalı Bireyleşme (Individuation) Açılımı
+   - 🌑 Bilinçdışı Gölge Uyarısı & 💡 Bilişsel Eylem Protokolü
+   - 12 Burç İnteraktif Zodyak Çarkı & Bilişsel Odak Yorum Paneli
    - 🧠 ML Tabanlı Derin Astroloji & Doğum Haritası (Natal Harita + Radar Grafik)
    - Günün Yıldız Haritası & Gerçek Astronomi Fotoğrafları
    - İki Burç Arası Sinerji ve Uyum Hesaplayıcı
    - Kolektif Yıldız Tarlası & Dilek Feneri (Canvas tabanlı)
    - Gerçek Zamanlı Topluluk Duvarı
 
-2. `lunaris-ml.js` (Makine Öğrenmesi & Astroloji Motoru)
-   - Dış kütüphanesiz, saf JavaScript deterministik sinir ağı simülasyonu
+2. `lunaris-ml.js` (Makine Öğrenmesi & Astroloji Motoru v3.1)
+   - 22 Büyük Arkana Carl Jung arketip, gölge ve bilişsel protokol matrisi
+   - 4 Boyutlu Matematiksel Kronobiyoloji & Biyoritim Motoru (23/28/33/38 günlük sinüs dalgaları)
+   - Dış kütüphanesiz, saf JavaScript deterministik sinir ağı (MLP)
    - 8 boyutlu Zodyak Feature Vector uzayı
    - Keldani Gezegensel Saat matrisi
    - J2000 referanslı Gezegen Transit ve Retrograd motoru
@@ -32,6 +35,7 @@ Klasörde yer alan 7 dosya birbiriyle entegre olarak çalışır:
    - Çok dilli (TR / EN / RU) ağırlıklı metin havuzu
 
 3. `araclar.html` (Ezoterik & Kozmik Araçlar)
+   - 🧬 Biyoritim Analiz Radarı (Fiziksel, Duygusal, Zihinsel, Sezgisel & Bileşik Vitalite)
    - Kutsal Numeroloji (Yaşam Yolu Sayısı & Usta Sayılar 11, 22, 33)
    - Doğu Astrolojisi (12 Hayvan Totemi & 5 Element Mührü)
    - Batı Zodyak Dekanları & 3D Enerji Dengesi

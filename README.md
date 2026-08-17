@@ -35,18 +35,29 @@
 
 ## ✨ Özellikler
 
-### 🃏 17-Katmanlı Nöral Tarot Motoru (v3.0)
-- **22 Büyük Arkana Kartı** için 8 boyutlu embedding matrisi (`TAROT_CARDS_META`)
-- **3'lü Kronolojik Açılım**: Geçmiş (%20) → Şimdi (%35) → Gelecek (%45) pozisyonel ağırlıklandırması
-- **Kozmik Rezonans Skoru (%35 - %98)**: Kart arketipi, gökyüzü element dengesi, gezegen asaletleri ve Keldani saati benzerliğini hesaplayan 4 sütunlu bilimsel & astrolojik indeks
+### 🃏 Carl Gustav Jung Analitik Psikolojisi & Nöral Tarot Motoru (v3.1)
+- **22 Büyük Arkana Kartı** için 8 boyutlu embedding matrisi (`TAROT_CARDS_META`) ve Carl Jung arketip modellemesi (*Puer Aeternus, The Magus, Anima/Animus, The Great Mother, The Shadow, Coniunctio, Metanoia, The Self, Mandalic Wholeness*)
+- **3'lü Kronolojik Bireyleşme (Individuation) Açılımı**:
+  - `✦ 1. Kök Bilişsel Şema (Geçmiş - %20)`
+  - `✦ 2. Bilinç Durumu & Simyasal Gerilim (Şimdi - %35)`
+  - `✦ 3. Entegrasyon & Bireyleşme Vektörü (Gelecek - %45)`
+- **🌑 Bilinçdışı Gölge (Shadow Self) Uyarısı**: Bilişsel kör noktalar, savunma mekanizmaları ve bastırılmış arzuların analizi
+- **💡 Jungian Bilişsel Entegrasyon Protokolü**: Açılımın öne çıkan enerjisine özel davranışsal eylem rehberliği ve arketip mantrası
+- **Kozmik Senkronisite Skoru (%35 - %98)**: Kart arketipi, gökyüzü element dengesi, gezegen asaletleri ve Keldani saati benzerliğini hesaplayan 4 sütunlu bilimsel & astrolojik indeks
 - **Elementel Simya Analizi**: Açılımdaki Ateş, Toprak, Hava ve Su oranlarının dinamik dağılımı
-- **3 Aşamalı Derin Poetik Sentez**: `✦ Geçmişin Kökü`, `✦ Şimdinin Simyası` ve `✦ Geleceğin Kapısı`
-- **Nöral Eylem Direktifi**: Açılımın öne çıkan enerjisine özel aksiyon rehberliği ve arketip mantrası
-- **Profil Geçmişi**: Kayıtlı açılımların kart hapları, rezonans rozetleri ve tam sentez özetiyle profil sekmesinde listelenmesi
+- **Profil Geçmişi**: Kayıtlı açılımların kart hapları, rezonans rozetleri, gölge uyarıları ve tam sentez özetiyle profil sekmesinde listelenmesi
+
+### 🧬 Matematiksel Kronobiyoloji & Biyoritim Motoru
+- Doğum tarihinden itibaren geçen gün ($t$) üzerinden 4 boyutlu matematiksel sinüs dalgası:
+  - ⚡ **Fiziksel Döngü (23 gün)**: $\sin(2\pi t / 23) \times 100$ — Vitalite ve bedensel direnç
+  - 💖 **Duygusal Döngü (28 gün)**: $\sin(2\pi t / 28) \times 100$ — Duygusal regülasyon ve ilişkisel denge
+  - 🧠 **Zihinsel Döngü (33 gün)**: $\sin(2\pi t / 33) \times 100$ — Bilişsel odaklanma ve stratejik kapasite
+  - 🔮 **Sezgisel Döngü (38 gün)**: $\sin(2\pi t / 38) \times 100$ — Bilinçdışı içgörüler ve yaratıcı algı
+- **Kritik Geçiş Düğümü Analizi**: Sıfır noktaları, yükseliş/düşüş trendleri ve **Bileşik Vitalite İndeksi** hesaplaması
 
 ### ♈ Astroloji & Burç Yorumları
 - **12 Burç İnteraktif Zodyak Çarkı** — 36° açılarla dönen gezegen yörüngeleri
-- Günlük ML destekli burç yorumu (Aşk, Kariyer, Şans, Sağlık, Para)
+- Günlük ML destekli psikolojik ve bilişsel burç analizi (Aşk, Kariyer, Şans, Sağlık, Para)
 - İki burç arası **Sinerji & Uyum Hesaplayıcı**
 - Günün Yıldız Haritası & NASA Astronomi Fotoğrafı (APOD)
 
@@ -63,6 +74,7 @@
 - 5 gezegen için tarih tabanlı Retrograd & Gölge Periyodu motoru
 
 ### 🔮 Kozmik Araçlar
+- **Biyoritim Analiz Radarı** — 4 Boyutlu Sirkadiyen Dalga ve Bileşik Vitalite İndeksi
 - **Kutsal Numeroloji** — Yaşam Yolu Sayısı & Usta Sayılar (11, 22, 33)
 - **Doğu Astrolojisi** — 12 Hayvan Totemi & 5 Element Mührü
 - **Batı Zodyak Dekanları** & 3D Enerji Dengesi

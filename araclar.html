@@ -2,7 +2,10 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>LUNARIS Araçlar — Numeroloji, Çin Burcu ve Kozmik Takvim</title>
 <meta name="description" content="Doğum tarihine göre yaşam yolu sayını ve Çin burcunu hesapla, 2026'nın Merkür retro dönemlerine ve tutulmalarına göz at, aylık ay evrelerini takip et.">
 <meta name="theme-color" content="#0B0714">
@@ -249,6 +252,17 @@
 </div>
 
 <div class="page-intro">
+  <!-- Mobil Kategori / Araç Seçim Hapları -->
+  <div class="mobile-section-chips" style="justify-content:flex-start; margin-bottom: 24px;">
+    <a href="#birthMatrixResults" class="sec-chip active" onclick="LunarisMobile.hapticImpact('LIGHT')">✦ Doğum Matrisi</a>
+    <a href="#aura" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🌈 Aura Kartı</a>
+    <a href="#pendulum" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🕰️ Kozmik Sarkaç</a>
+    <a href="#orbit" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🪐 Gezegen Saatleri</a>
+    <a href="#moonritual" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🕯️ Mistik Ritüel</a>
+    <a href="#cosmic" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">📅 Kozmik Takvim</a>
+    <a href="#mooncal" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🌙 Ay Takvimi</a>
+  </div>
+
   <span class="section-eyebrow" data-i18n="toolsEyebrow">Kozmik Doğum Matrisi</span>
   <h1 class="section-title" data-i18n="toolsTitle">Astrolojik Doğum Haritan</h1>
   <p class="section-text" data-i18n="toolsText">Doğum tarihini gir; kutsal numeroloji sayını, Doğu astrolojisi 5 element mührünü ve Güneş burcunun kozmik güç dengesini keşfet.</p>
@@ -346,6 +360,72 @@
             <strong class="meta-val" id="chineseLuckyColors">Altın, Yeşil, Toprak</strong>
           </div>
         </div>
+      </div>
+    </div>
+
+
+    <!-- 4. Bilimsel Biyoritim & Kronobiyoloji Döngüsü -->
+    <div class="tool-card astro-matrix-card biorhythm-card" id="biorhythmCard">
+      <div class="matrix-card-header">
+        <span class="tool-card-eyebrow" data-i18n="bioEyebrow">Kronobiyoloji & Biyoritim</span>
+        <span class="matrix-badge cyan" id="bioBadgePending" data-i18n="bioBadgePending">✦ 4 Boyutlu Sinüs</span>
+      </div>
+      
+      <div class="matrix-empty-wrap" id="bioEmpty">
+        <div class="matrix-empty-icon-wrap cyan-glow">
+          <div class="matrix-empty-ring cyan"></div>
+          <div class="matrix-empty-glyph">🧬</div>
+        </div>
+        <h4 class="matrix-empty-title" data-i18n="bioEmptyTitle">Biyoritim & Sirkadiyen Ritim</h4>
+        <p class="matrix-empty-desc" data-i18n="bioEmpty">Doğum tarihine göre 23 günlük Fiziksel, 28 günlük Duygusal, 33 günlük Zihinsel ve 38 günlük Sezgisel dalgalarını hesapla.</p>
+        <div class="matrix-empty-chip" data-i18n="bioEmptyChip">✦ 4 Boyutlu Matematiksel Sinüs Modeli</div>
+      </div>
+      
+      <div id="bioResult" class="matrix-card-content" style="display:none;">
+        <div class="bio-hero-wrap">
+          <div class="bio-hero-score" id="bioCompositeScore">--</div>
+          <div class="bio-hero-label" data-i18n="bioCompositeLabel">Bileşik Vitalite İndeksi</div>
+        </div>
+        
+        <div class="biorhythm-bars">
+          <!-- Fiziksel (23g) -->
+          <div class="bio-bar-item">
+            <div class="bar-header">
+              <span>⚡ <span data-i18n="bioPhys">Fiziksel (23g)</span></span>
+              <span class="bio-phase-tag" id="bioPhysPhase">--</span>
+              <strong id="bioPhysVal">0%</strong>
+            </div>
+            <div class="bio-bar-track"><div class="bio-bar-fill physical" id="bioPhysFill" style="width:50%;"></div></div>
+          </div>
+          <!-- Duygusal (28g) -->
+          <div class="bio-bar-item">
+            <div class="bar-header">
+              <span>💖 <span data-i18n="bioEmot">Duygusal (28g)</span></span>
+              <span class="bio-phase-tag" id="bioEmotPhase">--</span>
+              <strong id="bioEmotVal">0%</strong>
+            </div>
+            <div class="bio-bar-track"><div class="bio-bar-fill emotional" id="bioEmotFill" style="width:50%;"></div></div>
+          </div>
+          <!-- Zihinsel (33g) -->
+          <div class="bio-bar-item">
+            <div class="bar-header">
+              <span>🧠 <span data-i18n="bioIntel">Zihinsel (33g)</span></span>
+              <span class="bio-phase-tag" id="bioIntelPhase">--</span>
+              <strong id="bioIntelVal">0%</strong>
+            </div>
+            <div class="bio-bar-track"><div class="bio-bar-fill intellectual" id="bioIntelFill" style="width:50%;"></div></div>
+          </div>
+          <!-- Sezgisel (38g) -->
+          <div class="bio-bar-item">
+            <div class="bar-header">
+              <span>🔮 <span data-i18n="bioIntuit">Sezgisel (38g)</span></span>
+              <span class="bio-phase-tag" id="bioIntuitPhase">--</span>
+              <strong id="bioIntuitVal">0%</strong>
+            </div>
+            <div class="bio-bar-track"><div class="bio-bar-fill intuitive" id="bioIntuitFill" style="width:50%;"></div></div>
+          </div>
+        </div>
+        <p class="bio-advice-text" id="bioAdviceText"></p>
       </div>
     </div>
 
@@ -945,6 +1025,50 @@ function renderWesternResult(day, month) {
   }, 100);
 }
 
+
+function renderBiorhythmResult(birthDateStr) {
+  if (!window.LunarisML || typeof window.LunarisML.calculateBiorhythms !== 'function') return;
+  const lang = state.lang || 'tr';
+  const bio = window.LunarisML.calculateBiorhythms(birthDateStr, new Date(), lang);
+  if (!bio) return;
+
+  const emptyEl = document.getElementById("bioEmpty");
+  const resultEl = document.getElementById("bioResult");
+  const badgeEl = document.getElementById("bioBadgePending");
+
+  if (emptyEl) emptyEl.style.display = "none";
+  if (resultEl) resultEl.style.display = "block";
+  if (badgeEl) {
+    badgeEl.textContent = (bio.compositeScore >= 0 ? "+" : "") + bio.compositeScore + "% Vitalite";
+  }
+
+  const scoreEl = document.getElementById("bioCompositeScore");
+  if (scoreEl) scoreEl.textContent = (bio.compositeScore >= 0 ? "+" : "") + bio.compositeScore + "%";
+
+  const pPhase = document.getElementById("bioPhysPhase"), pVal = document.getElementById("bioPhysVal"), pFill = document.getElementById("bioPhysFill");
+  if (pPhase) pPhase.textContent = bio.physical.phase;
+  if (pVal) pVal.textContent = (bio.physical.value >= 0 ? "+" : "") + bio.physical.value + "%";
+  if (pFill) pFill.style.width = ((bio.physical.value + 100) / 2) + "%";
+
+  const ePhase = document.getElementById("bioEmotPhase"), eVal = document.getElementById("bioEmotVal"), eFill = document.getElementById("bioEmotFill");
+  if (ePhase) ePhase.textContent = bio.emotional.phase;
+  if (eVal) eVal.textContent = (bio.emotional.value >= 0 ? "+" : "") + bio.emotional.value + "%";
+  if (eFill) eFill.style.width = ((bio.emotional.value + 100) / 2) + "%";
+
+  const iPhase = document.getElementById("bioIntelPhase"), iVal = document.getElementById("bioIntelVal"), iFill = document.getElementById("bioIntelFill");
+  if (iPhase) iPhase.textContent = bio.intellectual.phase;
+  if (iVal) iVal.textContent = (bio.intellectual.value >= 0 ? "+" : "") + bio.intellectual.value + "%";
+  if (iFill) iFill.style.width = ((bio.intellectual.value + 100) / 2) + "%";
+
+  const inPhase = document.getElementById("bioIntuitPhase"), inVal = document.getElementById("bioIntuitVal"), inFill = document.getElementById("bioIntuitFill");
+  if (inPhase) inPhase.textContent = bio.intuitive.phase;
+  if (inVal) inVal.textContent = (bio.intuitive.value >= 0 ? "+" : "") + bio.intuitive.value + "%";
+  if (inFill) inFill.style.width = ((bio.intuitive.value + 100) / 2) + "%";
+
+  const advEl = document.getElementById("bioAdviceText");
+  if (advEl) advEl.textContent = bio.advice;
+}
+
 function calculatePersonalTools(event) {
   const input = document.getElementById("toolsBirthDate");
   if (!input.value) { input.focus(); return; }
@@ -967,6 +1091,7 @@ function calculatePersonalTools(event) {
   renderChineseResult(cz.animalIdx, cz.elementKey);
 
   renderWesternResult(day, month);
+  renderBiorhythmResult(input.value);
 
   setTimeout(() => {
     const matrixContainer = document.getElementById("birthMatrixResults");

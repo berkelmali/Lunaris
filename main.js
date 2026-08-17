@@ -116,6 +116,8 @@ const UI = {
     moodStarry: "Işıltılı", moodLoved: "Aşk Dolu", moodLucky: "Şanslı", moodDreamy: "Hayalperest", blogAccountNote: "Geçmiş fallarını görmek için ana sayfaya dön.",
     navTools: "Araçlar", toolsEyebrow: "Kozmik Doğum Matrisi", toolsTitle: "Astrolojik Doğum Haritan", toolsText: "Doğum tarihini gir; kutsal numeroloji sayını, Doğu astrolojisi 5 element mührünü ve Güneş burcunun kozmik güç dengesini keşfet.",
     toolsDateLabel: "Doğum Tarihin", toolsCalcBtn: "✦ Kozmik İmzamı Çöz", toolsDateRequired: "Lütfen doğum tarihini seç.",
+    bioEyebrow: "Kronobiyoloji & Biyoritim", bioTitle: "Biyo-Enerji & Zihinsel Döngüler", bioBadgePending: "✦ 4 Boyutlu Sinüs", bioEmptyTitle: "Biyoritim & Sirkadiyen Denge", bioEmpty: "Doğum tarihine göre 23 günlük Fiziksel, 28 günlük Duygusal, 33 günlük Zihinsel ve 38 günlük Sezgisel dalgalarını hesapla.", bioEmptyChip: "✦ Matematiksel Sinüs Modeli", bioCompositeLabel: "Bileşik Vitalite İndeksi", bioPhys: "Fiziksel (23g)", bioEmot: "Duygusal (28g)", bioIntel: "Zihinsel (33g)", bioIntuit: "Sezgisel (38g)",
+    tarotTitle: "Arketipsel Projeksiyon & Senkronisite", tarotText: "Carl Jung'un arketip ve senkronisite kuramıyla zihnini odakla; 3 kartlık açılımla bilinçdışı şemalarını ve bireyleşme yolunu keşfet.", tarotMlTitle: "✦ Carl Jung Analitik Psikolojisi & Kozmik Senkronisite", tarotAdviceTitle: "💡 Jungian Bilişsel Eylem Protokolü",
     numeroEyebrow: "Kutsal Numeroloji", numeroTitle: "Yaşam Yolu Sayın", numeroBadgePending: "✦ Yaşam Yolu", numeroEmptyTitle: "Kutsal Sayı Frekansı", numeroEmpty: "Doğum tarihini girerek yaşam yolu sayını, gezegensel titreşimini ve solfeggio frekansını keşfet.", numeroEmptyChip: "✦ 1 - 9 & Usta Sayılar (11, 22, 33)", numeroNote: "Numeroloji ve doğum analizi kadim ezoterik sistemlere ve astronomik takvim hesaplamalarına dayanır.",
     chineseEyebrow: "Doğu Astrolojisi & Çin Burcu", chineseTitle: "Çin Burcun & Element Mührü", chineseBadgePending: "✦ 5 Element Mührü", chineseEmptyTitle: "Doğu Mührü & 5 Element", chineseEmpty: "12 Göksel Hayvan totemini, Yin/Yang polariteni ve Ahşap, Ateş, Toprak, Metal, Su element dengeni mühürle.", chineseEmptyChip: "✦ 12 Yıllık Ay Takvimi Döngüsü", chineseNote: "Çin burcu Ay takvimine göre Ocak/Şubat civarında değişir; sınır tarihlerde doğduysan gerçek yılın bir öncekiyle aynı olabilir.",
     westernEyebrow: "Güneş Burcu & Element Dengesi", westernTitle: "Kozmik Doğum İmzası", westernBadgePending: "✦ Güneş Haritası", westernEmptyTitle: "Güneş İmzası & Enerji Radarı", westernEmpty: "Güneş burcunun dekansal arketiplerini, sezgisel derinliğini ve manyetik aura güç dengesini ortaya çıkar.", westernEmptyChip: "✦ Zodyak Dekanı & 3 Boyutlu Güç Dengesi",
@@ -483,6 +485,11 @@ function applyLangToDOM(lang) {
   // Hesap butonunu ve oturum durumunu güncelle
   if (typeof window.updateAccountUI === "function") {
     window.updateAccountUI(activeUser);
+  }
+
+  // Mobil alt menü etiketlerini güncelle
+  if (window.LunarisMobile && typeof window.LunarisMobile.updateLabels === "function") {
+    window.LunarisMobile.updateLabels();
   }
 
   // Dinamik açılır menü ve widget güncellemeleri
@@ -1252,13 +1259,23 @@ async function refreshUserReadings() {
         .replace(/\n\n/g, '<br><br>');
 
       let directiveHtml = "";
-      if (mlInfo && mlInfo.actionDirective) {
-        directiveHtml = `
-          <div class="history-directive-box">
-            <span class="hdb-tag">${UI[lang].tarotAdviceTitle || "🎯 Eylem Rehberi"}:</span>
-            <span class="hdb-text">${mlInfo.actionDirective}</span>
-          </div>
-        `;
+      if (mlInfo) {
+        if (mlInfo.shadowWarning) {
+          directiveHtml += `
+            <div class="history-directive-box history-shadow-box">
+              <span class="hdb-tag">🌑 ${lang === "tr" ? "Bilinçdışı Gölge Uyarısı" : (lang === "ru" ? "Предупреждение о Тени" : "Unconscious Shadow Alert")}:</span>
+              <span class="hdb-text">${mlInfo.shadowWarning}</span>
+            </div>
+          `;
+        }
+        if (mlInfo.cognitiveAdvice || mlInfo.actionDirective) {
+          directiveHtml += `
+            <div class="history-directive-box">
+              <span class="hdb-tag">💡 ${UI[lang].tarotAdviceTitle || "Eylem Protokolü"}:</span>
+              <span class="hdb-text">${mlInfo.cognitiveAdvice ? (mlInfo.cognitiveAdvice + " (" + mlInfo.actionDirective + ")") : mlInfo.actionDirective}</span>
+            </div>
+          `;
+        }
       }
 
       html += `

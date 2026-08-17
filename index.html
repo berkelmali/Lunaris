@@ -2,7 +2,10 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>LUNARIS — Tarot, Astroloji & Burç Yorumları</title>
 <meta name="description" content="LUNARIS'te tarot kartlarını çek, günlük burç yorumunu oku, burç uyumuna bak, mistik blog yazılarını keşfet ve topluluk duvarında herkesle enerjini paylaş.">
 <meta name="theme-color" content="#0B0714">
@@ -284,6 +287,17 @@
   </div>
 </div>
 
+<!-- Mobil Hızlı Erişim / Kategori Hapları -->
+<div class="mobile-section-chips" style="padding: 12px 16px; margin: 10px auto 20px auto; max-width: 1200px;">
+  <a href="#tarot" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🃏 Tarot Açılımı</a>
+  <a href="#horoscope" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">⭐ Günlük Burç</a>
+  <a href="#compat" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">💫 Burç Uyumu</a>
+  <a href="araclar.html" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🔮 Kozmik Araçlar</a>
+  <a href="#wishfield" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🌟 Dilek Feneri</a>
+  <a href="#wall" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🌌 Topluluk Duvarı</a>
+  <a href="blog.html" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">📖 Mistik Blog</a>
+</div>
+
 <section id="features">
   <h2 class="section-title" data-i18n="featTitle">Neler Sunuyoruz</h2>
   <div class="features-grid">
@@ -381,9 +395,12 @@
       </div>
     </div>
 
-    <!-- Nöral Sentez Hikayesi -->
+    <!-- Nöral Sentez Hikayesi & Jungian Analiz -->
     <div class="tarot-synthesis-body">
+      <div class="tml-jung-badge">🧠 Carl Jung Analitik Psikolojisi & Bireyleşme Sentezi</div>
       <p class="combo-text" id="comboText"></p>
+      <div class="tarot-shadow-box" id="tarotShadowBox" style="display:none;"></div>
+      <div class="tarot-cognitive-box" id="tarotCognitiveBox" style="display:none;"></div>
     </div>
 
     <!-- Kategori Enerji Dağılım Hapları -->
@@ -1666,6 +1683,29 @@ function renderSpread(animate) {
 
       const mtrEl = document.getElementById("tarotMlMantra");
       if (mtrEl) mtrEl.textContent = mlResult.mantra;
+
+      // Gölge Benlik Uyarısı & Bilişsel Protokol
+      const shadowBox = document.getElementById("tarotShadowBox");
+      if (shadowBox) {
+        if (mlResult.shadowWarning) {
+          const shadowTitle = lang === "tr" ? "🌑 Bilinçdışı Gölge (Shadow) Uyarısı" : (lang === "ru" ? "🌑 Предупреждение о Тени" : "🌑 Unconscious Shadow Alert");
+          shadowBox.innerHTML = `<strong class="tsb-title">${shadowTitle}:</strong> <span class="tsb-text">${mlResult.shadowWarning}</span>`;
+          shadowBox.style.display = "block";
+        } else {
+          shadowBox.style.display = "none";
+        }
+      }
+
+      const cogBox = document.getElementById("tarotCognitiveBox");
+      if (cogBox) {
+        if (mlResult.cognitiveAdvice) {
+          const cogTitle = lang === "tr" ? "💡 Jungian Bilişsel Entegrasyon Protokolü" : (lang === "ru" ? "💡 Протокол Когнитивной Интеграции" : "💡 Cognitive Integration Protocol");
+          cogBox.innerHTML = `<strong class="tcb-title">${cogTitle}:</strong> <span class="tcb-text">${mlResult.cognitiveAdvice}</span>`;
+          cogBox.style.display = "block";
+        } else {
+          cogBox.style.display = "none";
+        }
+      }
     } else {
       comboResult = renderComboReading(state.spread, lang);
       comboTextEl.textContent = comboResult;
