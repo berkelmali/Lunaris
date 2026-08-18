@@ -289,9 +289,31 @@ export const LunarisAuth = {
     return (currentUser && currentUser.preferredLang) || localStorage.getItem(PREFERRED_LANG_KEY) || "tr";
   },
 
+  // Profil Fotoğrafı Güvenlik Doğrulaması (XSS & SVG Engelleme)
+  isSafePhotoURL: (url) => {
+    if (!url || typeof url !== "string") return false;
+    const trimmed = url.trim().toLowerCase();
+    // HTTPS URL'ler
+    if (trimmed.startsWith("https://") || trimmed.startsWith("http://localhost")) {
+      return url.length <= 2048 && !trimmed.includes("javascript:") && !trimmed.includes("<");
+    }
+    // Sadece güvenli raster görsel MIME tipleri (SVG hariç tutulur - XSS engeli)
+    if (trimmed.startsWith("data:image/jpeg;") || 
+        trimmed.startsWith("data:image/png;") || 
+        trimmed.startsWith("data:image/webp;") || 
+        trimmed.startsWith("data:image/gif;")) {
+      return url.length <= 1500000 && !trimmed.includes("script") && !trimmed.includes("<");
+    }
+    return false;
+  },
+
   // Profil Fotoğrafı Güncelleme (Base64 / URL / Mistik İkon)
   updateProfilePicture: async (photoURL) => {
     if (!currentUser) return false;
+    if (photoURL && !LunarisAuth.isSafePhotoURL(photoURL)) {
+      console.warn("Geçersiz veya güvensiz fotoğraf URL formatı!");
+      return false;
+    }
     try {
       currentUser.photoURL = photoURL;
       saveStoredUser(currentUser);
@@ -308,7 +330,7 @@ export const LunarisAuth = {
 
       // 3. Firebase senkronizasyonu
       if (isReady && !currentUser.isDemo && auth && auth.currentUser) {
-        if (photoURL && photoURL.startsWith("http") && photoURL.length < 2048) {
+        if (photoURL && photoURL.startsWith("https://")) {
           try {
             await updateProfile(auth.currentUser, { photoURL });
           } catch (authErr) {
@@ -1179,6 +1201,175 @@ window.LunarisAuth = LunarisAuth;
 window.LunarisWall = LunarisWall;
 window.LunarisWishes = LunarisWishes;
 window.firebaseConfig = firebaseConfig;
+
+/* ══════════════════════════════════════════════════
+   ML DATA SERVİSİ
+   Feedback toplama, eğitilmiş model yükleme
+   ══════════════════════════════════════════════════ */
+
+let _lastMLFeedbackTime = 0;
+const MAX_ML_FEEDBACK_PER_DAY = 25;
+
+export const LunarisMLData = {
+
+  /**
+   * ML Feedback kaydet — anonim (kullanıcı ID gönderilmez)
+   * Rate limiting ve şema doğrulaması içerir
+   */
+  saveMLFeedback: async (feedbackData) => {
+    if (!feedbackData || (feedbackData.rating !== 0 && feedbackData.rating !== 1)) {
+      return false;
+    }
+
+    // Rate Limiting (DoS / Spam Koruması)
+    const now = Date.now();
+    if (now - _lastMLFeedbackTime < 4000) {
+      console.warn("Lütfen geri bildirimler arasında birkaç saniye bekleyin.");
+      return false;
+    }
+
+    try {
+      const todayKey = "lunaris_fb_limit_" + new Date().toISOString().slice(0, 10);
+      const todayCount = parseInt(localStorage.getItem(todayKey) || "0", 10);
+      if (todayCount >= MAX_ML_FEEDBACK_PER_DAY) {
+        console.warn("Günlük maksimum geri bildirim sınırına ulaştınız.");
+        return false;
+      }
+      localStorage.setItem(todayKey, (todayCount + 1).toString());
+    } catch(e){}
+
+    _lastMLFeedbackTime = now;
+
+    // Şema ve Vektör Doğrulaması
+    const cleanSignVec = Array.isArray(feedbackData.signVector) && feedbackData.signVector.length === 8 
+      ? feedbackData.signVector.map(v => Math.max(0, Math.min(1, parseFloat(v) || 0))) 
+      : [];
+    const cleanTempVec = Array.isArray(feedbackData.temporalVector) && feedbackData.temporalVector.length === 8 
+      ? feedbackData.temporalVector.map(v => Math.max(0, Math.min(1, parseFloat(v) || 0))) 
+      : [];
+
+    if (cleanSignVec.length !== 8 || cleanTempVec.length !== 8) {
+      console.warn("Geçersiz vektör formatı, feedback reddedildi.");
+      return false;
+    }
+
+    const payload = {
+      signKey: String(feedbackData.signKey || "").slice(0, 20),
+      category: String(feedbackData.category || "").slice(0, 20),
+      readingType: String(feedbackData.readingType || "horoscope").slice(0, 20),
+      score: Math.max(0, Math.min(1, parseFloat(feedbackData.score) || 0.5)),
+      signVector: cleanSignVec,
+      temporalVector: cleanTempVec,
+      mlScores: Array.isArray(feedbackData.mlScores) ? feedbackData.mlScores.slice(0, 6) : [],
+      natalVector: Array.isArray(feedbackData.natalVector) && feedbackData.natalVector.length === 8 ? feedbackData.natalVector : null,
+      rating: feedbackData.rating === 1 ? 1 : 0,
+      readDuration: Math.min(300, Math.max(0, parseFloat(feedbackData.readDuration) || 0)),
+      dayOfWeek: new Date().getDay(),
+      lang: String(feedbackData.lang || "tr").slice(0, 5)
+    };
+
+    // 1. Firestore'a kaydet (anonim)
+    if (isReady) {
+      try {
+        await addDoc(collection(db, "ml_feedback"), {
+          ...payload,
+          createdAt: serverTimestamp()
+        });
+      } catch(e) {
+        console.warn("ML feedback Firestore kayıt uyarısı:", e);
+      }
+    }
+
+    // 2. localStorage'a da kaydet (kişisel ML eğitimi + offline fallback)
+    try {
+      const localFB = JSON.parse(localStorage.getItem("lunaris_ml_feedback") || "[]");
+      localFB.push({
+        ...payload,
+        createdAt: new Date().toISOString()
+      });
+      // Son 200 feedback'i tut
+      localStorage.setItem("lunaris_ml_feedback", JSON.stringify(localFB.slice(-200)));
+    } catch(e) {
+      console.warn("ML feedback localStorage kayıt uyarısı:", e);
+    }
+    return true;
+  },
+
+  /**
+   * Eğitilmiş ağırlıkları statik JSON'dan çek (Firebase Hosting — ücretsiz)
+   * Döndürür: { version, weights, sampleCount, ... } veya null
+   */
+  loadTrainedWeights: async () => {
+    try {
+      const cacheBuster = Math.floor(Date.now() / 3600000); // Saatlik cache
+      const resp = await fetch("/ml-weights.json?v=" + cacheBuster);
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data && data.weights) return data;
+      }
+    } catch(e) {
+      // Dosya henüz yoksa veya offline — sessizce devam et
+    }
+    return null;
+  },
+
+  /**
+   * Kişisel feedback'leri localStorage'dan oku
+   */
+  getLocalFeedback: () => {
+    try {
+      return JSON.parse(localStorage.getItem("lunaris_ml_feedback") || "[]");
+    } catch(e) {
+      return [];
+    }
+  },
+
+  /**
+   * Kişisel eğitilmiş ağırlıkları localStorage'dan oku
+   */
+  getPersonalWeights: () => {
+    try {
+      const raw = localStorage.getItem("lunaris_personal_weights");
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return null;
+  }
+};
+
+window.LunarisMLData = LunarisMLData;
+
+/* ══════════════════════════════════════════════════
+   BAŞLANGIÇ — Eğitilmiş ML Modelini Otomatik Yükle
+   ══════════════════════════════════════════════════ */
+
+async function initTrainedML() {
+  // 1. Global eğitilmiş modeli yükle (statik JSON — hosting)
+  try {
+    const weightsData = await LunarisMLData.loadTrainedWeights();
+    if (weightsData && window.LunarisML) {
+      window.LunarisML.loadTrainedModel(weightsData);
+    }
+  } catch(e) {}
+
+  // 2. Kişisel modeli localStorage'dan yükle
+  try {
+    const personalW = LunarisMLData.getPersonalWeights();
+    if (personalW && window.LunarisML) {
+      window.LunarisML.loadPersonalWeights(personalW);
+    }
+  } catch(e) {}
+}
+
+// Sayfa hazır olduğunda ML modelini yükle
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(initTrainedML, 500);
+  } else {
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initTrainedML, 500);
+    });
+  }
+}
 
 
 if (typeof window.updateAccountUI === "function") {

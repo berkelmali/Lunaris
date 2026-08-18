@@ -11,13 +11,22 @@
       "android/**",
       "ios/**",
       "www/**",
+      "scripts/**",
       "copy-web.js",
       "package.json",
       "package-lock.json",
       "capacitor.config.json",
       "OKU-BENI.txt"
     ],
-    "cleanUrls": true
+    "cleanUrls": true,
+    "headers": [
+      {
+        "source": "ml-weights.json",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=3600" }
+        ]
+      }
+    ]
   },
   "firestore": {
     "rules": "firestore.rules"

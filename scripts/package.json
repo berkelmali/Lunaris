@@ -1,0 +1,13 @@
+{
+  "name": "lunaris-ml-trainer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lunaris ML model eğitim scripti — Firestore feedback verilerinden MLP eğitir",
+  "scripts": {
+    "train": "node train-ml.js",
+    "train:test": "node train-ml.js --test"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}

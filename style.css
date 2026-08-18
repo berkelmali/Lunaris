@@ -3581,4 +3581,142 @@ body {
   background: rgba(239, 68, 68, 0.06) !important;
 }
 
+/* ══════════════════════════════════════════════════
+   LUNARIS ML — Feedback UI Stilleri
+   ══════════════════════════════════════════════════ */
+
+.ml-feedback-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.ml-feedback-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 175, 106, 0.25);
+}
+
+.ml-feedback-label {
+  font-size: 0.82rem;
+  color: var(--mist, #a49fc4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.ml-feedback-label-icon {
+  font-size: 0.95rem;
+}
+
+.ml-feedback-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ml-fb-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--starlight, #fff);
+  padding: 6px 12px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  user-select: none;
+}
+
+.ml-fb-btn:hover {
+  background: rgba(212, 175, 106, 0.18);
+  border-color: var(--gold-bright, #ffd700);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(212, 175, 106, 0.2);
+}
+
+.ml-fb-btn:active {
+  transform: scale(0.95);
+}
+
+.ml-fb-btn.selected-up {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: #10b981;
+  color: #a7f3d0;
+}
+
+.ml-fb-btn.selected-down {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.ml-feedback-thanks {
+  font-size: 0.82rem;
+  color: #10b981;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: mlFeedbackFadeIn 0.3s ease-out;
+}
+
+.ml-badge-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(181, 128, 255, 0.15);
+  border: 1px solid rgba(181, 128, 255, 0.3);
+  color: #d8b4fe;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.ml-badge-indicator.trained {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+@keyframes mlFeedbackFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .ml-feedback-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .ml-feedback-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+
 

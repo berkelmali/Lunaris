@@ -423,6 +423,9 @@
         <p id="tarotMlMantra" class="tml-mantra-text">--</p>
       </div>
     </div>
+
+    <!-- ML Geri Bildirim Satırı -->
+    <div id="tarotMlFeedbackWrap"></div>
   </div>
 </section>
 
@@ -586,6 +589,7 @@
     <div class="deep-readings">
       <div class="deep-card-title" data-i18n="deepReadingTitle">ML ile Üretilmiş Günlük Derin Yorum</div>
       <div class="deep-cats" id="deepCats"></div>
+      <div id="deepMlFeedbackWrap"></div>
     </div>
 
     <!-- ŞANSLI VE RENK -->
@@ -1510,11 +1514,28 @@ function renderHoroPanel() {
   const energy = (hashStr(tk+"-"+sign.key+"-energy") % 41) + 60;
 
   let mlScoreBadge = "";
+  let mlScoresArr = [];
   if (window.LunarisML && typeof window.LunarisML.getCategoryScores === "function") {
     const mlScores = window.LunarisML.getCategoryScores(sign.key, new Date());
+    mlScoresArr = [mlScores.love, mlScores.luck, mlScores.career, mlScores.health, mlScores.money, mlScores.daily];
     const avgScore = Math.round(((mlScores.love + mlScores.luck + mlScores.career + mlScores.health) / 4) * 100);
-    mlScoreBadge = '<div class="hp-ml-badge" title="Algoritmik Ağırlıklı Gün Skoru"><span class="hp-ml-spark">✦</span> ML Kozmik Titreşim: <strong>'+avgScore+'%</strong></div>';
+    const trainedBadge = window.LunarisML.isModelTrained() ? ' <span class="ml-badge-indicator trained">Trained</span>' : '';
+    mlScoreBadge = '<div class="hp-ml-badge" title="Algoritmik Ağırlıklı Gün Skoru"><span class="hp-ml-spark">✦</span> ML Kozmik Titreşim: <strong>'+avgScore+'%</strong>' + trainedBadge + '</div>';
   }
+
+  const signVec = (window.LunarisML && typeof window.LunarisML.getSignVector === "function") ? window.LunarisML.getSignVector(sign.key) : [];
+  const tempVec = (window.LunarisML && typeof window.LunarisML.getTemporalSnapshot === "function") ? window.LunarisML.getTemporalSnapshot(new Date()) : [];
+
+  const fbHtml = renderMLFeedbackRow({
+    id: "horo_" + sign.key + "_" + tk,
+    type: "horoscope",
+    signKey: sign.key,
+    category: "daily",
+    score: energy / 100,
+    signVector: signVec,
+    temporalVector: tempVec,
+    mlScores: mlScoresArr
+  });
 
   panel.innerHTML =
     '<div class="hpanel-head"><span class="hp-glyph">'+renderConstellationSVG(sign.key,"hp-glyph-icon")+'</span><div class="hp-text"><h3>'+sign.name[lang]+'</h3><p class="hp-meta">'+sign.dates[lang]+' · '+sign.element[lang]+' · '+sign.planet[lang]+'</p>'+mlScoreBadge+'</div></div>'+
@@ -1524,6 +1545,7 @@ function renderHoroPanel() {
       '<div class="hstat">'+icon("statColor",22,"hstat-icon")+'<span>'+UI[lang].luckyColorLabel+'</span><strong>'+color+'</strong></div>'+
       '<div class="hstat">'+icon("statEnergy",22,"hstat-icon")+'<span>'+UI[lang].energyLabel+'</span><strong>'+energy+'%</strong></div>'+
     '</div>'+
+    fbHtml +
     '<div class="horo-save-wrap">'+
       '<button class="horo-save-btn" id="horoSaveBtn" onclick="saveActiveHoroscope()">'+
         '<span>✦</span> <span>'+UI[lang].saveHoroBtn+'</span>'+
@@ -1705,6 +1727,26 @@ function renderSpread(animate) {
         } else {
           cogBox.style.display = "none";
         }
+      }
+
+      // Tarot ML Feedback
+      const tarotFbWrap = document.getElementById("tarotMlFeedbackWrap");
+      if (tarotFbWrap) {
+        const spreadKey = state.spread.map(function(c){return c.key;}).join("_");
+        const spreadSign = state.selectedSign || "aries";
+        const sVec = (window.LunarisML && typeof window.LunarisML.getSignVector === "function") ? window.LunarisML.getSignVector(spreadSign) : [];
+        const tVec = (window.LunarisML && typeof window.LunarisML.getTemporalSnapshot === "function") ? window.LunarisML.getTemporalSnapshot(new Date()) : [];
+        const mlSc = mlResult ? Object.values(mlResult.energyScores || {}) : [];
+        tarotFbWrap.innerHTML = renderMLFeedbackRow({
+          id: "tarot_" + spreadKey,
+          type: "tarot",
+          signKey: spreadSign,
+          category: mlResult ? (mlResult.dominantCategory || "daily") : "daily",
+          score: mlResult ? (mlResult.resonanceScore / 100) : 0.7,
+          signVector: sVec,
+          temporalVector: tVec,
+          mlScores: mlSc
+        });
       }
     } else {
       comboResult = renderComboReading(state.spread, lang);
@@ -2269,6 +2311,25 @@ function renderDeepReadingUI(data) {
         '</div>';
     });
     catsContainer.innerHTML = catsHtml;
+
+    // Deep ML Feedback Row
+    const deepFbWrap = document.getElementById("deepMlFeedbackWrap");
+    if (deepFbWrap) {
+      const sVec = (window.LunarisML && typeof window.LunarisML.getSignVector === "function") ? window.LunarisML.getSignVector(natal.sunSign) : [];
+      const tVec = (window.LunarisML && typeof window.LunarisML.getTemporalSnapshot === "function") ? window.LunarisML.getTemporalSnapshot(new Date()) : [];
+      const nVec = natal.natalVector || [];
+      deepFbWrap.innerHTML = renderMLFeedbackRow({
+        id: "deep_" + natal.sunSign + "_" + (data.birthDate ? data.birthDate.getTime() : "0"),
+        type: "deep",
+        signKey: natal.sunSign,
+        category: "daily",
+        score: reading.totalEnergy / 100,
+        signVector: sVec,
+        temporalVector: tVec,
+        natalVector: nVec,
+        mlScores: [reading.scores.love, reading.scores.luck, reading.scores.career, reading.scores.health, reading.scores.money, reading.scores.daily || 0.5]
+      });
+    }
   }
 
   // 6. Şanslı Sayı & Renk
@@ -2393,6 +2454,102 @@ function renderEnergyTimelineUI(timeline, lang) {
       '</div>';
   });
   container.innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════════
+   LUNARIS ML — Geri Bildirim & Kişisel Öğrenme Sistemi
+   ══════════════════════════════════════════════════ */
+
+const _mlFeedbackSessions = {};
+
+function renderMLFeedbackRow(opts) {
+  const lang = state.lang || "tr";
+  const prompt = (UI[lang] && UI[lang].mlFeedbackPrompt) || "Bu yorum sana isabetli geldi mi?";
+  const upLabel = (UI[lang] && UI[lang].mlFeedbackUp) || "İsabetli";
+  const downLabel = (UI[lang] && UI[lang].mlFeedbackDown) || "Yetersiz";
+
+  // Session start time
+  _mlFeedbackSessions[opts.id] = Date.now();
+
+  const signVecStr = JSON.stringify(opts.signVector || []);
+  const tempVecStr = JSON.stringify(opts.temporalVector || []);
+  const natalVecStr = JSON.stringify(opts.natalVector || []);
+  const mlScoresStr = JSON.stringify(opts.mlScores || []);
+
+  return '<div class="ml-feedback-row" id="fb_row_' + opts.id + '" ' +
+    'data-id="' + opts.id + '" ' +
+    'data-type="' + (opts.type || "horoscope") + '" ' +
+    'data-sign="' + (opts.signKey || "") + '" ' +
+    'data-cat="' + (opts.category || "daily") + '" ' +
+    'data-score="' + (opts.score || 0.5) + '" ' +
+    'data-signvec=\'' + signVecStr + '\' ' +
+    'data-tempvec=\'' + tempVecStr + '\' ' +
+    'data-natalvec=\'' + natalVecStr + '\' ' +
+    'data-mlscores=\'' + mlScoresStr + '\'>' +
+      '<div class="ml-feedback-label">' +
+        '<span class="ml-feedback-label-icon">🧠</span> ' +
+        '<span>' + prompt + '</span>' +
+      '</div>' +
+      '<div class="ml-feedback-actions">' +
+        '<button class="ml-fb-btn" onclick="submitMLFeedback(this, 1)">' +
+          '<span>👍</span> <span>' + upLabel + '</span>' +
+        '</button>' +
+        '<button class="ml-fb-btn" onclick="submitMLFeedback(this, 0)">' +
+          '<span>👎</span> <span>' + downLabel + '</span>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+async function submitMLFeedback(btn, rating) {
+  const row = btn.closest(".ml-feedback-row");
+  if (!row) return;
+
+  const id = row.dataset.id;
+  const lang = state.lang || "tr";
+  const startTime = _mlFeedbackSessions[id] || Date.now();
+  const duration = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+
+  let signVec = [], tempVec = [], natalVec = null, mlScores = [];
+  try { signVec = JSON.parse(row.dataset.signvec || "[]"); } catch(e) {}
+  try { tempVec = JSON.parse(row.dataset.tempvec || "[]"); } catch(e) {}
+  try { const n = JSON.parse(row.dataset.natalvec || "[]"); if (n.length) natalVec = n; } catch(e) {}
+  try { mlScores = JSON.parse(row.dataset.mlscores || "[]"); } catch(e) {}
+
+  const feedbackData = {
+    signKey: row.dataset.sign,
+    category: row.dataset.cat,
+    readingType: row.dataset.type,
+    score: parseFloat(row.dataset.score) || 0.5,
+    signVector: signVec,
+    temporalVector: tempVec,
+    natalVector: natalVec,
+    mlScores: mlScores,
+    rating: rating,
+    readDuration: duration,
+    lang: lang
+  };
+
+  // UI hemen teşekkür moduna geçsin
+  const thanksMsg = (UI[lang] && UI[lang].mlFeedbackThanks) || "Geri bildirimin kaydedildi! Model öğreniyor ✨";
+  row.innerHTML = '<span class="ml-feedback-thanks">✓ ' + thanksMsg + '</span>';
+
+  // 1. Veri servisine gönder (Firestore + localStorage)
+  if (window.LunarisMLData && typeof window.LunarisMLData.saveMLFeedback === "function") {
+    await window.LunarisMLData.saveMLFeedback(feedbackData);
+  }
+
+  // 2. Client-side kişisel eğitim: Local feedback'ler yeterliyse tarayıcıda mini-SGD çalıştır
+  if (window.LunarisMLData && typeof window.LunarisMLData.getLocalFeedback === "function" &&
+      window.LunarisML && typeof window.LunarisML.personalTrain === "function") {
+    const localHistory = window.LunarisMLData.getLocalFeedback();
+    if (localHistory.length >= 8 && localHistory.length % 4 === 0) {
+      const trained = window.LunarisML.personalTrain(localHistory);
+      if (trained && typeof showToast === "function") {
+        showToast(lang === "tr" ? "🧠 Kişisel ML modeli güncellendi!" : (lang === "ru" ? "🧠 Персональная ML-модель обновлена!" : "🧠 Personal ML model updated!"));
+      }
+    }
+  }
 }
 
 /* ---- Language switching (page-specific re-renders) ---- */

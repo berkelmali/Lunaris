@@ -1,39 +1,68 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Topluluk Duvarı (Twitter/Feed akışı - Herkes okuyabilir ve giriş yapan herkes post atabilir)
-    match /wallPosts/{postId} {
-      allow read: if true;
-      allow create: if request.resource.data.text is string && request.resource.data.text.size() > 0;
-      allow update: if true;
-      allow delete: if request.auth != null;
+
+    // Yardımcı Doğrulama Fonksiyonları
+    function isAuthenticated() {
+      return request.auth != null;
     }
     
-    // Kozmik Dilek Galaksisi
-    match /wishes/{wishId} {
-      allow read: if true;
-      allow create: if true;
-      allow update: if true;
-      allow delete: if request.auth != null;
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
     }
-    
-    // Kullanıcı Profilleri & Tercihler
+
+    // 1. Kullanıcı Profilleri & Kişisel Fallar
     match /users/{userId} {
-      allow read: if true;
-      allow write: if true;
-      
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId);
+
       match /readings/{readingId} {
-        allow read, write: if true;
+        allow read, write: if isOwner(userId);
       }
       match /horoscopes/{horoId} {
-        allow read, write: if true;
+        allow read, write: if isOwner(userId);
       }
     }
-    
-    // Varsayılan
+
+    // 2. Topluluk Duvarı
+    match /wallPosts/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated()
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() > 0
+                    && request.resource.data.text.size() <= 500
+                    && request.resource.data.authorUid == request.auth.uid;
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && (resource.data.authorUid == request.auth.uid || resource.data.authorUid == "user_" + request.auth.uid);
+    }
+
+    // 3. Kozmik Dilek Galaksisi
+    match /wishes/{wishId} {
+      allow read: if true;
+      allow create: if request.resource.data.text is string
+                    && request.resource.data.text.size() > 0
+                    && request.resource.data.text.size() <= 280;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lightCount']);
+      allow delete: if isAuthenticated() && resource.data.authorUid == request.auth.uid;
+    }
+
+    // 4. ML Geri Bildirim Koleksiyonu (Sıkı Şema Doğrulaması)
+    match /ml_feedback/{feedbackId} {
+      allow create: if request.resource.data.keys().hasAll(['signKey', 'category', 'rating', 'score', 'signVector', 'temporalVector'])
+                    && request.resource.data.rating is int
+                    && (request.resource.data.rating == 0 || request.resource.data.rating == 1)
+                    && request.resource.data.signKey is string
+                    && request.resource.data.category is string
+                    && request.resource.data.signVector is list
+                    && request.resource.data.temporalVector is list
+                    && request.resource.data.signVector.size() == 8
+                    && request.resource.data.temporalVector.size() == 8;
+      allow read, update, delete: if false;
+    }
+
+    // 5. Varsayılan: Tanımlanmamış tüm yollara erişimi tamamen engelle
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if false;
     }
   }
 }

@@ -464,8 +464,9 @@
 
   /* Transit uyum skoru: transit haritası element dengesi + asaletler */
   function transitScore(signKey, date) {
+    var validKey = (signKey && SIGN_VECTORS[signKey]) ? signKey : 'aries';
     var positions = calcPlanetPositions(date || new Date());
-    var signVec = SIGN_VECTORS[signKey];
+    var signVec = SIGN_VECTORS[validKey];
     var score = 0;
     var planetKeys = ['sun','moon','mercury','venus','mars','jupiter','saturn'];
 
@@ -492,7 +493,7 @@
 
     // Aspect bonusu
     var aspects = calcAspects(positions);
-    var aspectBonus = aspectInfluence(signKey, aspects);
+    var aspectBonus = aspectInfluence(validKey, aspects);
     score += aspectBonus * 0.18;
 
     return Math.max(0.1, Math.min(0.95, score));
@@ -919,20 +920,80 @@
     return 6;
   }
 
-  function getAscendantSign(birthDate, birthHour) {
-    var sunSign = getSunSign(birthDate);
-    var sunIdx = SIGN_KEYS.indexOf(sunSign);
+  /**
+   * Astronomik Yerel Yıldız Saati (LST) ve Eksen Eğikliği ile Gerçekçi Yükselen Burç Hesabı
+   * Otomatik yerel/tarihsel saat dilimi (Timezone/DST) çözümlemesi içerir
+   * @param {Date|String} birthDate — Doğum tarihi
+   * @param {Number|String} birthHour — Doğum saati (0-23.99)
+   * @param {Object|Number} [options] — { lat, lon, timezoneOffset } veya lat
+   * @param {Number} [lon] — Boylam derecesi
+   * @returns {String} signKey (örn: 'scorpio')
+   */
+  function getAscendantSign(birthDate, birthHour, options, lon) {
+    var d = (birthDate instanceof Date) ? birthDate : new Date(birthDate);
+    if (isNaN(d.getTime())) d = new Date();
+    
     var h = parseHourSafe(birthHour);
-    var hourOffset = Math.floor(h / 2);
-    var targetIdx = (sunIdx + hourOffset) % 12;
-    if (targetIdx < 0) targetIdx += 12;
-    return SIGN_KEYS[targetIdx] || 'aries';
+    
+    var latitude = 41.015;
+    var longitude = 28.978;
+    var tzOffsetHours = null;
+
+    if (typeof options === 'object' && options !== null) {
+      if (typeof options.lat === 'number') latitude = options.lat;
+      if (typeof options.lon === 'number') longitude = options.lon;
+      if (typeof options.timezoneOffset === 'number') tzOffsetHours = options.timezoneOffset;
+    } else if (typeof options === 'number') {
+      latitude = options;
+      if (typeof lon === 'number') longitude = lon;
+    }
+
+    // Dinamik Timezone / Yaz Saati (DST) ofset hesabı
+    if (tzOffsetHours === null) {
+      if (typeof d.getTimezoneOffset === 'function') {
+        tzOffsetHours = -d.getTimezoneOffset() / 60;
+      } else {
+        tzOffsetHours = 3.0;
+      }
+    }
+
+    // 1. Julian Day Hesabı (UTC zaman düzeltmesiyle)
+    var year = d.getFullYear();
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+    if (month <= 2) { year -= 1; month += 12; }
+    var A = Math.floor(year / 100);
+    var B = 2 - A + Math.floor(A / 4);
+    var jd = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
+    
+    // Gün içi saat fraksiyonu (Yerel saatten dinamik timezone ofseti düş)
+    var utHour = (h - tzOffsetHours + 24) % 24;
+    jd += utHour / 24.0;
+
+    // 2. Greenwich Ortalama Yıldız Zamanı (GMST)
+    var T = (jd - 2451545.0) / 36525.0;
+    var gmst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T;
+    gmst = normDeg(gmst);
+
+    // 3. Yerel Yıldız Zamanı (LST / RAMC)
+    var lst = normDeg(gmst + longitude);
+    var ramcRad = lst * Math.PI / 180;
+    var latRad = latitude * Math.PI / 180;
+    var epsRad = 23.4392911 * Math.PI / 180; // Tutulum eğikliği
+
+    // 4. Astronomik Yükselen Boylamı: tan(Asc) = -cos(RAMC) / (sin(RAMC)*cos(eps) + tan(lat)*sin(eps))
+    var y = -Math.cos(ramcRad);
+    var x = Math.sin(ramcRad) * Math.cos(epsRad) + Math.tan(latRad) * Math.sin(epsRad);
+    var ascLon = Math.atan2(y, x) * 180 / Math.PI;
+    ascLon = normDeg(ascLon);
+
+    return lonToSign(ascLon);
   }
 
-  function calcNatalScores(birthDate, birthHour) {
+  function calcNatalScores(birthDate, birthHour, options) {
     var sunSign = getSunSign(birthDate);
     var moonSign = getMoonSign(birthDate);
-    var ascSign = getAscendantSign(birthDate, birthHour);
+    var ascSign = getAscendantSign(birthDate, birthHour, options);
 
     var sunVec = SIGN_VECTORS[sunSign];
     var moonVec = SIGN_VECTORS[moonSign];
@@ -995,47 +1056,77 @@
     return bias;
   }
 
-  /* MLP Ağırlıkları — deterministik olarak seed'den üretilir */
-  /* Seed değerleri astrolojik sabitlerden türetilmiştir */
-  var MLP_W1 = generateWeightMatrix(12, 16, 7.83);     // 16→12 (Input→Hidden1)
-  var MLP_B1 = generateBiasVector(12, 29.53);            // Hidden1 bias (Ay döngüsü)
-  var MLP_W2 = generateWeightMatrix(8, 12, 365.25);     // 12→8  (Hidden1→Hidden2)
-  var MLP_B2 = generateBiasVector(8, 11.86);              // Hidden2 bias (Jüpiter yılı)
-  var MLP_W3 = generateWeightMatrix(6, 8, 224.7);       // 8→6   (Hidden2→Output)
-  var MLP_B3 = generateBiasVector(6, 687.0);              // Output bias (Mars yılı)
+  /* MLP Ağırlıkları — FALLBACK (deterministik seed'den üretilir) */
+  /* Eğitilmiş model yokken bu ağırlıklar kullanılır */
+  var MLP_W1_DEFAULT = generateWeightMatrix(12, 16, 7.83);     // 16→12 (Input→Hidden1)
+  var MLP_B1_DEFAULT = generateBiasVector(12, 29.53);            // Hidden1 bias
+  var MLP_W2_DEFAULT = generateWeightMatrix(8, 12, 365.25);     // 12→8  (Hidden1→Hidden2)
+  var MLP_B2_DEFAULT = generateBiasVector(8, 11.86);              // Hidden2 bias
+  var MLP_W3_DEFAULT = generateWeightMatrix(6, 8, 224.7);       // 8→6   (Hidden2→Output)
+  var MLP_B3_DEFAULT = generateBiasVector(6, 687.0);              // Output bias
+
+  /* Eğitilmiş global model (ml-weights.json'dan yüklenir) */
+  var _trainedWeights = null;
+  /* Kişisel model (kullanıcı feedback'lerinden tarayıcıda eğitilir, localStorage) */
+  var _personalWeights = null;
+  /* Model versiyon bilgisi */
+  var _modelVersion = 0;
+  var _modelInfo = { source: 'fallback', sampleCount: 0, accuracy: 0 };
+
+  /**
+   * Aktif ağırlıkları döndür — öncelik: Kişisel > Eğitilmiş > Fallback
+   */
+  function getActiveWeights() {
+    if (_personalWeights) return _personalWeights;
+    if (_trainedWeights) return _trainedWeights;
+    return {
+      W1: MLP_W1_DEFAULT, B1: MLP_B1_DEFAULT,
+      W2: MLP_W2_DEFAULT, B2: MLP_B2_DEFAULT,
+      W3: MLP_W3_DEFAULT, B3: MLP_B3_DEFAULT
+    };
+  }
+
+  /**
+   * Eğitilmiş model aktif mi?
+   */
+  function isModelTrained() {
+    return Boolean(_trainedWeights || _personalWeights);
+  }
 
   /* Kategori sırası: love=0, luck=1, career=2, health=3, money=4, daily=5 */
   var CATEGORY_ORDER = ['love', 'luck', 'career', 'health', 'money', 'daily'];
 
   /**
    * MLP ileri yayılım (forward pass)
+   * Dinamik ağırlık seçimi: eğitilmiş model varsa onu, yoksa fallback kullanır
    * @param {Array} signVec — 8D burç vektörü
    * @param {Array} temporalVec — 8D temporal vektör
    * @param {Array|null} natalVec — 8D natal vektör (opsiyonel)
-   * @returns {Object} Kategori skorları {love, luck, career, health, money, daily}
+   * @returns {Array} 6D kategori skorları [love, luck, career, health, money, daily]
    */
   function mlpForward(signVec, temporalVec, natalVec) {
+    var w = getActiveWeights();
+
     // Input vektörü: signVec (8) + temporalVec (8) = 16D
     var input = signVec.concat(temporalVec);
 
-    // Layer 1: Input(16) → Hidden1(12) + ReLU
-    var h1 = applyActivation(vecAdd(matVecMul(MLP_W1, input), MLP_B1), leakyRelu);
+    // Layer 1: Input(16) → Hidden1(12) + LeakyReLU
+    var h1 = applyActivation(vecAdd(matVecMul(w.W1, input), w.B1), leakyRelu);
 
     // Natal attention: natal vektör varsa hidden1'e modülasyon uygula
     if (natalVec) {
       var natalAttention = normalize(natalVec);
       for (var i = 0; i < h1.length; i++) {
-        // Natal vektörün ilgili boyutlarını attention olarak kullan
         var attWeight = natalAttention[i % natalAttention.length];
-        h1[i] = h1[i] * (0.7 + attWeight * 0.6); // 0.7-1.3 arası modülasyon
+        h1[i] = h1[i] * (0.7 + attWeight * 0.6);
       }
     }
 
-    // Layer 2: Hidden1(12) → Hidden2(8) + ReLU
-    var h2 = applyActivation(vecAdd(matVecMul(MLP_W2, h1), MLP_B2), leakyRelu);
+    // Layer 2: Hidden1(12) → Hidden2(8) + LeakyReLU
+    var h2 = applyActivation(vecAdd(matVecMul(w.W2, h1), w.B2), leakyRelu);
 
     // Layer 3: Hidden2(8) → Output(6) + Sigmoid
-    var output = applyActivation(vecAdd(matVecMul(MLP_W3, h2), MLP_B3), sigmoid);
+    var output = applyActivation(vecAdd(matVecMul(w.W3, h2), w.B3), sigmoid);
 
     return output;
   }
@@ -1045,7 +1136,8 @@
    * MLP %60 + Eski dot-product %25 + Transit %15
    */
   function scoreForCategory(signKey, category, date, natalVector) {
-    var signVec = SIGN_VECTORS[signKey];
+    var validKey = (signKey && SIGN_VECTORS[signKey]) ? signKey : 'aries';
+    var signVec = SIGN_VECTORS[validKey];
     var temporal = getTemporalVector(date);
     var catWeights = CATEGORY_WEIGHTS[category] || CATEGORY_WEIGHTS.daily;
 
@@ -1082,8 +1174,11 @@
     var aspects = calcAspects(positions);
     var aspectCatBonus = aspectCategoryInfluence(aspects, category) * 0.08;
 
-    /* Hibrit skorlama */
-    var finalScore = (mlpScore * 0.60 + legacyScore * 0.25 + transit * 0.15);
+    /* Hibrit skorlama — eğitilmiş model varsa MLP'ye daha çok güven */
+    var mlpW = isModelTrained() ? 0.75 : 0.60;
+    var legacyW = isModelTrained() ? 0.12 : 0.25;
+    var transitW = isModelTrained() ? 0.13 : 0.15;
+    var finalScore = (mlpScore * mlpW + legacyScore * legacyW + transit * transitW);
 
     /* Çarpanlar uygula */
     finalScore = finalScore * elemBoost * modBoost * retroMul + aspectCatBonus;
@@ -1480,7 +1575,7 @@
     return { tr: chosen.tr, en: chosen.en, ru: chosen.ru };
   }
 
-  function generateDeepReading(signKey, lang, birthDate, birthHour) {
+  function generateDeepReading(signKey, lang, birthDate, birthHour, options) {
     var date = new Date();
     var tk = todayKey();
     lang = lang || 'tr';
@@ -1488,7 +1583,7 @@
     /* Natal hesap */
     var natal = null;
     if (birthDate) {
-      natal = calcNatalScores(birthDate, birthHour);
+      natal = calcNatalScores(birthDate, birthHour, options);
     }
     var natalVec = natal ? natal.natalVector : null;
 
@@ -3269,9 +3364,157 @@
     /** Aspect isimleri */
     ASPECT_NAMES: ASPECT_NAMES,
 
-    /** Versiyon */
+    /** Biyoritim */
     calculateBiorhythms: calculateBiorhythms,
-    VERSION: '3.1.0 (Jungian & Biorhythm Engine)'
+
+    /* ── v3 API (Gerçek ML Sistemi) ── */
+
+    /** Eğitilmiş global modeli yükle (ml-weights.json'dan) */
+    loadTrainedModel: function(data) {
+      if (data && data.weights) {
+        _trainedWeights = {
+          W1: data.weights.W1, B1: data.weights.B1,
+          W2: data.weights.W2, B2: data.weights.B2,
+          W3: data.weights.W3, B3: data.weights.B3
+        };
+        _modelVersion = data.version || 1;
+        _modelInfo = {
+          source: 'trained',
+          version: _modelVersion,
+          sampleCount: data.sampleCount || 0,
+          accuracy: data.trainAccuracy || 0,
+          trainedAt: data.trainedAt || null
+        };
+        console.log('\u{1F9E0} Lunaris ML: E\u011Fitilmi\u015F model y\u00FCklendi (v' + _modelVersion + ', ' + _modelInfo.sampleCount + ' \u00F6rnek, %' + _modelInfo.accuracy + ' do\u011Fruluk)');
+        return true;
+      }
+      return false;
+    },
+
+    /** Kişisel eğitilmiş ağırlıkları yükle (localStorage'dan) */
+    loadPersonalWeights: function(weights) {
+      if (weights && weights.W1) {
+        _personalWeights = weights;
+        _modelInfo.source = 'personal';
+        return true;
+      }
+      return false;
+    },
+
+    /** Client-side kişisel eğitim — kullanıcının kendi feedback'lerinden mini-SGD */
+    personalTrain: function(feedbackBatch) {
+      if (!feedbackBatch || feedbackBatch.length < 5) return false;
+
+      // Mevcut aktif ağırlıklardan başla (derin kopya)
+      var base = getActiveWeights();
+      var W1 = base.W1.map(function(r) { return r.slice(); });
+      var B1 = base.B1.slice();
+      var W2 = base.W2.map(function(r) { return r.slice(); });
+      var B2 = base.B2.slice();
+      var W3 = base.W3.map(function(r) { return r.slice(); });
+      var B3 = base.B3.slice();
+
+      var lr = 0.005;
+      var epochs = 20;
+      var catOrder = CATEGORY_ORDER;
+
+      for (var ep = 0; ep < epochs; ep++) {
+        feedbackBatch.forEach(function(fb) {
+          if (!fb.signVector || !fb.temporalVector || fb.signVector.length !== 8) return;
+          var input = fb.signVector.concat(fb.temporalVector);
+
+          // Forward pass (ara değerler saklayarak)
+          var z1 = vecAdd(matVecMul(W1, input), B1);
+          var a1 = z1.map(leakyRelu);
+          var z2 = vecAdd(matVecMul(W2, a1), B2);
+          var a2 = z2.map(leakyRelu);
+          var z3 = vecAdd(matVecMul(W3, a2), B3);
+          var a3 = z3.map(sigmoid);
+
+          // Target oluştur
+          var target = a3.slice();
+          var catIdx = catOrder.indexOf(fb.category);
+          if (catIdx >= 0) {
+            if (fb.rating === 1) {
+              target[catIdx] = Math.min(0.95, target[catIdx] + 0.12);
+            } else {
+              target[catIdx] = Math.max(0.05, target[catIdx] - 0.15);
+            }
+          }
+
+          // Backprop — output layer delta
+          var d3 = a3.map(function(o, i) { return (o - target[i]) * o * (1 - o); });
+
+          // Hidden2 delta
+          var d2 = [];
+          for (var j = 0; j < a2.length; j++) {
+            var s = 0;
+            for (var k = 0; k < d3.length; k++) s += W3[k][j] * d3[k];
+            d2.push(s * (z2[j] > 0 ? 1 : 0.01));
+          }
+
+          // Hidden1 delta
+          var d1 = [];
+          for (var j2 = 0; j2 < a1.length; j2++) {
+            var s2 = 0;
+            for (var k2 = 0; k2 < d2.length; k2++) s2 += W2[k2][j2] * d2[k2];
+            d1.push(s2 * (z1[j2] > 0 ? 1 : 0.01));
+          }
+
+          // Ağırlık güncellemesi
+          for (var r3 = 0; r3 < W3.length; r3++) {
+            for (var c3 = 0; c3 < W3[r3].length; c3++) W3[r3][c3] -= lr * d3[r3] * a2[c3];
+            B3[r3] -= lr * d3[r3];
+          }
+          for (var r2 = 0; r2 < W2.length; r2++) {
+            for (var c2 = 0; c2 < W2[r2].length; c2++) W2[r2][c2] -= lr * d2[r2] * a1[c2];
+            B2[r2] -= lr * d2[r2];
+          }
+          for (var r1 = 0; r1 < W1.length; r1++) {
+            for (var c1 = 0; c1 < W1[r1].length; c1++) W1[r1][c1] -= lr * d1[r1] * input[c1];
+            B1[r1] -= lr * d1[r1];
+          }
+        });
+      }
+
+      _personalWeights = { W1: W1, B1: B1, W2: W2, B2: B2, W3: W3, B3: B3 };
+      _modelInfo.source = 'personal';
+
+      // localStorage'a kaydet
+      try {
+        localStorage.setItem('lunaris_personal_weights', JSON.stringify(_personalWeights));
+      } catch(e) { /* quota exceeded — sorun değil */ }
+
+      console.log('\u{1F9E0} Lunaris ML: Ki\u015Fisel model e\u011Fitildi (' + feedbackBatch.length + ' \u00F6rnek, ' + epochs + ' epoch)');
+      return true;
+    },
+
+    /** Temporal vektör snapshot'ı (feedback kaydı için) */
+    getTemporalSnapshot: function(date) {
+      return getTemporalVector(date || new Date());
+    },
+
+    /** Sign vektörü (feedback kaydı için) */
+    getSignVector: function(signKey) {
+      return SIGN_VECTORS[signKey] ? SIGN_VECTORS[signKey].slice() : null;
+    },
+
+    /** Model durumu */
+    getModelInfo: function() {
+      return {
+        source: _modelInfo.source,
+        version: _modelVersion,
+        isTrained: isModelTrained(),
+        sampleCount: _modelInfo.sampleCount,
+        accuracy: _modelInfo.accuracy
+      };
+    },
+
+    /** Model eğitilmiş mi? */
+    isModelTrained: isModelTrained,
+
+    /** Versiyon */
+    VERSION: '4.0.0 (Real ML Engine)'
   };
 
   global.LunarisML = LunarisML;
