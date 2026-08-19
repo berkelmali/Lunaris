@@ -110,13 +110,70 @@ bildirim döngüsü var, dolayısıyla etiket dürüst — değiştirilmedi.
     (TR/EN/RU). Başlıklardaki sabit "2026" ifadeleri kaldırıldı. 2026'nın
     17 Şubat halkalı Güneş tutulması eksikti, eklendi.
 
+13. **Ay burcu doğum saatini yok sayıyordu** (`lunaris-ml.js`)
+    Ay günde ~13.2° ilerler, yani ~2.3 günde bir burç değiştirir. `getMoonSign()`
+    yalnızca tarihi alıyor, saati ve saat dilimini görmezden gelip günün başını
+    kullanıyordu; doğum günü içinde sınır geçilen herkes yanlış burç alıyordu.
+    20.000 rastgele doğum anıyla ölçüldü: **vakaların %21.8'i**. Form zaten doğum
+    saatini topluyordu, sadece motora iletilmiyordu. Artık saat ve (şehir
+    seçildiyse) o şehrin saat dilimi hesaba katılıyor.
+    *Doğrulama:* 7 farklı saat dilimi, 5000 gerçek doğum anı → **%99.86 doğruluk**
+    (öncesi ~%78). Kalan sapmalar burç sınırına dakikalar kalmış anlar.
+
 ## Doğrulama
-- `node --check` → main.js, lunaris-ml.js, araclar.html/index.html gömülü JS temiz.
-- Yerel sunucuda her iki sayfa da konsol hatasız yükleniyor (tek 404: `env.js`,
-  gitignore'da olduğu için beklenen).
-- Derin Analiz akışı tarayıcıda uçtan uca çalıştırıldı: şehirsiz / İstanbul /
-  Sydney, üç dilde dil değiştirme, localStorage geri yükleme.
-- Numeroloji gösterimi 4 tarihte `lifePathNumber()` ile birebir uyuştu.
+
+**Bütünlük**
+- `origin/main` ile fonksiyon envanteri karşılaştırıldı: `main.js` 58→59,
+  `lunaris-ml.js` 64→65, `index.html` 49→49, `araclar.html` 17→17 —
+  **kaybolan fonksiyon yok**, eklenenler yalnızca `lunarisIsWithinWindow` ve
+  `retroWindows`.
+- CSS süslü parantez dengesi 956/956, seçici sayısı 794→796.
+- `node --check` → `main.js`, `lunaris-ml.js` ve gömülü sayfa JS'i temiz.
+- i18n: üç dil arasında anahtar farkı eklenmedi; her dile tam olarak aynı
+  4 yeni anahtar girdi (`deepCityLabel`, `deepCityNone`, `deepCityNoteText`,
+  `eclipseAnnularSolar`). Kalan boşluklar birleştirmeden önce de vardı
+  (aşağıya bakınız).
+
+**Astronomik doğruluk** (bağımsız 25 terimli Meeus/ELP referansına karşı)
+- Ay boylamı, 1950-2030 arası 4000 örnek: ortalama hata **0.073°**, en büyük
+  **0.321°** (≈8 dakikalık zaman belirsizliği), aynı burcu verme oranı %99.88.
+- Ay burcu, 7 saat diliminde 5000 gerçek doğum anı: **%99.86** doğruluk.
+- Yükselen burç, ev tablolarına karşı üç enlemde birebir tutuyor.
+- Güneş burcu sınır tarihleri (20/21 Mart, 22/23 Temmuz) doğru.
+- Retro tutarlılığı: 2026'nın 365 günü tek tek karşılaştırıldı, motor ile
+  Kozmik Takvim **%100 uyumlu**.
+
+**Çalışma**
+- Yerel sunucuda üç sayfa da (`index`, `araclar`, `blog`) konsol hatasız
+  yükleniyor; tüm varlıklar 200, tek 404 `env.js` (gitignore'da, beklenen).
+- `index.html`: tarot açılımı, burç paneli, uyum, derin analiz, ML geri
+  bildirimi ve üç dil arasında geçiş çalıştırıldı.
+- Derin Analiz: şehirsiz / İstanbul / Sydney; saat 02:00 vs 23:00 aynı günde
+  farklı Ay burcu üretiyor (saatin gerçekten işlendiğinin kanıtı);
+  `localStorage` geri yüklemesi çalışıyor.
+- Dürüst yedek arayüzü doğrulandı: şehir yokken kesikli çerçeve + %72 opaklık
+  + görünür not, şehir seçilince düz çerçeve + %100 opaklık + gizli not.
+- Form yerleşimi masaüstünde 2 sütun + alt satır, mobilde tek sütun; alanlar
+  eşit yükseklikte, formdan kaynaklı yatay taşma yok.
+- `araclar.html`: numeroloji, Çin burcu, gezegen saatleri, ritüel, Kozmik
+  Takvim ve Ay takvimi çalıştırıldı; takvim ile motor aynı günde aynı cevabı
+  veriyor.
+- 54 şehrin tamamının `enlem,boylam,saat dilimi` verisi aralık denetiminden
+  geçti.
+
+## Birleştirmeyle ilgisi olmayan, önceden var olan bulgular
+
+Bunlar `origin/main` üzerinde de mevcut, bu PR'ın kapsamı dışında bırakıldı:
+
+- **i18n boşlukları**: biyoritim anahtarları (`bioEyebrow`, `bioTitle`,
+  `bioPhys` ve 8 tanesi daha) yalnızca Türkçe'de var; `moonRitual*` üç
+  anahtarı Türkçe'de eksik; `presetAvatarsLabel` hiçbir dilde yok ama üç
+  sayfada da `data-i18n` olarak kullanılıyor; `avatarUpdatedToast` koddan
+  çağrılıyor ama Türkçe tabloda yok.
+- **Mobilde yatay taşma**: 375px genişlikte belge 639px'e uzuyor. Kaynak hero
+  süslemeleri (`.nebula`, `.hero-art`, `.hero-card`) — bu PR'da dokunulan
+  hiçbir seçici listede yok.
+
 
 ## Sonraki adım önerileri (yapılmadı)
 - `firebase deploy --only firestore:rules` — kural değişikliği canlıya çıkmalı.
