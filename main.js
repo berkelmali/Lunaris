@@ -9,6 +9,89 @@
 
 const PREFERRED_LANG_KEY = "lunaris_preferred_lang";
 
+/* ==========================================================
+   KOZMİK TAKVİM — TEK KAYNAK (single source of truth)
+   ----------------------------------------------------------
+   Retro pencereleri ve tutulmalar ESKİDEN iki ayrı yerde
+   yaşıyordu: araclar.html (gerçek, araştırılmış 2026 tarihleri)
+   ve lunaris-ml.js (yıl bilgisi olmayan ay/gün çiftleri). İkisi
+   çelişebiliyordu — site aynı anda hem "Merkür retro" hem
+   "retro yok" diyebiliyordu. Artık ikisi de bu tabloyu okur.
+   main.js hem index.html hem araclar.html tarafından, ikisinden
+   de önce yüklendiği için burası ortak zemin.
+
+   Tarihler kapsayıcıdır (start 00:00 — end 23:59, yerel saat).
+   YENİ YIL EKLERKEN: sadece burayı güncelle, iki sayfa da
+   otomatik olarak yeni tarihleri kullanır.
+   ========================================================== */
+const LUNARIS_COSMIC = {
+  /* Merkür retro — 2025-2028 (araştırılmış tarihler) */
+  mercury: [
+    { start: "2024-11-26", end: "2024-12-15", sign: { tr:"Yay",     en:"Sagittarius", ru:"Стрелец"  } },
+    { start: "2025-03-15", end: "2025-04-07", sign: { tr:"Koç",     en:"Aries",       ru:"Овен"     } },
+    { start: "2025-07-18", end: "2025-08-11", sign: { tr:"Aslan",   en:"Leo",         ru:"Лев"      } },
+    { start: "2025-11-09", end: "2025-11-29", sign: { tr:"Yay",     en:"Sagittarius", ru:"Стрелец"  } },
+    { start: "2026-02-26", end: "2026-03-20", sign: { tr:"Balık",   en:"Pisces",      ru:"Рыбы"     } },
+    { start: "2026-06-29", end: "2026-07-23", sign: { tr:"Yengeç",  en:"Cancer",      ru:"Рак"      } },
+    { start: "2026-10-24", end: "2026-11-13", sign: { tr:"Akrep",   en:"Scorpio",     ru:"Скорпион" } },
+    { start: "2027-02-09", end: "2027-03-03", sign: { tr:"Balık",   en:"Pisces",      ru:"Рыбы"     } },
+    { start: "2027-06-10", end: "2027-07-04", sign: { tr:"Yengeç",  en:"Cancer",      ru:"Рак"      } },
+    { start: "2027-10-07", end: "2027-10-28", sign: { tr:"Akrep",   en:"Scorpio",     ru:"Скорпион" } },
+    { start: "2028-01-24", end: "2028-02-14", sign: { tr:"Kova",    en:"Aquarius",    ru:"Водолей"  } },
+    { start: "2028-05-21", end: "2028-06-13", sign: { tr:"İkizler", en:"Gemini",      ru:"Близнецы" } },
+    { start: "2028-09-19", end: "2028-10-11", sign: { tr:"Terazi",  en:"Libra",       ru:"Весы"     } }
+  ],
+  /* Venüs retro — ~584 günde bir, ~40 gün sürer */
+  venus: [
+    { start: "2025-03-01", end: "2025-04-12" },
+    { start: "2026-10-03", end: "2026-11-13" },
+    { start: "2028-05-09", end: "2028-06-20" }
+  ],
+  /* Mars retro — ~26 ayda bir */
+  mars: [
+    { start: "2024-12-06", end: "2025-02-23" },
+    { start: "2027-01-10", end: "2027-04-01" }
+  ],
+  /* Jüpiter retro — yılda bir, ~4 ay */
+  jupiter: [
+    { start: "2025-10-11", end: "2026-02-11" },
+    { start: "2026-11-11", end: "2027-03-10" },
+    { start: "2027-12-12", end: "2028-04-11" }
+  ],
+  /* Satürn retro — yılda bir, ~4.5 ay */
+  saturn: [
+    { start: "2025-07-13", end: "2025-11-28" },
+    { start: "2026-07-27", end: "2026-12-12" },
+    { start: "2027-08-10", end: "2027-12-24" }
+  ],
+  /* Tutulmalar — araclar.html Kozmik Takvim'i besler */
+  eclipses: [
+    { date: "2026-02-17", labelKey: "eclipseAnnularSolar", isLunar: false },
+    { date: "2026-03-03", labelKey: "eclipseTotalLunar",   isLunar: true  },
+    { date: "2026-08-12", labelKey: "eclipseTotalSolar",   isLunar: false },
+    { date: "2026-08-28", labelKey: "eclipsePartialLunar", isLunar: true  },
+    { date: "2027-02-06", labelKey: "eclipseAnnularSolar", isLunar: false },
+    { date: "2027-08-02", labelKey: "eclipseTotalSolar",   isLunar: false }
+  ]
+};
+
+/* Bir tarih, verilen pencerelerden birinin içinde mi? */
+function lunarisIsWithinWindow(date, windows) {
+  if (!windows || !windows.length) return false;
+  const t = (date instanceof Date ? date : new Date(date)).getTime();
+  for (let i = 0; i < windows.length; i++) {
+    const s = new Date(windows[i].start + "T00:00:00").getTime();
+    const e = new Date(windows[i].end + "T23:59:59").getTime();
+    if (t >= s && t <= e) return true;
+  }
+  return false;
+}
+
+if (typeof window !== "undefined") {
+  window.LUNARIS_COSMIC = LUNARIS_COSMIC;
+  window.lunarisIsWithinWindow = lunarisIsWithinWindow;
+}
+
 function getInitialLang() {
   try {
     const saved = localStorage.getItem(PREFERRED_LANG_KEY);
@@ -123,9 +206,9 @@ const UI = {
     westernEyebrow: "Güneş Burcu & Element Dengesi", westernTitle: "Kozmik Doğum İmzası", westernBadgePending: "✦ Güneş Haritası", westernEmptyTitle: "Güneş İmzası & Enerji Radarı", westernEmpty: "Güneş burcunun dekansal arketiplerini, sezgisel derinliğini ve manyetik aura güç dengesini ortaya çıkar.", westernEmptyChip: "✦ Zodyak Dekanı & 3 Boyutlu Güç Dengesi",
     matrixVibeLabel: "Gezegensel Titreşim", matrixChakraLabel: "Kozmik Çakra", matrixLuckyNumLabel: "Şanslı Sayılar", matrixLuckyColLabel: "Aura Renkleri",
     matrixIntuition: "Ruhsal Sezgi", matrixCharm: "Manyetik Çekim", matrixFocus: "Zihinsel Odak",
-    cosmicEyebrow: "Kozmik Takvim", cosmicTitle: "2026'da Gökyüzü", cosmicText: "Merkür'ün retro dönemleri ve bu yılın tutulmaları — gerçek astronomik tarihlerle.", cosmicRetroActive: "Şu an Merkür retrosundayız", cosmicRetroDirect: "Şu an Merkür direkt (normal) ilerliyor", cosmicDaysLeft: "gün kaldı", cosmicUntilNext: "sonraki retroya", cosmicRetroListTitle: "2026 Merkür Retro Dönemleri", cosmicEclipseListTitle: "2026 Tutulmaları", cosmicNote: "Tarihler 2026 yılına özeldir ve yaygın astronomik/astrolojik kaynaklara dayanır.",
+    cosmicEyebrow: "Kozmik Takvim", cosmicTitle: "Gökyüzü Takvimi", cosmicText: "Merkür'ün yaklaşan retro dönemleri ve tutulmalar — gerçek astronomik tarihlerle.", cosmicRetroActive: "Şu an Merkür retrosundayız", cosmicRetroDirect: "Şu an Merkür direkt (normal) ilerliyor", cosmicDaysLeft: "gün kaldı", cosmicUntilNext: "sonraki retroya", cosmicRetroListTitle: "Yaklaşan Merkür Retroları", cosmicEclipseListTitle: "Yaklaşan Tutulmalar", cosmicNote: "Tarihler yaygın astronomik/astrolojik kaynaklara dayanır ve sitenin tamamı tek bir ortak tablodan okur — Derin Analiz ile bu takvim asla çelişmez.",
     moonCalEyebrow: "Ay Takvimi", moonCalTitle: "Aylık Ay Evreleri", moonCalText: "Ayın bu ayki tüm evrelerini gör, günden güne takip et.", moonCalToday: "Bugün",
-    eclipseTotalLunar: "Tam Ay Tutulması", eclipseTotalSolar: "Tam Güneş Tutulması", eclipsePartialLunar: "Parçalı Ay Tutulması",
+    eclipseTotalLunar: "Tam Ay Tutulması", eclipseTotalSolar: "Tam Güneş Tutulması", eclipsePartialLunar: "Parçalı Ay Tutulması", eclipseAnnularSolar: "Halkalı Güneş Tutulması",
     monthJan: "Ocak", monthFeb: "Şubat", monthMar: "Mart", monthApr: "Nisan", monthMay: "Mayıs", monthJun: "Haziran", monthJul: "Temmuz", monthAug: "Ağustos", monthSep: "Eylül", monthOct: "Ekim", monthNov: "Kasım", monthDec: "Aralık",
     wdMon: "Pt", wdTue: "Sa", wdWed: "Ça", wdThu: "Pe", wdFri: "Cu", wdSat: "Ct", wdSun: "Pz",
 
@@ -134,6 +217,8 @@ const UI = {
     deepText: "Doğum tarihinle astrolojik DNA'nı çöz. Makine öğrenmesi algoritması güneş burcu, ay burcu, yükselen burç, gezegen saati ve ay fazını birleştirerek sana özgü derin bir yorum üretiyor.",
     deepBirthLabel: "Doğum Tarihin", deepHourLabel: "Doğum Saatin (opsiyonel)",
     deepHourPh: "ör. 14:30", deepCalcBtn: "✦ Kozmik DNA'mı Çöz",
+    deepCityLabel: "Doğum Yerin (Yükselen burç için)", deepCityNone: "Seçilmedi",
+    deepCityNoteText: "Şehrini seçmezsen Yükselen Burç dürüstçe Güneş burcuna eşitlenir — yükselen, doğum yeri bilinmeden doğru hesaplanamaz.",
     deepNatalTitle: "Natal Haritanın Üç Sütunu",
     deepSunLabel: "Güneş Burcu", deepMoonLabel: "Ay Burcu", deepAscLabel: "Yükselen Burç",
     deepProfileTitle: "Kişilik Profil Radarı",
@@ -261,9 +346,9 @@ const UI = {
     westernEyebrow: "Sun Sign & Element Balance", westernTitle: "Cosmic Birth Signature", westernBadgePending: "✦ Sun Chart", westernEmptyTitle: "Sun Signature & Energy Radar", westernEmpty: "Reveal your sun sign decans, intuitive depth, and magnetic aura energy balance.", westernEmptyChip: "✦ Zodiac Decans & 3D Energy Balance",
     matrixVibeLabel: "Planetary Vibration", matrixChakraLabel: "Cosmic Chakra", matrixLuckyNumLabel: "Lucky Numbers", matrixLuckyColLabel: "Aura Colors",
     matrixIntuition: "Intuition", matrixCharm: "Magnetism", matrixFocus: "Mental Focus",
-    cosmicEyebrow: "Cosmic Calendar", cosmicTitle: "The Sky in 2026", cosmicText: "Mercury's retrograde periods and this year's eclipses — with real astronomical dates.", cosmicRetroActive: "Mercury is retrograde right now", cosmicRetroDirect: "Mercury is direct right now", cosmicDaysLeft: "days left", cosmicUntilNext: "until the next retrograde", cosmicRetroListTitle: "2026 Mercury Retrograde Periods", cosmicEclipseListTitle: "2026 Eclipses", cosmicNote: "Dates are specific to 2026 and based on widely reported astronomical/astrological sources.",
+    cosmicEyebrow: "Cosmic Calendar", cosmicTitle: "The Sky Calendar", cosmicText: "Mercury's upcoming retrograde periods and eclipses — with real astronomical dates.", cosmicRetroActive: "Mercury is retrograde right now", cosmicRetroDirect: "Mercury is direct right now", cosmicDaysLeft: "days left", cosmicUntilNext: "until the next retrograde", cosmicRetroListTitle: "Upcoming Mercury Retrogrades", cosmicEclipseListTitle: "Upcoming Eclipses", cosmicNote: "Dates are based on widely reported astronomical/astrological sources and read from one shared table, so this calendar can never contradict the Deep Analysis.",
     moonCalEyebrow: "Moon Calendar", moonCalTitle: "Monthly Moon Phases", moonCalText: "See every phase the Moon moves through this month, day by day.", moonCalToday: "Today",
-    eclipseTotalLunar: "Total Lunar Eclipse", eclipseTotalSolar: "Total Solar Eclipse", eclipsePartialLunar: "Partial Lunar Eclipse",
+    eclipseTotalLunar: "Total Lunar Eclipse", eclipseTotalSolar: "Total Solar Eclipse", eclipsePartialLunar: "Partial Lunar Eclipse", eclipseAnnularSolar: "Annular Solar Eclipse",
     monthJan: "January", monthFeb: "February", monthMar: "March", monthApr: "April", monthMay: "May", monthJun: "June", monthJul: "July", monthAug: "August", monthSep: "September", monthOct: "October", monthNov: "November", monthDec: "December",
     wdMon: "Mo", wdTue: "Tu", wdWed: "We", wdThu: "Th", wdFri: "Fr", wdSat: "Sa", wdSun: "Su",
 
@@ -272,6 +357,8 @@ const UI = {
     deepText: "Decode your astrological DNA from your birth date. The machine learning algorithm combines your sun sign, moon sign, rising sign, planetary hour and moon phase to produce a reading uniquely tailored to you.",
     deepBirthLabel: "Your Birth Date", deepHourLabel: "Your Birth Time (optional)",
     deepHourPh: "e.g. 14:30", deepCalcBtn: "✦ Decode My Cosmic DNA",
+    deepCityLabel: "Your Birth Place (for rising sign)", deepCityNone: "Not selected",
+    deepCityNoteText: "Without a city, the Rising Sign honestly falls back to your Sun sign — a true ascendant cannot be computed without a birth place.",
     deepNatalTitle: "Three Pillars of Your Natal Chart",
     deepSunLabel: "Sun Sign", deepMoonLabel: "Moon Sign", deepAscLabel: "Rising Sign",
     deepProfileTitle: "Personality Profile Radar",
@@ -395,9 +482,9 @@ const UI = {
     westernEyebrow: "Солнечный знак и Баланс стихий", westernTitle: "Космическая подпись рождения", westernBadgePending: "✦ Солнечная карта", westernEmptyTitle: "Солнечный код и радар энергии", westernEmpty: "Узнай деканат своего знака зодиака, интуитивную глубину и баланс магнитной ауры.", westernEmptyChip: "✦ Деканаты зодиака и 3D баланс энергии",
     matrixVibeLabel: "Планетарная вибрация", matrixChakraLabel: "Космическая чакра", matrixLuckyNumLabel: "Счастливые числа", matrixLuckyColLabel: "Цвета ауры",
     matrixIntuition: "Интуиция", matrixCharm: "Магнетизм", matrixFocus: "Фокус и Воля",
-    cosmicEyebrow: "Космический календарь", cosmicTitle: "Небо в 2026", cosmicText: "Периоды ретроградного Меркурия и затмения этого года — с реальными астрономическими датами.", cosmicRetroActive: "Меркурий сейчас ретрограден", cosmicRetroDirect: "Меркурий сейчас движется прямо", cosmicDaysLeft: "дней осталось", cosmicUntilNext: "до следующего ретро", cosmicRetroListTitle: "Ретроградные периоды Меркурия 2026", cosmicEclipseListTitle: "Затмения 2026", cosmicNote: "Даты указаны для 2026 года и основаны на широко публикуемых астрономических и астрологических источниках.",
+    cosmicEyebrow: "Космический календарь", cosmicTitle: "Календарь неба", cosmicText: "Ближайшие периоды ретроградного Меркурия и затмения — с реальными астрономическими датами.", cosmicRetroActive: "Меркурий сейчас ретрограден", cosmicRetroDirect: "Меркурий сейчас движется прямо", cosmicDaysLeft: "дней осталось", cosmicUntilNext: "до следующего ретро", cosmicRetroListTitle: "Ближайшие ретрограды Меркурия", cosmicEclipseListTitle: "Ближайшие затмения", cosmicNote: "Даты основаны на широко публикуемых астрономических и астрологических источниках и берутся из единой общей таблицы, поэтому календарь никогда не противоречит глубокому анализу.",
     moonCalEyebrow: "Лунный календарь", moonCalTitle: "Фазы Луны по месяцам", moonCalText: "Смотри все фазы Луны в этом месяце, день за днём.", moonCalToday: "Сегодня",
-    eclipseTotalLunar: "Полное лунное затмение", eclipseTotalSolar: "Полное солнечное затмение", eclipsePartialLunar: "Частичное лунное затмение",
+    eclipseTotalLunar: "Полное лунное затмение", eclipseTotalSolar: "Полное солнечное затмение", eclipsePartialLunar: "Частичное лунное затмение", eclipseAnnularSolar: "Кольцеобразное солнечное затмение",
     monthJan: "Январь", monthFeb: "Февраль", monthMar: "Март", monthApr: "Апрель", monthMay: "Май", monthJun: "Июнь", monthJul: "Июль", monthAug: "Август", monthSep: "Сентябрь", monthOct: "Октябрь", monthNov: "Ноябрь", monthDec: "Декабрь",
     wdMon: "Пн", wdTue: "Вт", wdWed: "Ср", wdThu: "Чт", wdFri: "Пт", wdSat: "Сб", wdSun: "Вс",
 
@@ -406,6 +493,8 @@ const UI = {
     deepText: "Расшифруй свою астрологическую ДНК по дате рождения. ML-алгоритм объединяет солнечный знак, лунный знак, асцендент, планетарный час и фазу Луны, создавая уникальный прогноз именно для тебя.",
     deepBirthLabel: "Дата рождения", deepHourLabel: "Время рождения (необязательно)",
     deepHourPh: "напр. 14:30", deepCalcBtn: "✦ Расшифровать мою космическую ДНК",
+    deepCityLabel: "Место рождения (для асцендента)", deepCityNone: "Не выбрано",
+    deepCityNoteText: "Если не выбрать город, асцендент честно приравнивается к солнечному знаку — без места рождения его нельзя рассчитать верно.",
     deepNatalTitle: "Три опоры натальной карты",
     deepSunLabel: "Солнечный знак", deepMoonLabel: "Лунный знак", deepAscLabel: "Асцендент",
     deepProfileTitle: "Радар личностного профиля",

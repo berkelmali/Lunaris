@@ -505,43 +505,40 @@
      5 gezegen için tarih tabanlı retrograd dönemleri
   ══════════════════════════════════════════════════ */
 
-  var RETROGRADE_PERIODS = {
+  /**
+   * Retrograd pencereleri — TAM TARİHLİ (yıl dahil).
+   *
+   * ÖNEMLİ DÜZELTME: Burada eskiden yıl bilgisi OLMAYAN [ay,gün, ay,gün]
+   * çiftleri vardı ve 2024-2028 arasındaki bütün pencereler tek bir takvim
+   * yılına eziliyordu. Sonuç: motor Merkür'ü yılda 13 kez retroya sokuyor,
+   * araclar.html'deki gerçek Kozmik Takvim ile çelişiyordu (site aynı anda
+   * hem "retro" hem "retro değil" diyebiliyordu).
+   * Artık tek kaynak main.js'teki LUNARIS_COSMIC tablosu. main.js
+   * yüklenmemişse (ör. lunaris-ml.js'in tek başına test edilmesi)
+   * aşağıdaki yedek tablo devreye girer — ikisi aynı tarihleri taşır.
+   */
+  var RETROGRADE_FALLBACK = {
     mercury: [
-      [12,13, 1,2],
-      [3,15, 4,7],
-      [7,18, 8,11],
-      [11,9, 11,29],
-      [3,2, 3,25],
-      [6,30, 7,24],
-      [10,25, 11,15],
-      [2,10, 3,5],
-      [6,10, 7,4],
-      [10,7, 10,28],
-      [1,24, 2,14],
-      [5,21, 6,13],
-      [9,19, 10,11]
+      { start: "2025-03-15", end: "2025-04-07" },
+      { start: "2025-07-18", end: "2025-08-11" },
+      { start: "2025-11-09", end: "2025-11-29" },
+      { start: "2026-02-26", end: "2026-03-20" },
+      { start: "2026-06-29", end: "2026-07-23" },
+      { start: "2026-10-24", end: "2026-11-13" },
+      { start: "2027-02-09", end: "2027-03-03" },
+      { start: "2027-06-10", end: "2027-07-04" },
+      { start: "2027-10-07", end: "2027-10-28" }
     ],
-    venus: [
-      [3,2, 4,13],
-      [10,3, 11,14],
-      [5,9, 6,20],
-      [12,16, 1,27]
-    ],
-    mars: [
-      [12,6, 2,24],
-      [1,10, 4,1],
-    ],
-    jupiter: [
-      [10,9, 2,4],
-      [11,11, 3,10],
-      [12,12, 4,11],
-    ],
-    saturn: [
-      [6,29, 11,15],
-      [7,13, 11,28],
-      [7,27, 12,12],
-    ]
+    venus:   [ { start: "2025-03-01", end: "2025-04-12" }, { start: "2026-10-03", end: "2026-11-13" } ],
+    mars:    [ { start: "2024-12-06", end: "2025-02-23" }, { start: "2027-01-10", end: "2027-04-01" } ],
+    jupiter: [ { start: "2025-10-11", end: "2026-02-11" }, { start: "2026-11-11", end: "2027-03-10" } ],
+    saturn:  [ { start: "2025-07-13", end: "2025-11-28" }, { start: "2026-07-27", end: "2026-12-12" } ]
   };
+
+  function retroWindows(planet) {
+    var shared = (typeof window !== 'undefined' && window.LUNARIS_COSMIC) ? window.LUNARIS_COSMIC[planet] : null;
+    return (shared && shared.length) ? shared : (RETROGRADE_FALLBACK[planet] || []);
+  }
 
   var RETROGRADE_PENALTIES = {
     mercury: 0.05,
@@ -615,35 +612,36 @@
     }
   };
 
+  var DAY_MS = 86400000;
+
+  /**
+   * Verilen tarihte hangi gezegenler retro / gölge periyodunda?
+   * Karşılaştırma artık TAM TARİH üzerinden (yıl dahil) yapılıyor; gölge
+   * periyodu da pencerenin 14 gün öncesi ve 14 gün sonrası olarak gerçek
+   * takvim aritmetiğiyle bulunuyor (eskiden ay/gün sayısına 14 EKLENİYORDU,
+   * bu da ay sonlarında "32 Mart" gibi var olmayan tarihler üretiyordu).
+   */
   function getRetrogrades(date) {
-    var d = date || new Date();
-    var m = d.getMonth() + 1;
-    var day = d.getDate();
-    var current = m * 100 + day;
+    var d = (date instanceof Date) ? date : (date ? new Date(date) : new Date());
+    if (isNaN(d.getTime())) d = new Date();
+    var t = d.getTime();
 
     var result = {};
     var planetNames = ['mercury','venus','mars','jupiter','saturn'];
 
     planetNames.forEach(function(planet) {
-      var periods = RETROGRADE_PERIODS[planet] || [];
+      var windows = retroWindows(planet);
       var isActive = false;
       var isShadow = false;
 
-      for (var i = 0; i < periods.length; i++) {
-        var p = periods[i];
-        var start = p[0] * 100 + p[1];
-        var end = p[2] * 100 + p[3];
+      for (var i = 0; i < windows.length; i++) {
+        var s = new Date(windows[i].start + 'T00:00:00').getTime();
+        var e = new Date(windows[i].end + 'T23:59:59').getTime();
+        if (isNaN(s) || isNaN(e)) continue;
 
-        if (start <= end) {
-          if (current >= start && current <= end) { isActive = true; break; }
-        } else {
-          if (current >= start || current <= end) { isActive = true; break; }
-        }
-
-        var preS = p[0] * 100 + Math.max(1, p[1] - 14);
-        if (!isActive && current >= preS && current < start) { isShadow = true; }
-        var postE = p[2] * 100 + Math.min(28, p[3] + 14);
-        if (!isActive && current > end && current <= postE) { isShadow = true; }
+        if (t >= s && t <= e) { isActive = true; isShadow = false; break; }
+        if (t >= s - 14 * DAY_MS && t < s) isShadow = true;   // ön gölge
+        if (t > e && t <= e + 14 * DAY_MS) isShadow = true;   // arka gölge
       }
 
       result[planet] = {
@@ -895,12 +893,22 @@
     return 'capricorn';
   }
 
+  /**
+   * Ay Burcu — Ay'ın GERÇEK geosentrik ekliptik boylamından.
+   *
+   * ÖNEMLİ DÜZELTME: Burada eskiden Ay'ın FAZ döngüsü (sinodik ay, 29.53 gün)
+   * 12'ye bölünüp burç sanılıyordu. Faz, Güneş-Ay-Dünya arasındaki AÇIDIR;
+   * burç ise Ay'ın YILDIZLARA göre konumudur (sidereal/tropik ay, 27.32 gün).
+   * İkisi farklı büyüklükler olduğu için üretilen "ay burcu" astrolojik
+   * olarak anlamsız bir sayıydı ve yılda ~2 burç kayıyordu.
+   * Artık aynı dosyadaki calcPlanetPositions() pertürbasyonlu Ay boylamını
+   * (Meeus, truncated ELP serisi) kullanıyoruz — transit motorunun kullandığı
+   * değerin birebir aynısı, yani natal ile transit artık tutarlı.
+   */
   function getMoonSign(birthDate) {
-    var jd = julianDay(birthDate);
-    var moonCycle = ((jd - 2451550.1) % 29.530588);
-    if (moonCycle < 0) moonCycle += 29.530588;
-    var signIdx = Math.floor(moonCycle / (29.530588 / 12));
-    return SIGN_KEYS[signIdx % 12];
+    var d = (birthDate instanceof Date) ? birthDate : new Date(birthDate);
+    if (isNaN(d.getTime())) d = new Date();
+    return lonToSign(calcPlanetPositions(d).moon);
   }
 
   function parseHourSafe(h) {
@@ -966,9 +974,15 @@
     var B = 2 - A + Math.floor(A / 4);
     var jd = Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
     
-    // Gün içi saat fraksiyonu (Yerel saatten dinamik timezone ofseti düş)
-    var utHour = (h - tzOffsetHours + 24) % 24;
-    jd += utHour / 24.0;
+    /* Yerel saatten UT'ye: ofset gün sınırını aşabilir (ör. İstanbul'da
+       01:00 doğum → UT 22:00, bir ÖNCEKİ gün). Eskiden sadece saat mod 24
+       alınıp aynı güne ekleniyordu; bu, tam bir günlük JD kayması demekti
+       ve yıldız zamanını ~1° kaydırıyordu. Artık gün kayması da JD'ye
+       yansıtılıyor. */
+    var utRaw = h - tzOffsetHours;
+    var dayShift = Math.floor(utRaw / 24);
+    var utHour = utRaw - dayShift * 24;
+    jd += dayShift + utHour / 24.0;
 
     // 2. Greenwich Ortalama Yıldız Zamanı (GMST)
     var T = (jd - 2451545.0) / 36525.0;
@@ -981,11 +995,19 @@
     var latRad = latitude * Math.PI / 180;
     var epsRad = 23.4392911 * Math.PI / 180; // Tutulum eğikliği
 
-    // 4. Astronomik Yükselen Boylamı: tan(Asc) = -cos(RAMC) / (sin(RAMC)*cos(eps) + tan(lat)*sin(eps))
-    var y = -Math.cos(ramcRad);
-    var x = Math.sin(ramcRad) * Math.cos(epsRad) + Math.tan(latRad) * Math.sin(epsRad);
-    var ascLon = Math.atan2(y, x) * 180 / Math.PI;
-    ascLon = normDeg(ascLon);
+    /* 4. Yükselen boylamı:
+             Asc = atan2( cos(RAMC), −( sin(RAMC)·cos ε + tan φ·sin ε ) )
+
+       DÜZELTME (180°): Burada eskiden atan2(−cos(RAMC), +X) yazıyordu.
+       atan2(−u, v) = −atan2(u, v) iken doğru ifade atan2(u, −v) = π − atan2(u, v);
+       aradaki fark tam olarak 180°'dir. Yani motor yükselen burç yerine sürekli
+       onun KARŞITINI — yani Alçalan'ı (Descendant) — döndürüyordu.
+       Doğrulama: enlem 41°K, RAMC = 0° (0° Koç tepe noktasında) için
+       ev tabloları ~19° Yengeç verir; düzeltilmiş formül 109.1° = 19° Yengeç
+       üretiyor, eski formül ise 289.1° = 19° Oğlak (tam karşıtı) üretiyordu. */
+    var y = Math.cos(ramcRad);
+    var x = -(Math.sin(ramcRad) * Math.cos(epsRad) + Math.tan(latRad) * Math.sin(epsRad));
+    var ascLon = normDeg(Math.atan2(y, x) * 180 / Math.PI);
 
     return lonToSign(ascLon);
   }
@@ -993,7 +1015,13 @@
   function calcNatalScores(birthDate, birthHour, options) {
     var sunSign = getSunSign(birthDate);
     var moonSign = getMoonSign(birthDate);
-    var ascSign = getAscendantSign(birthDate, birthHour, options);
+
+    /* Yükselen burç DOĞUM YERİ olmadan hesaplanamaz — yerel yıldız zamanı
+       boylama, yükselen açısı da enleme bağlıdır. Konum verilmediğinde
+       burcu UYDURMAK yerine dürüstçe Güneş burcuna düşüyor ve bunu
+       ascKnown=false ile arayüze bildiriyoruz. */
+    var hasPlace = !!(options && typeof options.lat === 'number' && typeof options.lon === 'number');
+    var ascSign = hasPlace ? getAscendantSign(birthDate, birthHour, options) : sunSign;
 
     var sunVec = SIGN_VECTORS[sunSign];
     var moonVec = SIGN_VECTORS[moonSign];
@@ -1017,6 +1045,7 @@
       sunSign: sunSign,
       moonSign: moonSign,
       ascSign: ascSign,
+      ascKnown: hasPlace,
       natalVector: natal,
       profile: profile,
       element: SIGN_ELEMENTS[sunSign],
@@ -1760,9 +1789,9 @@
   /**
    * Haftalık okuma — 7 günlük skor ortalaması + hafta teması
    */
-  function generateWeeklyReading(signKey, lang, birthDate, birthHour) {
+  function generateWeeklyReading(signKey, lang, birthDate, birthHour, options) {
     lang = lang || 'tr';
-    var natal = birthDate ? calcNatalScores(birthDate, birthHour) : null;
+    var natal = birthDate ? calcNatalScores(birthDate, birthHour, options) : null;
     var natalVec = natal ? natal.natalVector : null;
     var now = new Date();
 
@@ -1828,9 +1857,9 @@
   /**
    * Aylık okuma — 30 günlük trend analizi + ay teması
    */
-  function generateMonthlyReading(signKey, lang, birthDate, birthHour) {
+  function generateMonthlyReading(signKey, lang, birthDate, birthHour, options) {
     lang = lang || 'tr';
-    var natal = birthDate ? calcNatalScores(birthDate, birthHour) : null;
+    var natal = birthDate ? calcNatalScores(birthDate, birthHour, options) : null;
     var natalVec = natal ? natal.natalVector : null;
     var now = new Date();
     var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();

@@ -576,11 +576,11 @@
 
   <div class="cosmic-columns">
     <div>
-      <h3 class="cosmic-list-title" data-i18n="cosmicRetroListTitle">2026 Merkür Retro Dönemleri</h3>
+      <h3 class="cosmic-list-title" data-i18n="cosmicRetroListTitle">Yaklaşan Merkür Retroları</h3>
       <div id="retroList"></div>
     </div>
     <div>
-      <h3 class="cosmic-list-title" data-i18n="cosmicEclipseListTitle">2026 Tutulmaları</h3>
+      <h3 class="cosmic-list-title" data-i18n="cosmicEclipseListTitle">Yaklaşan Tutulmalar</h3>
       <div id="eclipseList"></div>
     </div>
   </div>
@@ -872,13 +872,18 @@ function getWesternZodiac(day, month) {
   return "pisces";
 }
 
-/* ---- 2026 cosmic calendar: real, researched dates ---- */
-const MERCURY_RETROGRADES_2026 = [
+/* ---- 2026 cosmic calendar ----
+   Tarihler artık main.js'teki LUNARIS_COSMIC tablosundan geliyor —
+   böylece Derin Analiz (lunaris-ml.js) ile bu takvim ASLA çelişemez.
+   (Eskiden iki ayrı liste vardı ve site aynı anda hem "retro" hem
+   "retro değil" diyebiliyordu.) Aşağıdakiler sadece main.js
+   yüklenmemişse devreye giren güvenli yedeklerdir. */
+const MERCURY_RETROGRADES_2026 = (window.LUNARIS_COSMIC && window.LUNARIS_COSMIC.mercury) || [
   { start:"2026-02-26", end:"2026-03-20", sign:{tr:"Balık",en:"Pisces",ru:"Рыбы"} },
   { start:"2026-06-29", end:"2026-07-23", sign:{tr:"Yengeç",en:"Cancer",ru:"Рак"} },
   { start:"2026-10-24", end:"2026-11-13", sign:{tr:"Akrep",en:"Scorpio",ru:"Скорпион"} }
 ];
-const ECLIPSES_2026 = [
+const ECLIPSES_2026 = (window.LUNARIS_COSMIC && window.LUNARIS_COSMIC.eclipses) || [
   { date:"2026-03-03", labelKey:"eclipseTotalLunar", isLunar:true },
   { date:"2026-08-12", labelKey:"eclipseTotalSolar", isLunar:false },
   { date:"2026-08-28", labelKey:"eclipsePartialLunar", isLunar:true }
@@ -959,7 +964,13 @@ function renderNumerologyResult(num, day, month, year) {
   
   const dStr = day < 10 ? "0" + day : day;
   const mStr = month < 10 ? "0" + month : month;
-  document.getElementById("numeroFormulaChip").textContent = `${dStr}.${mStr}.${year} ➔ ${day}+${month}+${year} = ${day+month+year} ➔ ${num}`;
+  /* Gösterilen formül artık GERÇEK hesaplama adımlarını yansıtıyor: gün, ay ve
+     yıl AYRI AYRI indirgenir, sonra toplanıp tekrar indirgenir (lifePathNumber
+     ile birebir aynı sıra). Eskiden ham gün+ay+yıl toplamı gösteriliyordu —
+     çoğu tarihte aynı sonuca çıksa da usta sayılarda (11/22/33) hesapla
+     çelişebilen, kafa karıştırıcı bir gösterimdi. */
+  const rDay = reduceNum(day), rMonth = reduceNum(month), rYear = reduceNum(year);
+  document.getElementById("numeroFormulaChip").textContent = `${dStr}.${mStr}.${year} ➔ ${rDay} + ${rMonth} + ${rYear} = ${rDay+rMonth+rYear} ➔ ${num}`;
   document.getElementById("numeroDesc").textContent = data.text[lang];
   document.getElementById("numeroPlanetVal").textContent = data.planet[lang];
   document.getElementById("numeroChakraVal").textContent = data.chakra[lang];
@@ -1143,11 +1154,13 @@ function renderCosmicCalendar(){
   const localeMap = {tr:"tr-TR", en:"en-US", ru:"ru-RU"};
   const retroListEl = document.getElementById("retroList");
   let rhtml = "";
-  MERCURY_RETROGRADES_2026.forEach(function(r){
+  /* Tablo artik cok yilli — sadece suren + gelecek pencereleri goster (en fazla 4). */
+  MERCURY_RETROGRADES_2026.filter(function(r){ return new Date(r.end + "T23:59:59") >= now; }).slice(0,4).forEach(function(r){
     const s = new Date(r.start + "T00:00:00");
     const e = new Date(r.end + "T00:00:00");
+    const yearOpt = (e.getFullYear() !== now.getFullYear()) ? { year:"numeric" } : {};
     const sStr = s.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long"});
-    const eStr = e.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long"});
+    const eStr = e.toLocaleDateString(localeMap[lang], Object.assign({day:"numeric", month:"long"}, yearOpt));
     rhtml += '<div class="cosmic-event"><div class="cosmic-event-icon">'+icon("temperance",17)+'</div>'+
       '<div><div class="cosmic-event-title">'+sStr+' – '+eStr+'</div><div class="cosmic-event-sub">'+r.sign[lang]+'</div></div></div>';
   });
@@ -1155,9 +1168,9 @@ function renderCosmicCalendar(){
 
   const eclipseListEl = document.getElementById("eclipseList");
   let ehtml = "";
-  ECLIPSES_2026.forEach(function(ev){
+  ECLIPSES_2026.filter(function(ev){ return new Date(ev.date + "T23:59:59") >= now; }).slice(0,4).forEach(function(ev){
     const d = new Date(ev.date + "T00:00:00");
-    const dStr = d.toLocaleDateString(localeMap[lang], {day:"numeric", month:"long"});
+    const dStr = d.toLocaleDateString(localeMap[lang], Object.assign({day:"numeric", month:"long"}, d.getFullYear() !== now.getFullYear() ? { year:"numeric" } : {}));
     ehtml += '<div class="cosmic-event eclipse"><div class="cosmic-event-icon">'+icon(ev.isLunar?"moon":"sun",17)+'</div>'+
       '<div><div class="cosmic-event-title">'+dStr+'</div><div class="cosmic-event-sub">'+UI[lang][ev.labelKey]+'</div></div></div>';
   });

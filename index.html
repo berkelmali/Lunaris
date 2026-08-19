@@ -508,8 +508,83 @@
         <label class="deep-label" for="deepBirthHour" data-i18n="deepHourLabel">Doğum Saatin (opsiyonel)</label>
         <input type="time" id="deepBirthHour" class="deep-input" data-i18n-ph="deepHourPh" placeholder="ör. 14:30">
       </div>
+      <!-- Yükselen burç doğası gereği DOĞUM YERİNE bağlıdır (yerel yıldız
+           zamanı + enlem). Şehir seçilmezse burç uydurulmaz — dürüstçe
+           Güneş burcuna düşülür ve bu formun altında yazılır.
+           value = "enlem,boylam,saatDilimi" -->
+      <div class="deep-field">
+        <label class="deep-label" for="deepBirthCity" data-i18n="deepCityLabel">Doğum Yerin (Yükselen burç için)</label>
+        <select id="deepBirthCity" class="deep-input">
+          <option value="" data-i18n="deepCityNone">Seçilmedi</option>
+          <optgroup label="Türkiye / KKTC">
+            <option value="41.0082,28.9784,3">İstanbul</option>
+            <option value="39.9334,32.8597,3">Ankara</option>
+            <option value="38.4237,27.1428,3">İzmir</option>
+            <option value="40.1826,29.0665,3">Bursa</option>
+            <option value="36.8969,30.7133,3">Antalya</option>
+            <option value="37.0000,35.3213,3">Adana</option>
+            <option value="36.8000,34.6333,3">Mersin</option>
+            <option value="37.8746,32.4932,3">Konya</option>
+            <option value="37.0662,37.3833,3">Gaziantep</option>
+            <option value="41.2867,36.3300,3">Samsun</option>
+            <option value="41.0027,39.7168,3">Trabzon</option>
+            <option value="37.9144,40.2306,3">Diyarbakır</option>
+            <option value="38.7312,35.4787,3">Kayseri</option>
+            <option value="39.7767,30.5206,3">Eskişehir</option>
+            <option value="39.9000,41.2700,3">Erzurum</option>
+            <option value="38.4891,43.4089,3">Van</option>
+            <option value="35.1856,33.3823,3">Lefkoşa (KKTC)</option>
+          </optgroup>
+          <optgroup label="Avrupa">
+            <option value="51.5074,-0.1278,0">London</option>
+            <option value="48.8566,2.3522,1">Paris</option>
+            <option value="52.5200,13.4050,1">Berlin</option>
+            <option value="52.3676,4.9041,1">Amsterdam</option>
+            <option value="48.2082,16.3738,1">Wien</option>
+            <option value="41.9028,12.4964,1">Roma</option>
+            <option value="40.4168,-3.7038,1">Madrid</option>
+            <option value="50.4501,30.5234,2">Kyiv</option>
+            <option value="55.7558,37.6173,3">Moskova</option>
+          </optgroup>
+          <optgroup label="Asya / Orta Doğu">
+            <option value="40.4093,49.8671,4">Bakü</option>
+            <option value="35.6892,51.3890,3.5">Tahran</option>
+            <option value="25.2048,55.2708,4">Dubai</option>
+            <option value="25.2854,51.5310,3">Doha</option>
+            <option value="24.7136,46.6753,3">Riyad</option>
+            <option value="28.6139,77.2090,5.5">Delhi</option>
+            <option value="19.0760,72.8777,5.5">Mumbai</option>
+            <option value="24.8607,67.0011,5">Karaçi</option>
+            <option value="1.3521,103.8198,8">Singapur</option>
+            <option value="22.3193,114.1694,8">Hong Kong</option>
+            <option value="31.2304,121.4737,8">Şanghay</option>
+            <option value="39.9042,116.4074,8">Pekin</option>
+            <option value="37.5665,126.9780,9">Seul</option>
+            <option value="35.6762,139.6503,9">Tokyo</option>
+          </optgroup>
+          <optgroup label="Amerika">
+            <option value="40.7128,-74.0060,-5">New York</option>
+            <option value="41.8781,-87.6298,-6">Chicago</option>
+            <option value="34.0522,-118.2437,-8">Los Angeles</option>
+            <option value="43.6532,-79.3832,-5">Toronto</option>
+            <option value="19.4326,-99.1332,-6">Mexico City</option>
+            <option value="-23.5505,-46.6333,-3">São Paulo</option>
+            <option value="-34.6037,-58.3816,-3">Buenos Aires</option>
+          </optgroup>
+          <optgroup label="Afrika / Okyanusya">
+            <option value="30.0444,31.2357,2">Kahire</option>
+            <option value="6.5244,3.3792,1">Lagos</option>
+            <option value="-1.2921,36.8219,3">Nairobi</option>
+            <option value="-26.2041,28.0473,2">Johannesburg</option>
+            <option value="-33.8688,151.2093,10">Sydney</option>
+            <option value="-37.8136,144.9631,10">Melbourne</option>
+            <option value="-36.8485,174.7633,12">Auckland</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
     <button class="btn-primary deep-calc-btn" id="deepCalcBtn" onclick="runDeepReading()" data-i18n="deepCalcBtn">✦ Kozmik DNA'mı Çöz</button>
+    <p class="tool-note" id="deepCityNote" data-i18n="deepCityNoteText">Şehrini seçmezsen Yükselen Burç dürüstçe Güneş burcuna eşitlenir — yükselen, doğum yeri bilinmeden doğru hesaplanamaz.</p>
     <p class="deep-error" id="deepError" style="display:none;"></p>
   </div>
 
@@ -2201,14 +2276,32 @@ function runDeepReading() {
     birthHour = parseInt(hp[0], 10) + (parseInt(hp[1], 10) || 0) / 60;
   }
 
+  /* Doğum yeri — "enlem,boylam,saatDilimi". Seçildiyse yükselen burç gerçek
+     yerel yıldız zamanıyla hesaplanır; seçilmediyse motor Güneş burcuna
+     düşer (bkz. calcNatalScores / ascKnown). Saat dilimini şehirden
+     alıyoruz: ziyaretçinin tarayıcı saat dilimi doğum yerininkiyle
+     alakasız olabilir (Berlin'de oturup İstanbul'da doğmuş olmak gibi). */
+  let birthPlace = null;
+  const cityInput = document.getElementById("deepBirthCity");
+  if (cityInput && cityInput.value) {
+    const cp = cityInput.value.split(",");
+    const latV = parseFloat(cp[0]), lonV = parseFloat(cp[1]), tzV = parseFloat(cp[2]);
+    if (!isNaN(latV) && !isNaN(lonV)) {
+      birthPlace = { lat: latV, lon: lonV };
+      if (!isNaN(tzV)) birthPlace.timezoneOffset = tzV;
+      try { localStorage.setItem("lunaris_birth_city", cityInput.value); } catch (e) {}
+    }
+  }
+
   const sunSignKey = window.LunarisML.getSunSign(birthDate);
-  const reading = window.LunarisML.generateDeepReading(sunSignKey, lang, birthDate, birthHour);
+  const reading = window.LunarisML.generateDeepReading(sunSignKey, lang, birthDate, birthHour, birthPlace);
   const timeline = window.LunarisML.generateEnergyTimeline(sunSignKey, reading.natal ? reading.natal.natalVector : null);
   const insight = window.LunarisML.getProfileInsight(reading.natal.profile, lang);
 
   lastDeepReadingData = {
     birthDate: birthDate,
     birthHour: birthHour,
+    birthPlace: birthPlace,
     sunSignKey: sunSignKey,
     reading: reading,
     timeline: timeline,
@@ -2246,7 +2339,15 @@ function renderDeepReadingUI(data) {
   const dnAscVal = document.getElementById("dnAscVal");
   if (dnSunVal) dnSunVal.textContent = findSignName(natal.sunSign);
   if (dnMoonVal) dnMoonVal.textContent = findSignName(natal.moonSign);
-  if (dnAscVal) dnAscVal.textContent = findSignName(natal.ascSign);
+  if (dnAscVal) {
+    dnAscVal.textContent = findSignName(natal.ascSign);
+    /* Doğum yeri seçilmediyse gösterilen değer gerçek bir yükselen değil,
+       Güneş burcunun kendisidir — kullanıcıya bunu saklamıyoruz. */
+    const ascPill = document.getElementById("dnAsc");
+    if (ascPill) ascPill.classList.toggle("dnp-approx", !natal.ascKnown);
+    const cityNote = document.getElementById("deepCityNote");
+    if (cityNote) cityNote.style.display = natal.ascKnown ? "none" : "";
+  }
 
   // 2. Radar Chart
   drawRadarChart(natal.profile, lang);
@@ -2264,10 +2365,21 @@ function renderDeepReadingUI(data) {
     moonPhaseEl.textContent = reading.moonPhase[lang];
   }
   if (retrogradEl) {
-    if (reading.transits.mercRetro) {
-      retrogradEl.textContent = "Merkür (Retro) ⚠️";
-    } else if (reading.transits.venusRetro) {
-      retrogradEl.textContent = "Venüs (Retro) ⚠️";
+    /* Motor 5 gezegen için retro takip ediyor ama panel yalnızca Merkür ve
+       Venüs'e bakıyordu; Satürn retrodayken bile "tüm gezegenler direkt"
+       yazıyor, üstelik skorlar o cezayı zaten uygulamış oluyordu.
+       Artık aktif olan HER gezegen listeleniyor (yoksa gölge periyodu). */
+    const retro = (reading.transits && reading.transits.retrogrades) || {};
+    const planetLabel = function(p) {
+      const n = window.LunarisML.PLANET_NAMES[p];
+      return n ? n[lang] : p;
+    };
+    const active = Object.keys(retro).filter(function(p){ return retro[p].active; });
+    const shadow = Object.keys(retro).filter(function(p){ return !retro[p].active && retro[p].shadow; });
+    if (active.length) {
+      retrogradEl.textContent = active.map(planetLabel).join(", ") + " (Retro) ⚠️";
+    } else if (shadow.length) {
+      retrogradEl.textContent = shadow.map(planetLabel).join(", ") + " 🌫️";
     } else {
       retrogradEl.textContent = UI[lang].deepRetrogradNone;
     }
@@ -2567,7 +2679,9 @@ function setLang(lang){
   buildWallMoodChips();
   renderWallFeed(state.wallPosts);
   if (lastDeepReadingData) {
-    const reading = window.LunarisML.generateDeepReading(lastDeepReadingData.sunSignKey, lang, lastDeepReadingData.birthDate, lastDeepReadingData.birthHour);
+    /* Dil değişiminde de doğum yerini taşı — aksi halde yükselen burç dil
+       değiştirince sessizce başka bir burca dönüşürdü. */
+    const reading = window.LunarisML.generateDeepReading(lastDeepReadingData.sunSignKey, lang, lastDeepReadingData.birthDate, lastDeepReadingData.birthHour, lastDeepReadingData.birthPlace || null);
     const timeline = window.LunarisML.generateEnergyTimeline(lastDeepReadingData.sunSignKey, reading.natal ? reading.natal.natalVector : null);
     const insight = window.LunarisML.getProfileInsight(reading.natal.profile, lang);
     lastDeepReadingData.reading = reading;
@@ -2583,6 +2697,13 @@ function setLang(lang){
 }
 
 document.addEventListener("DOMContentLoaded", function(){
+  /* Daha önce seçilen doğum yerini geri yükle — yükselen burç için tek
+     seferlik bir bilgi, her ziyarette tekrar sordurmanın anlamı yok. */
+  try {
+    const savedCity = localStorage.getItem("lunaris_birth_city");
+    const cityEl = document.getElementById("deepBirthCity");
+    if (savedCity && cityEl) cityEl.value = savedCity;
+  } catch (e) {}
   setLang(state.lang);
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   createStars(70);
