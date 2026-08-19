@@ -7,6 +7,7 @@
       ".firebaserc",
       "firestore.rules",
       "**/.*",
+      "**/.*/**",
       "**/node_modules/**",
       "android/**",
       "ios/**",
@@ -16,7 +17,9 @@
       "package.json",
       "package-lock.json",
       "capacitor.config.json",
-      "OKU-BENI.txt"
+      "OKU-BENI.txt",
+      "BIRLESTIRME.md",
+      "generate-assets.js"
     ],
     "cleanUrls": true,
     "headers": [
