@@ -637,6 +637,9 @@
 
 
 
+<!-- Astronomy Engine (MIT, Don Cross) — gerçek efemeris; gezegen boylamları
+     ve yıldız zamanı buradan geliyor. Yerel dosya, CDN yok. Bkz. vendor/astronomy-engine-LICENSE.txt -->
+<script src="vendor/astronomy.browser.min.js"></script>
 <script src="main.js"></script>
 <script src="mobile-bridge.js"></script>
 <script>
@@ -878,6 +881,23 @@ function getWesternZodiac(day, month) {
    (Eskiden iki ayrı liste vardı ve site aynı anda hem "retro" hem
    "retro değil" diyebiliyordu.) Aşağıdakiler sadece main.js
    yüklenmemişse devreye giren güvenli yedeklerdir. */
+/* Merkür retro pencereleri ÖNCE gerçek gezegen hareketinden hesaplanır
+   (main.js -> lunarisRetroWindows). Derin Analiz motoru da aynı fonksiyonu
+   çağırdığı için iki sayfa çelişemez ve tablo her yıl elle güncellenmek
+   zorunda değildir. Efemeris yüklenmezse LUNARIS_COSMIC tablosuna, o da
+   yoksa aşağıdaki gömülü listeye düşülür. */
+function mercuryRetroListesi(){
+  const hesap = (typeof lunarisRetroWindows === "function")
+    ? lunarisRetroWindows("mercury", new Date(), 900) : null;
+  if (hesap && hesap.length) {
+    return hesap.map(function(w){
+      /* ZODIAC yalnızca index.html'te var; burada main.js'in ortak ZODIAC_I18N tablosunu kullanıyoruz. */
+      const z = ZODIAC_I18N.find(function(x){ return x.key === w.signKey; });
+      return { start: w.start, end: w.end, sign: z ? z.name : { tr:"", en:"", ru:"" }, hesaplanmis: true };
+    });
+  }
+  return MERCURY_RETROGRADES_2026;
+}
 const MERCURY_RETROGRADES_2026 = (window.LUNARIS_COSMIC && window.LUNARIS_COSMIC.mercury) || [
   { start:"2026-02-26", end:"2026-03-20", sign:{tr:"Balık",en:"Pisces",ru:"Рыбы"} },
   { start:"2026-06-29", end:"2026-07-23", sign:{tr:"Yengeç",en:"Cancer",ru:"Рак"} },
@@ -1114,8 +1134,9 @@ function calculatePersonalTools(event) {
 
 /* ---- Cosmic calendar ---- */
 function getMercuryStatus(now){
-  for (let i=0; i<MERCURY_RETROGRADES_2026.length; i++){
-    const r = MERCURY_RETROGRADES_2026[i];
+  const liste = mercuryRetroListesi();
+  for (let i=0; i<liste.length; i++){
+    const r = liste[i];
     const start = new Date(r.start + "T00:00:00");
     const end = new Date(r.end + "T23:59:59");
     if (now >= start && now <= end) {
@@ -1123,8 +1144,8 @@ function getMercuryStatus(now){
       return { retrograde:true, period:r, daysLeft:daysLeft };
     }
   }
-  for (let i=0; i<MERCURY_RETROGRADES_2026.length; i++){
-    const r = MERCURY_RETROGRADES_2026[i];
+  for (let i=0; i<liste.length; i++){
+    const r = liste[i];
     const start = new Date(r.start + "T00:00:00");
     if (now < start) {
       const daysUntil = Math.ceil((start - now) / 86400000);
@@ -1155,7 +1176,7 @@ function renderCosmicCalendar(){
   const retroListEl = document.getElementById("retroList");
   let rhtml = "";
   /* Tablo artik cok yilli — sadece suren + gelecek pencereleri goster (en fazla 4). */
-  MERCURY_RETROGRADES_2026.filter(function(r){ return new Date(r.end + "T23:59:59") >= now; }).slice(0,4).forEach(function(r){
+  mercuryRetroListesi().filter(function(r){ return new Date(r.end + "T23:59:59") >= now; }).slice(0,4).forEach(function(r){
     const s = new Date(r.start + "T00:00:00");
     const e = new Date(r.end + "T00:00:00");
     const yearOpt = (e.getFullYear() !== now.getFullYear()) ? { year:"numeric" } : {};

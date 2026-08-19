@@ -92,6 +92,104 @@ if (typeof window !== "undefined") {
   window.lunarisIsWithinWindow = lunarisIsWithinWindow;
 }
 
+/* ──────────────────────────────────────────────────────────
+   RETROGRAD İLKELİ — TEK UYGULAMA, İKİ SAYFA
+
+   Retrograd, gezegenin geosentrik ekliptik boylamının azalmasıdır.
+   Elle bakımlı tarih listesi yerine bunu doğrudan ölçüyoruz.
+   Burada duruyor çünkü main.js hem index.html hem araclar.html
+   tarafından yükleniyor; lunaris-ml.js (Derin Analiz) ve Kozmik
+   Takvim aynı fonksiyonu çağırdığı için ikisinin çelişmesi
+   yapısal olarak imkânsız.
+
+   Astronomy Engine yoksa çağıran taraf LUNARIS_COSMIC tablosuna düşer.
+   ────────────────────────────────────────────────────────── */
+const LUNARIS_GUN_MS = 86400000;
+const _lunarisRetroCache = Object.create(null);
+
+function lunarisAstronomyHazir() {
+  return typeof window !== "undefined" && !!window.Astronomy;
+}
+
+function lunarisBodyLon(planet, ms) {
+  if (!lunarisAstronomyHazir()) return null;
+  const A = window.Astronomy;
+  const body = A.Body[planet.charAt(0).toUpperCase() + planet.slice(1)];
+  if (!body) return null;
+  try {
+    return ((A.Ecliptic(A.GeoVector(body, new Date(ms), true)).elon % 360) + 360) % 360;
+  } catch (e) {
+    return null;
+  }
+}
+
+/** Gezegen o gün geri mi hareket ediyor? Bilinemiyorsa null döner. */
+function lunarisIsRetrogradeOn(planet, ms) {
+  const gun = Math.floor(ms / LUNARIS_GUN_MS);
+  const anahtar = planet + "@" + gun;
+  if (anahtar in _lunarisRetroCache) return _lunarisRetroCache[anahtar];
+
+  let sonuc = null;
+  const once = lunarisBodyLon(planet, gun * LUNARIS_GUN_MS);
+  if (once !== null) {
+    const sonra = lunarisBodyLon(planet, (gun + 1) * LUNARIS_GUN_MS);
+    if (sonra !== null) {
+      /* 0°/360° sarması: günlük hareket hiçbir gezegende ±2°'yi geçmez,
+         kısa yay doğru işareti verir. */
+      sonuc = (((sonra - once + 540) % 360) - 180) < 0;
+    }
+  }
+  _lunarisRetroCache[anahtar] = sonuc;
+  return sonuc;
+}
+
+/**
+ * Verilen tarihten itibaren gerçek retro pencerelerini hesaplar.
+ * @returns [{start,end,signKey}] veya efemeris yoksa null
+ */
+function lunarisRetroWindows(planet, from, days) {
+  if (!lunarisAstronomyHazir()) return null;
+  const start = (from instanceof Date) ? from : new Date();
+  const span = days || 540;
+  const iso = ms => new Date(ms).toISOString().slice(0, 10);
+  const t0 = Math.floor((start.getTime() - 30 * LUNARIS_GUN_MS) / LUNARIS_GUN_MS);
+  const out = [];
+  let icinde = false, bas = null;
+
+  for (let g = 0; g <= span + 30; g++) {
+    const ms = (t0 + g) * LUNARIS_GUN_MS;
+    const retro = lunarisIsRetrogradeOn(planet, ms);
+    if (retro === null) return null;           // efemeris yarıda kesildi
+    if (retro && !icinde) { icinde = true; bas = ms; }
+    else if (!retro && icinde) {
+      icinde = false;
+      const bitis = ms - LUNARIS_GUN_MS;
+      if (bitis >= start.getTime() - LUNARIS_GUN_MS) {
+        /* Burç etiketi DURAKLAMA (istasyon) anından alınır: astroloji
+           "Merkür Akrep'te retro" derken gezegenin geri dönmeye başladığı
+           burcu kasteder. Pencerenin ortası yanıltıcı olur, çünkü gezegen
+           çoğu zaman geri geri bir önceki burca kayar. */
+        out.push({ start: iso(bas), end: iso(bitis),
+                   signKey: lunarisLonToSignKey(lunarisBodyLon(planet, bas)) });
+      }
+    }
+  }
+  return out;
+}
+
+const LUNARIS_SIGN_KEYS = ["aries","taurus","gemini","cancer","leo","virgo",
+                           "libra","scorpio","sagittarius","capricorn","aquarius","pisces"];
+function lunarisLonToSignKey(lon) {
+  if (typeof lon !== "number" || isNaN(lon)) return null;
+  return LUNARIS_SIGN_KEYS[Math.floor((((lon % 360) + 360) % 360) / 30) % 12];
+}
+
+if (typeof window !== "undefined") {
+  window.lunarisIsRetrogradeOn = lunarisIsRetrogradeOn;
+  window.lunarisRetroWindows = lunarisRetroWindows;
+  window.lunarisLonToSignKey = lunarisLonToSignKey;
+}
+
 function getInitialLang() {
   try {
     const saved = localStorage.getItem(PREFERRED_LANG_KEY);

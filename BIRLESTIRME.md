@@ -120,6 +120,77 @@ bildirim döngüsü var, dolayısıyla etiket dürüst — değiştirilmedi.
     *Doğrulama:* 7 farklı saat dilimi, 5000 gerçek doğum anı → **%99.86 doğruluk**
     (öncesi ~%78). Kalan sapmalar burç sınırına dakikalar kalmış anlar.
 
+## Gerçek efemerise geçiş (Astronomy Engine)
+
+Doğrulama sırasında motorun gezegen konumları bağımsız bir referansa karşı
+ölçüldü. Sonuç, yorum katmanının büyük bölümünü geçersiz kılıyordu:
+
+| gök cismi | eski ort. hata | doğru burcu bulma |
+|---|---|---|
+| Güneş | 0.01° | %100 |
+| Ay | 0.07° | %99.5 |
+| **Merkür** | **73.25°** | **%12.8** |
+| **Venüs** | **60.06°** | **%14.9** |
+| **Mars** | **22.29°** | **%31.7** |
+| Plüton | 16.43° | %42.6 |
+| Jüpiter | 7.04° | %78.3 |
+| Satürn | 3.83° | %87.7 |
+| Uranüs | 3.39° | %88.8 |
+| Neptün | 1.31° | %96.0 |
+
+Merkür'ün 73° hatası 2.5 burç demek; doğru burcu bulma oranı %12.8, yani
+rastgele tahminden (%8.3) yalnızca biraz iyi. Bu konumlar esas onurları
+(dignities), açı motorunu ve aşk/para skorlarını besliyordu — oradaki
+yorumlar fiilen gürültüydü. Güneş ve Ay iyiydi, o yüzden hata gözle
+görünmüyordu.
+
+**Çözüm:** [Astronomy Engine](https://github.com/cosinekitty/astronomy)
+(MIT, Don Cross) projeye alındı — `vendor/astronomy.browser.min.js`, 114 KB,
+bağımlılığı ve veri dosyası yok, CDN gerektirmiyor. VSOP87/NOVAS tabanlı,
+belgelenmiş doğruluğu **1 yay dakikasından (0.017°) iyi**.
+
+Neden Swiss Ephemeris değil: astroloji yazılımlarının fiili standardı o ve
+JPL DE431'i 0.001 yay saniyesiyle üretiyor, ama bir C kütüphanesi + 97 MB
+veri dosyası ve AGPL/ticari lisans demek — statik bir siteye taşınabilir
+değil. Astronomy Engine bu iş için doğru ölçek.
+
+Değişenler:
+- `calcPlanetPositions()` artık geosentrik boylamları kütüphaneden alıyor.
+  (Kütüphanenin `EclipticLongitude()` fonksiyonu **heliosentriktir**;
+  astrolojinin istediği `GeoVector` + `Ecliptic` bileşimidir.)
+- Yükselen burç, yıldız zamanını kütüphanenin `SiderealTime()`inden alıyor
+  (nütasyon dahil görünür yıldız zamanı).
+- Kütüphane yüklenmezse eski seriler yedek olarak devrede kalır; hangi
+  kaynağın kullanıldığı `LunarisML.ephemerisSource()` ile okunabilir.
+  Yedek yol ayrıca sınandı: sayfa kırılmıyor, tablo yedeği çalışıyor.
+
+## Retrograd artık tablodan değil, gerçek hareketten
+
+Retrograd, gezegenin geosentrik boylamının azalmasıdır. Elle bakımlı tarih
+listesi tutmak yerine bu doğrudan ölçülüyor (dλ/dt < 0). İlkel fonksiyon
+`main.js`'te duruyor — iki sayfa da onu yüklediği için Derin Analiz ile
+Kozmik Takvim'in çelişmesi artık **yapısal olarak imkânsız**.
+
+Kazanç: tablo her yıl elle güncellenmek zorunda değil, geçmiş doğum
+haritaları dahil herhangi bir yıl için çalışıyor. Kozmik Takvim de kendi
+pencerelerini hesaplıyor (şu an 2029'a kadar otomatik uzanıyor).
+
+*Doğrulama — iki bağımsız yöntem:*
+
+| pencere | hesaplanan | elle bakımlı tablo |
+|---|---|---|
+| Merkür | 2026-02-26 → 03-20 | 2026-02-26 → 03-20 |
+| Merkür | 2026-06-30 → 07-23 | 2026-06-29 → 07-23 |
+| Merkür | 2026-10-24 → 11-13 | 2026-10-24 → 11-13 |
+| Venüs | 2026-10-03 → 11-13 | 2026-10-03 → 11-13 |
+
+Tek günlük fark duraklama (istasyon) gününün yuvarlanmasından. 2026'da
+toplam Merkür retro günü 68 — astronomik beklenti 60-70. Burç etiketi
+istasyon anından alınıyor, çünkü astroloji "Merkür Akrep'te retro" derken
+gezegenin geri dönmeye başladığı burcu kasteder; pencerenin ortası
+yanıltıcıdır (gezegen çoğu zaman geri geri bir önceki burca kayar).
+
+
 ## Doğrulama
 
 **Bütünlük**
@@ -178,5 +249,10 @@ Bunlar `origin/main` üzerinde de mevcut, bu PR'ın kapsamı dışında bırakı
 ## Sonraki adım önerileri (yapılmadı)
 - `firebase deploy --only firestore:rules` — kural değişikliği canlıya çıkmalı.
 - Flood koruması için Firebase App Check (kurallar hız sınırı koymaz).
-- Gerçek efemeris kütüphanesi (ör. astronomy-engine): burç sınırına çok yakın
-  doğumlarda ortalama yörünge yaklaşıklığı hâlâ birkaç derece sapabilir.
+- ~~Gerçek efemeris kütüphanesi~~ — yapıldı, bkz. "Gerçek efemerise geçiş".
+- Skorlama kalibrasyonu: toplam enerji 12 burçta 15-52 aralığında dalgalanıyor
+  ve ateş/hava burçlarında sistematik olarak yüksek, toprak/su burçlarında
+  düşük çıkıyor. Bu desen `origin/main`'de de aynı (18-54), yani efemeris
+  değişikliğinden bağımsız bir tasarım konusu — ama kullanıcı hiçbir zaman
+  %52'nin üstünü göremiyor. `scoreForCategory()` sigmoid kalibrasyonu ayrı
+  bir turda gözden geçirilmeye değer.

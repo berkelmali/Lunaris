@@ -348,10 +348,80 @@
   var DEG2RAD = Math.PI / 180;
   var RAD2DEG = 180 / Math.PI;
 
-  /**
-   * Gezegen Ecliptic Boylamlarını (0-360°) Yüksek Doğrulukla Hesaplar
-   */
+  /* ──────────────────────────────────────────────────────────
+     GERÇEK EFEMERİS KÖPRÜSÜ (Astronomy Engine, MIT)
+
+     Motor eskiden gezegen boylamlarını elle yazılmış birkaç terimli
+     yaklaşımlarla üretiyordu. Ölçtük (1960-2030, astronomy-engine
+     referansına karşı, 2000 örnek):
+
+        Güneş  0.01°   Ay 0.07°   ← kullanılabilir
+        Merkür 73.25°  Venüs 60.06°  Mars 22.29°  Plüton 16.43°
+        Jüpiter 7.04°  Satürn 3.83°  Uranüs 3.39°  Neptün 1.31°
+
+     Merkür'ün 73° hatası 2.5 burç demek — doğru burcu bulma oranı %12.8,
+     yani rastgeleden (%8.3) yalnızca biraz iyi. Bu konumlar esas onurları
+     (dignities), açı motorunu ve aşk/para skorlarını besliyordu; oradaki
+     yorumlar fiilen gürültüydü.
+
+     Artık boylamlar Astronomy Engine'den geliyor: VSOP87/NOVAS tabanlı,
+     1 yay dakikası (0.017°) doğruluk, veri dosyası ve ağ bağlantısı
+     gerektirmiyor. Kütüphane herhangi bir sebeple yüklenmezse aşağıdaki
+     eski seri yedek olarak devrede kalır — sayfa asla kırılmaz, ama
+     hangi kaynağın kullanıldığı ephemerisSource() ile okunabilir.
+  ────────────────────────────────────────────────────────────── */
+
+  var AE = (typeof window !== 'undefined' && window.Astronomy) ? window.Astronomy : null;
+
+  var AE_BODIES = AE ? {
+    sun:     AE.Body.Sun,
+    mercury: AE.Body.Mercury,
+    venus:   AE.Body.Venus,
+    mars:    AE.Body.Mars,
+    jupiter: AE.Body.Jupiter,
+    saturn:  AE.Body.Saturn,
+    uranus:  AE.Body.Uranus,
+    neptune: AE.Body.Neptune,
+    pluto:   AE.Body.Pluto
+  } : null;
+
+  /* Motorun her yerinde Date'ler YEREL bileşenleriyle UT kabul edilir
+     (julianDay() böyle davranıyor). Astronomy Engine ise gerçek UTC
+     ister; bu köprü ikisini uyumlar. */
+  function toUTCInstant(date) {
+    var d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d.getTime())) d = new Date();
+    return new Date(Date.UTC(
+      d.getFullYear(), d.getMonth(), d.getDate(),
+      d.getHours(), d.getMinutes(), d.getSeconds()
+    ));
+  }
+
+  function ephemerisSource() {
+    return AE ? 'astronomy-engine' : 'fallback-series';
+  }
+
   function calcPlanetPositions(date) {
+    if (AE) {
+      try {
+        var utc = toUTCInstant(date);
+        var out = { moon: normDeg(AE.EclipticGeoMoon(utc).lon) };
+        for (var key in AE_BODIES) {
+          if (!AE_BODIES.hasOwnProperty(key)) continue;
+          /* GeoVector = geosentrik (Dünya merkezli) konum — astrolojinin
+             kullandığı budur; EclipticLongitude() heliosentriktir. */
+          out[key] = normDeg(AE.Ecliptic(AE.GeoVector(AE_BODIES[key], utc, true)).elon);
+        }
+        return out;
+      } catch (e) {
+        /* Kütüphane beklenmedik bir şey yaparsa sessizce yedeğe düş */
+      }
+    }
+    return calcPlanetPositionsFallback(date);
+  }
+
+  /* ── Yedek: eski kısaltılmış seriler (yalnızca kütüphane yokken) ── */
+  function calcPlanetPositionsFallback(date) {
     var jd = julianDay(date);
     var d = jd - 2451545.0; // J2000'den gün farkı
     var T = d / 36525.0;     // Julian yüzyıl
@@ -614,34 +684,70 @@
 
   var DAY_MS = 86400000;
 
-  /**
-   * Verilen tarihte hangi gezegenler retro / gölge periyodunda?
-   * Karşılaştırma artık TAM TARİH üzerinden (yıl dahil) yapılıyor; gölge
-   * periyodu da pencerenin 14 gün öncesi ve 14 gün sonrası olarak gerçek
-   * takvim aritmetiğiyle bulunuyor (eskiden ay/gün sayısına 14 EKLENİYORDU,
-   * bu da ay sonlarında "32 Mart" gibi var olmayan tarihler üretiyordu).
-   */
+  /* ──────────────────────────────────────────────────────────
+     RETROGRAD — artık TARİH TABLOSUNDAN DEĞİL, GERÇEK HAREKETTEN
+
+     Retrograd, gezegenin gökyüzünde geriye gidiyor GÖRÜNMESİDİR:
+     geosentrik ekliptik boylamın azalması. Elle yazılmış tarih
+     listesi tutmak yerine bunu doğrudan ölçüyoruz — dλ/dt < 0.
+
+     Kazanç: tablo her yıl elle güncellenmek zorunda değil, herhangi
+     bir yıl için (geçmiş doğum haritaları dahil) doğru çalışıyor ve
+     Kozmik Takvim'le çelişmesi yapısal olarak imkânsız.
+     Efemeris kütüphanesi yoksa LUNARIS_COSMIC tablosuna düşülür.
+  ────────────────────────────────────────────────────────────── */
+
+  var _retroCache = {};
+
+  /* Gezegen verilen günde geri hareket ediyor mu? (24 saatlik boylam farkı) */
+  function isRetrogradeAt(planet, ms) {
+    var gun = Math.floor(ms / DAY_MS);
+    var anahtar = planet + '@' + gun;
+    if (_retroCache[anahtar] !== undefined) return _retroCache[anahtar];
+
+    /* Ortak ilkel main.js'te yaşıyor; Kozmik Takvim de aynı fonksiyonu
+       çağırdığı için iki sayfanın çelişmesi imkânsız. */
+    var sonuc = null;
+    if (typeof window !== 'undefined' && typeof window.lunarisIsRetrogradeOn === 'function') {
+      sonuc = window.lunarisIsRetrogradeOn(planet, gun * DAY_MS);
+    }
+    if (sonuc === null) sonuc = tabloRetro(planet, gun * DAY_MS);
+
+    _retroCache[anahtar] = sonuc;
+    return sonuc;
+
+  }
+  /* Yedek yol: elle bakımlı tarih tablosu */
+  function tabloRetro(planet, ms) {
+    var windows = retroWindows(planet);
+    for (var i = 0; i < windows.length; i++) {
+      var s = new Date(windows[i].start + 'T00:00:00').getTime();
+      var e = new Date(windows[i].end + 'T23:59:59').getTime();
+      if (!isNaN(s) && !isNaN(e) && ms >= s && ms <= e) return true;
+    }
+    return false;
+  }
+
   function getRetrogrades(date) {
     var d = (date instanceof Date) ? date : (date ? new Date(date) : new Date());
     if (isNaN(d.getTime())) d = new Date();
     var t = d.getTime();
 
     var result = {};
-    var planetNames = ['mercury','venus','mars','jupiter','saturn'];
-
-    planetNames.forEach(function(planet) {
-      var windows = retroWindows(planet);
-      var isActive = false;
+    ['mercury', 'venus', 'mars', 'jupiter', 'saturn'].forEach(function(planet) {
+      var isActive = isRetrogradeAt(planet, t);
       var isShadow = false;
 
-      for (var i = 0; i < windows.length; i++) {
-        var s = new Date(windows[i].start + 'T00:00:00').getTime();
-        var e = new Date(windows[i].end + 'T23:59:59').getTime();
-        if (isNaN(s) || isNaN(e)) continue;
-
-        if (t >= s && t <= e) { isActive = true; isShadow = false; break; }
-        if (t >= s - 14 * DAY_MS && t < s) isShadow = true;   // ön gölge
-        if (t > e && t <= e + 14 * DAY_MS) isShadow = true;   // arka gölge
+      /* Gölge periyodu: retro penceresinin 14 gün öncesi/sonrası.
+         2 günlük adımlarla tarıyoruz — retro pencereleri en kısa
+         gezegende bile (Merkür ~21 gün) bu adımı kaçırmaz. */
+      if (!isActive) {
+        /* 7 günlük adım yeterli: en kısa retro penceresi bile (Merkür ~21 gün)
+           ±14 günlük aralığa değiyorsa bu noktalardan en az birine denk gelir. */
+        var ornekler = [-14, -7, 7, 14];
+        for (var g = 0; g < ornekler.length; g++) {
+          if (isRetrogradeAt(planet, t + ornekler[g] * DAY_MS)) { isShadow = true; break; }
+        }
       }
 
       result[planet] = {
@@ -654,6 +760,25 @@
     });
 
     return result;
+  }
+
+
+  /**
+   * Belirtilen tarihten itibaren gerçek retrograd pencerelerini HESAPLAR.
+   * Kozmik Takvim bunu kullanır; böylece takvim de elle bakım istemez ve
+   * Derin Analiz ile aynı kaynaktan beslendiği için çelişemez.
+   *
+   * @param {String} planet  'mercury' | 'venus' | 'mars' | 'jupiter' | 'saturn'
+   * @param {Date}   from    tarama başlangıcı
+   * @param {Number} days    kaç gün ileri taransın (varsayılan 540)
+   * @returns {Array|null}   [{start:'YYYY-MM-DD', end:'YYYY-MM-DD', signKey}]
+   *                         efemeris yoksa null (çağıran tabloya düşer)
+   */
+  function getRetrogradeWindows(planet, from, days) {
+    if (typeof window !== 'undefined' && typeof window.lunarisRetroWindows === 'function') {
+      return window.lunarisRetroWindows(planet, from, days);
+    }
+    return null;
   }
 
   function retrogradeMultiplier(category, date) {
@@ -1011,10 +1136,23 @@
     var utHour = utRaw - dayShift * 24;
     jd += dayShift + utHour / 24.0;
 
-    // 2. Greenwich Ortalama Yıldız Zamanı (GMST)
-    var T = (jd - 2451545.0) / 36525.0;
-    var gmst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T;
-    gmst = normDeg(gmst);
+    /* 2. Greenwich Yıldız Zamanı
+       Efemeris kütüphanesi varsa görünür yıldız zamanını (nütasyon dahil)
+       ondan alıyoruz; yoksa aşağıdaki GMST polinomu yedek kalıyor.
+       Fark küçük (~saniyeler) ama yükselen dakikada ~0.25° kaydığı için
+       ücretsiz gelen bir hassasiyet. */
+    var gmst = null;
+    if (AE && typeof AE.SiderealTime === 'function') {
+      try {
+        /* jd burada UT olarak kuruldu; kütüphaneye aynı anı UTC Date olarak ver */
+        var utcMs = (jd - 2440587.5) * 86400000;
+        gmst = normDeg(AE.SiderealTime(new Date(utcMs)) * 15); // saat → derece
+      } catch (e) { gmst = null; }
+    }
+    if (gmst === null) {
+      var T = (jd - 2451545.0) / 36525.0;
+      gmst = normDeg(280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T);
+    }
 
     // 3. Yerel Yıldız Zamanı (LST / RAMC)
     var lst = normDeg(gmst + longitude);
@@ -3405,6 +3543,9 @@
 
     /** Gelişmiş retrograd durumu */
     getRetrogrades: getRetrogrades,
+    /** Konumların hangi kaynaktan geldiği: "astronomy-engine" | "fallback-series" */
+    ephemerisSource: ephemerisSource,
+    getRetrogradeWindows: getRetrogradeWindows,
 
     /** Gezegen açıları (aspect'ler) */
     calcAspects: function(date) {
