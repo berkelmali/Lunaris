@@ -2568,7 +2568,7 @@ footer p {
 
 .deep-form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--sp-3);
   margin-bottom: var(--sp-4);
   text-align: left;
@@ -2661,6 +2661,19 @@ footer p {
 .deep-natal-pill:hover {
   transform: translateY(-3px);
   border-color: var(--gold-bright);
+}
+
+/* Doğum yeri seçilmediğinde yükselen burç kutusu — gösterilen değer gerçek
+   bir yükselen değil, Güneş burcunun kendisi. Görsel olarak da soluklaşıp
+   kesikli çerçeveye geçiyor ki kullanıcı "hesaplandı" sanmasın. */
+.deep-natal-pill.dnp-approx {
+  border-style: dashed;
+  border-color: rgba(212, 175, 106, 0.28);
+  opacity: 0.72;
+}
+.deep-natal-pill.dnp-approx .dnp-val::after {
+  content: " ~";
+  color: var(--mist);
 }
 
 .dnp-icon {

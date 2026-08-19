@@ -32,7 +32,11 @@ service cloud.firestore {
                     && request.resource.data.text.size() > 0
                     && request.resource.data.text.size() <= 500
                     && request.resource.data.authorUid == request.auth.uid;
-      allow update: if isAuthenticated();
+      // Beğeni dışında hiçbir alan sonradan değiştirilemez.
+      // Eskiden "allow update: if isAuthenticated()" idi — giriş yapan HERKES
+      // başkasının gönderisinin metnini, adını ve yazar kimliğini değiştirebiliyordu.
+      allow update: if isAuthenticated()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']);
       allow delete: if isAuthenticated() && (resource.data.authorUid == request.auth.uid || resource.data.authorUid == "user_" + request.auth.uid);
     }
 

@@ -395,7 +395,11 @@ B) `window.LunarisWall` (Topluluk Duvarı & Canlı Akış):
 ================================================================================
 
 1. Yerel Çalıştırma:
-   - `index.html` dosyasına çift tıklayarak tarayıcınızda (Chrome, Edge, Safari, Firefox)
+   - Basit bir HTTP sunucusu üzerinden açın (ör. `npx serve .`), sonra tarayıcınızda
+     (Chrome, Edge, Safari, Firefox)
+     NOT: `index.html`'e çift tıklamak tarot/burç/Derin Analiz için yeterlidir, ama
+     Giriş ve Topluluk Duvarı çalışmaz — firebase-config.js bir ES modülü ve
+     tarayıcılar file:// altında modül yüklemeyi engeller.
      doğrudan açabilirsiniz. Herhangi bir sunucu veya kurulum gerektirmez.
 
 2. Firebase Yapılandırması (Opsiyonel):

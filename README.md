@@ -112,7 +112,8 @@ lunaris/
 ├── blog.html            # Mistik blog makaleleri
 ├── style.css            # Kozmik tasarım sistemi & animasyonlar
 ├── main.js              # Ortak arayüz, dil motoru & çekirdek kütüphane
-├── lunaris-ml.js        # LunarisML v3.0 Makine Öğrenmesi & Astroloji motoru
+├── lunaris-ml.js        # LunarisML Astroloji & yorum motoru
+├── vendor/              # Astronomy Engine (MIT) — gerçek efemeris, yerel dosya
 ├── mobile-bridge.js     # Capacitor köprüsü (Haptic, StatusBar, Native Back)
 ├── copy-web.js          # Web kaynaklarını senkronize etme scripti
 ├── firebase-config.js   # Firebase Auth, Firestore & offline demo servisi
@@ -131,7 +132,20 @@ lunaris/
 
 ### Hızlı Başlangıç (Firebase olmadan)
 
-Herhangi bir kurulum gerekmez! `index.html` dosyasını tarayıcınızda açmanız yeterlidir. **Akıllı Demo Modu** sayesinde tüm özellikler Firebase bağlantısı olmadan çalışır.
+Tarot, burçlar, Derin Analiz ve kozmik araçlar hiçbir kuruluma ihtiyaç duymaz — gezegen
+konumları `vendor/` içindeki yerel efemeris dosyasından gelir, ağ bağlantısı gerekmez.
+
+Ancak `index.html`'e **çift tıklamak yetmez**: Giriş/Kayıt, Topluluk Duvarı ve ML geri
+bildirimi `firebase-config.js` üzerinden çalışır ve o bir ES modülüdür — tarayıcılar
+`file://` altında modül yüklemeyi CORS nedeniyle engeller. Yerelde denemek için basit
+bir HTTP sunucusu yeterli:
+
+```bash
+npx serve .
+```
+
+Ya da Firebase emülatörü / `firebase serve` kullanın. Firebase katmanı yüklenmezse
+Topluluk Duvarı `localStorage` tabanlı yerel moda düşer, site kırılmaz.
 
 ```bash
 # Repoyu klonlayın
