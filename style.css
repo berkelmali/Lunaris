@@ -3733,3 +3733,194 @@ body {
 
 
 
+
+/* ==========================================================
+   MOBİL TAŞMA DÜZELTMELERİ
+   ----------------------------------------------------------
+   Sorun: 375px genişlikte belge 641px'e uzuyordu — yani ekranın
+   neredeyse iki katı. Kullanıcı yatay kaydırmak zorunda kalıyor,
+   yazılar ve kartlar ekran dışına taşıyordu. Capacitor WebView'da
+   (APK) bu daha belirgin, çünkü orada yatay kaydırma bir tarayıcı
+   davranışı gibi değil, bozuk arayüz gibi hissediliyor.
+
+   Kök sebep: birkaç grid sabit sütun sayısıyla tanımlanmış ve
+   mobil için karşılığı yoktu (ör. .features-grid dört sütun olarak
+   kalıyordu; 375px'te dört kart yan yana 641px eder).
+   ========================================================== */
+
+/* ── Tablet ve altı: dört sütunlu ızgaralar ikiye iner ── */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-grid     { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Telefon: tek sütun ── */
+@media (max-width: 640px) {
+  .features-grid,
+  .blog-grid,
+  .hpanel-grid { grid-template-columns: 1fr; }
+
+  /* Tarot açılımı üç kart yan yana 375px'te ~105px'e sıkışıyor;
+     kartların üstündeki yazı okunmuyordu. Alt alta daha iyi. */
+  .tarot-spread { grid-template-columns: 1fr; }
+}
+
+/* ── Arka plan süslemeleri ekran dışına taşmasın ──
+   .nebula öğeleri position:fixed ve viewport'tan geniş; kaydırma
+   alanını büyütmeseler de kenarlardan taşıp görsel bozulma
+   yaratıyorlardı. Süsleme oldukları için mobilde küçültüyoruz. */
+@media (max-width: 640px) {
+  .nebula { max-width: 60vw; max-height: 60vw; }
+}
+
+/* ── Son emniyet ağı ──
+   Yukarıdakiler kök sebepleri kapatıyor; bu satır ileride eklenecek
+   bir bileşenin sessizce yatay kaydırma açmasını engelliyor.
+   'clip' kullanıyoruz çünkü 'hidden' position:sticky'yi bozar. */
+@media (max-width: 900px) {
+  body { overflow-x: clip; }
+}
+
+/* ── Hero: iki sütun mobilde alt alta ──
+   .hero "1.1fr 0.9fr" olarak tanımlıydı ve mobil karşılığı yoktu.
+   375px'te sağdaki 220px genişliğindeki kart ekranın 135px dışına
+   taşıyordu — sayfadaki yatay kaydırmanın tek kök sebebi buydu. */
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-4);
+    text-align: center;
+  }
+  .hero p.hero-text { margin-left: auto; margin-right: auto; }
+  .hero-art { order: -1; }          /* görsel önce, metin sonra */
+}
+
+/* Çok dar ekranlarda kart da küçülsün (oranını koruyarak) */
+@media (max-width: 400px) {
+  .hero-card { width: min(220px, 62vw); height: auto; aspect-ratio: 220 / 340; }
+}
+
+/* ── Burç çarkı: yarıçapı ekrana göre küçült ──
+   .zodiac-wheel genişliği "--radius * 2 + 76px" = 376px sabitti.
+   320-375px'lik telefonlarda çark ve üzerindeki burç düğmeleri
+   ekran dışına taşıyordu. Yarıçapı değiştirmek yeterli, çünkü
+   düğmeler ve çentikler zaten ondan türetiliyor. */
+@media (max-width: 420px) {
+  /* Çark genişliği = --radius * 2 + 76px. 375px ekranda kap 295px
+     olduğu için yarıçap en fazla 109px olabilir; üstünde kalırsa
+     çarkın kenarları ve burç düğmeleri kırpılıyor. */
+  .zodiac-wheel { --radius: 104px; }
+  .zitem { width: 52px; height: 52px; margin: -26px; }
+  .zitem-constellation { width: 22px; }
+  .zitem .zitem-label { font-size: 0.48rem; }
+}
+@media (max-width: 350px) {
+  /* 320px ekranda kap 240px; r <= (240-76)/2 = 82px olmalı. */
+  .zodiac-wheel { --radius: 78px; }
+  .zitem { width: 44px; height: 44px; margin: -22px; }
+  .zitem-constellation { width: 19px; }
+}
+
+/* ── 12 aylık enerji çizelgesi: grid blowout ──
+   "repeat(12, 1fr)" sütunları içeriğin altına inemez (1fr'in taban
+   değeri auto'dur), bu yüzden ay etiketleri sütunları şişirip
+   çizelgeyi 100px taşırıyordu. minmax(0,1fr) tabanı sıfırlar. */
+.deep-timeline { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+@media (max-width: 480px) {
+  .deep-timeline { gap: 3px; }
+  .dt-month-lbl { font-size: 0.55rem; }
+}
+
+/* ── Uzun kelimeler kutudan taşmasın ──
+   Burç yorumları ve kullanıcı gönderileri bölünemeyen uzun diziler
+   içerebiliyor (URL, uzun bileşik kelime). Dar ekranda bunlar
+   kutuyu genişletiyordu. */
+.hp-text, .wall-post-text, .deep-cat-text, .compat-text, .blog-card p {
+  overflow-wrap: anywhere;
+}
+
+/* ── Bölüm çipleri şeridi: negatif kenar boşluğu taşırıyordu ──
+   .mobile-section-chips "margin: 0 -12px" ile kenardan kenara
+   taşacak şekilde tasarlanmış. Bu yalnızca ebeveyninde en az 12px
+   iç boşluk varsa çalışıyor. araclar.html'de ebeveyn .page-intro'nun
+   iç boşluğu sıfır, dolayısıyla şerit iki yandan 12'şer piksel
+   ekran dışına çıkıyordu. Negatif boşluğu kaldırıp aynı nefes
+   payını iç boşlukla veriyoruz — görsel olarak neredeyse aynı,
+   ama hiçbir ebeveynde taşmıyor. */
+.mobile-section-chips {
+  margin-inline: 0;
+  padding-inline: 12px;
+}
+
+/* ── Grid blowout genel düzeltmesi ──
+   CSS grid'de "1fr" sütunun TABAN genişliği auto'dur; yani sütun
+   içeriğinden daha dar olamaz. İçerik sığmayınca ızgara kabın
+   dışına taşar. minmax(0, 1fr) tabanı sıfıra çekerek sütunun
+   gerçekten daralmasına izin verir. Sabit sütun sayılı bütün
+   ızgaralarda aynı sorun vardı. */
+.mooncal-grid   { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.hpanel-grid    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.features-grid  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.blog-grid      { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tarot-spread   { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Yukarıdaki genel kural mobil sütun sayılarını ezmesin diye
+   mobil değerler burada tekrar ediliyor (kaynak sırası önemli). */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .blog-grid     { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .features-grid,
+  .blog-grid,
+  .hpanel-grid,
+  .tarot-spread { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Ay takvimi çok dar ekranda: boşluk ve yazı küçülsün */
+@media (max-width: 360px) {
+  .mooncal-grid { gap: 3px; }
+  .mooncal-day  { font-size: 0.7rem; }
+  .mooncal-wd   { font-size: 0.6rem; }
+}
+
+/* ── Kalan iki sütunlu düzenler ──
+   Bunların hiçbirinde mobil karşılık yoktu; 320-375px'te iki sütun
+   yan yana durunca hem taşıyor hem de yazılar okunamayacak kadar
+   sıkışıyordu. Önce taban sıfırlanıyor (grid blowout'a karşı),
+   sonra telefonda tek sütuna iniyor — sıra önemli, koşulsuz kural
+   medya sorgusundan SONRA gelirse onu ezer. */
+.cosmic-columns   { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+.orbit-radar-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+.deep-cats        { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+
+@media (max-width: 640px) {
+  .cosmic-columns,
+  .starmap-card,
+  .tarot-ml-meta-grid,
+  .tarot-footer-grid,
+  .history-horo-grid,
+  .matrix-meta-row,
+  .deep-cats,
+  .deep-lucky-row,
+  .deep-insight-row,
+  .orbit-radar-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Dokunma hedefleri ──
+   Telefonda bazı düğmeler 24-30px yüksekliğindeydi; parmakla
+   isabet ettirmek zor. Mobilde asgari 40px'e çıkarıyoruz
+   (görsel boyut aynı kalsın diye iç boşlukla). */
+@media (max-width: 640px) {
+  .lang-btn        { min-height: 40px; padding-block: 8px; }
+  .account-btn     { min-height: 40px; }
+  .wall-like-btn,
+  .wall-share-btn,
+  .wall-del-btn    { min-height: 40px; min-width: 40px; }
+  .wall-mood-chip  { min-height: 38px; }
+  .sec-chip        { min-height: 40px; display: inline-flex; align-items: center; }
+}
