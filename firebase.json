@@ -19,16 +19,54 @@
       "capacitor.config.json",
       "OKU-BENI.txt",
       "BIRLESTIRME.md",
-      "generate-assets.js"
+      "generate-assets.js",
+      "**/*.apk",
+      "**/*.aab"
     ],
     "cleanUrls": true,
     "headers": [
       {
-        "source": "ml-weights.json",
+        "source": "/",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public, max-age=3600"
+            "value": "no-cache, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/araclar",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/blog",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(js|css|json|webmanifest)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, must-revalidate"
           }
         ]
       },
