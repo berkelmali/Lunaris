@@ -66,6 +66,7 @@
 
     /* 4. Android Geri Tuşu Yönetimi */
     initBackButton: function() {
+      var self = this;
       try {
         if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
           window.Capacitor.Plugins.App.addListener('backButton', function(event) {
@@ -88,7 +89,18 @@
             } else if (event.canGoBack) {
               window.history.back();
             } else {
-              window.Capacitor.Plugins.App.exitApp();
+              // İki kez dokununca çıkış yap (kazara kapanmayı önler)
+              var now = Date.now();
+              if (self._lastBackPress && (now - self._lastBackPress < 2000)) {
+                window.Capacitor.Plugins.App.exitApp();
+              } else {
+                self._lastBackPress = now;
+                var lang = self.getLang();
+                var exitMsg = lang === 'tr' ? 'Çıkmak için tekrar dokunun' : (lang === 'ru' ? 'Нажмите ещё раз для выхода' : 'Press back again to exit');
+                if (typeof showToast === 'function') {
+                  showToast(exitMsg);
+                }
+              }
             }
           });
         }
@@ -276,6 +288,7 @@
         { id: 'wall', target: 'community' },
         { id: 'wishfield', target: 'community' },
         { id: 'compat', target: 'horoscope' },
+        { id: 'scientific', target: 'tools' },
         { id: 'horoscope', target: 'horoscope' },
         { id: 'deepreading', target: 'tarot' },
         { id: 'tarot', target: 'tarot' },
@@ -320,7 +333,22 @@
       }
     },
 
-    /* 9. Otomatik Başlatma */
+    /* 10. Çevrimdışı (Offline) Durum Takibi */
+    initOfflineDetector: function() {
+      var self = this;
+      function updateOnlineStatus() {
+        if (!navigator.onLine) {
+          var lang = self.getLang();
+          var msg = lang === 'tr' 
+            ? '✨ Çevrimdışısınız — Lunaris yerel efemeris ve offline motorla çalışmaya devam ediyor.' 
+            : (lang === 'ru' ? '✨ Вы оффлайн — Lunaris продолжает работать на локальном движке.' : '✨ You are offline — Lunaris continues working with on-device local engine.');
+          if (typeof showToast === 'function') showToast(msg);
+        }
+      }
+      window.addEventListener('offline', updateOnlineStatus);
+    },
+
+    /* 11. Otomatik Başlatma */
     init: function() {
       var self = this;
       function start() {
@@ -328,6 +356,7 @@
         self.initBackButton();
         self.initTouchHaptics();
         self.initBottomNav();
+        self.initOfflineDetector();
         setTimeout(function() { self.hideSplash(); }, 1000);
       }
 

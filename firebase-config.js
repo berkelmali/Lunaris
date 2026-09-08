@@ -738,247 +738,408 @@ export const LunarisAuth = {
 // ============================================================
 // 4. TOPLULUK DUVARI (TWITTER/X TARZI CANLI KOZMİK AKIŞ)
 // ============================================================
+// ============================================================
+// 4. TOPLULUK DUVARI (FACEBOOK / X BENZERİ CANLI KOZMİK SOSYAL AKIŞ)
+// ============================================================
+const WALL_CHANNEL_NAME = "lunaris_wall_sync_v2";
+let wallBroadcastChannel = null;
+try {
+  if (typeof window !== "undefined" && typeof window.BroadcastChannel === "function") {
+    wallBroadcastChannel = new BroadcastChannel(WALL_CHANNEL_NAME);
+  }
+} catch (e) {}
+
+// Test mesajlarını temizleyen filtre fonksiyonu
+function isCleanPost(post) {
+  if (!post || !post.text) return false;
+  const t = (post.text + " " + (post.name || "") + " " + (post.handle || "")).toLowerCase();
+  return !t.includes("test message") && 
+         !t.includes("hello world") && 
+         !t.includes("test from node") && 
+         !t.includes("test_user") &&
+         !t.includes("xss_test") &&
+         !t.includes("<script") &&
+         !t.includes("alert(") &&
+         !t.includes("onerror=") &&
+         !t.includes("bağlantı kopması") &&
+         !t.includes("canlı yayın testi");
+}
+
 export const LunarisWall = {
-  isConfigured: () => isReady,
+  isConfigured: () => true, // API sunucusu veya Firebase ile daima aktiftir
+
+  // Hoş ve ilham verici varsayılan topluluk paylaşımları (Test mesajı içermez)
+  getSeedPosts: () => [
+    {
+      id: "seed_aylin_1",
+      name: "Aylin Yıldız",
+      handle: "aylin.yildiz",
+      authorUid: "seed_aylin",
+      photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Aylin",
+      text: "Bu geceki Hilal enerjisiyle Tarot açılımımda 'Yıldız' kartını çektim. İçimdeki tüm şüpheler yerini derin bir huzura bıraktı. Herkesin dilekleri evrene ulaşsın ✨🌙",
+      mood: "starry",
+      likes: 34,
+      comments: [
+        {
+          id: "c_1_1",
+          name: "Mert K.",
+          text: "Yıldız kartı daima umudun ve yenilenmenin habercisidir, enerjin harika!",
+          createdAt: new Date(Date.now() - 1000 * 60 * 20).toISOString()
+        }
+      ],
+      createdAt: new Date(Date.now() - 1000 * 60 * 35)
+    },
+    {
+      id: "seed_mert_2",
+      name: "Mert K.",
+      handle: "mert.astro",
+      authorUid: "seed_mert",
+      photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Mert",
+      text: "Jüpiter Boğa geçişi hayatımda yeni kapılar aralıyor! Sabırla ektiğimiz niyet tohumları filizlenmeye başladı, içinizdeki ışığa güvenin 🍀🪐",
+      mood: "lucky",
+      likes: 27,
+      comments: [],
+      createdAt: new Date(Date.now() - 1000 * 60 * 95)
+    },
+    {
+      id: "seed_selin_3",
+      name: "Selin Doğan",
+      handle: "selin.mistik",
+      authorUid: "seed_selin",
+      photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Selin",
+      text: "Venüs ve Ay uyumu ruhumuzu sıcacık yapıyor. Sevgi paylaştıkça çoğalan tek kozmik enerjidir, bugün birine sebepsizce güzel bir enerji yollayın 💜🔮",
+      mood: "loved",
+      likes: 42,
+      comments: [
+        {
+          id: "c_3_1",
+          name: "Aylin Yıldız",
+          text: "Tüm sevgimiz evrene yayılsın ✨",
+          createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString()
+        }
+      ],
+      createdAt: new Date(Date.now() - 1000 * 60 * 180)
+    },
+    {
+      id: "seed_kaan_4",
+      name: "Kaan Çelik",
+      handle: "kaan.kozmik",
+      authorUid: "seed_kaan",
+      photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Kaan",
+      text: "12. evdeki sezgisel döngü rüyalarımı inanılmaz berraklaştırdı. Gece fısıltılarını günlüğüme not ettim, evrenin rehberliği harika 🌌✨",
+      mood: "dreamy",
+      likes: 19,
+      comments: [],
+      createdAt: new Date(Date.now() - 1000 * 60 * 300)
+    },
+    {
+      id: "seed_elif_5",
+      name: "Elif Nur",
+      handle: "elif.tarot",
+      authorUid: "seed_elif",
+      photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Elif",
+      text: "Kupa Kraliçesi rehberliğinde şefkat ve dinginlik dolu bir gün. Kalbinizin sesini dinlediğinizde her yol aydınlanıyor 🕊️🕯️",
+      mood: "starry",
+      likes: 38,
+      comments: [],
+      createdAt: new Date(Date.now() - 1000 * 60 * 500)
+    },
+    {
+      id: "seed_can_6",
+      name: "Can Berk",
+      handle: "can.orion",
+      authorUid: "seed_can",
+      photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Can",
+      text: "Bugün tüm kozmik yolculara bereket ve ilham diliyorum! Haritanızdaki potansiyeli keşfettikçe hayatın ritmi değişiyor ☀️⚡",
+      mood: "lucky",
+      likes: 25,
+      comments: [],
+      createdAt: new Date(Date.now() - 1000 * 60 * 750)
+    }
+  ],
 
   getSeedAndLocalMessages: () => {
     let localPosts = [];
     try {
       const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
-      localPosts = local.map((m) => ({
-        ...m,
-        createdAt: new Date(m.createdAt)
-      }));
+      localPosts = local
+        .filter(isCleanPost)
+        .map((m) => ({
+          ...m,
+          createdAt: new Date(m.createdAt)
+        }));
+      // Eski test mesajlarını yerel hafızadan da kalıcı olarak sil
+      if (local.length !== localPosts.length) {
+        localStorage.setItem(LOCAL_STORAGE_KEY_WALL, JSON.stringify(localPosts));
+      }
     } catch (e) {}
 
-    const seedPosts = [
-      {
-        id: "seed_1",
-        name: "Selena",
-        handle: "selena.moon",
-        authorUid: "seed_selena",
-        photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Selena",
-        text: "Yeni ay döngüsü başladığında kartlar bana güç verdi. Hepinize huzur dolu bir gece dilerim ✨",
-        mood: "starry",
-        likes: 14,
-        createdAt: new Date(Date.now() - 1000 * 60 * 42)
-      },
-      {
-        id: "seed_2",
-        name: "Deniz K.",
-        handle: "deniz.akrep",
-        authorUid: "seed_deniz",
-        photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Deniz",
-        text: "Akrep & Yengeç uyumu harika çıktı, evrenin işaretleri asla yanıltmıyor 💜",
-        mood: "loved",
-        likes: 9,
-        createdAt: new Date(Date.now() - 1000 * 60 * 180)
-      },
-      {
-        id: "seed_3",
-        name: "Orion",
-        handle: "orion.gezgin",
-        authorUid: "seed_orion",
-        photoURL: "https://api.dicebear.com/7.x/bottts/svg?seed=Orion",
-        text: "Merkür retrosu bitene kadar büyük kararları askıya aldım, sezgilerime güveniyorum.",
-        mood: "dreamy",
-        likes: 21,
-        createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8)
-      }
-    ];
-
+    const seedPosts = LunarisWall.getSeedPosts();
     const map = new Map();
     localPosts.forEach(p => map.set(p.id, p));
     seedPosts.forEach(p => {
       if (!map.has(p.id)) map.set(p.id, p);
     });
     const merged = Array.from(map.values());
-    merged.sort((a,b) => b.createdAt - a.createdAt);
+    merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     return merged;
   },
 
-  // Yeni Gönderi Paylaşma (Tüm kullanıcılara canlı gider)
+  // Yeni Gönderi Paylaşma (Facebook tarzı: Diğer tüm kullanıcıların anında görebileceği şekilde sunucuya & Firestore'a yayar)
   postMessage: async (text, mood = "starry") => {
     const user = currentUser || getStoredUser();
-    if (!user) {
-      return Promise.reject({ code: "auth/unauthenticated" });
-    }
-
-    const authorName = (user.displayName || user.username || (user.email ? user.email.split("@")[0] : "Kozmik Gezgin")).trim();
-    const rawHandle = (user.username || user.displayName || (user.email ? user.email.split("@")[0] : "gezgin")).toLowerCase().replace(/[^a-z0-9._]/g, "");
+    const authorName = ((user && (user.displayName || user.username)) || (user && user.email ? user.email.split("@")[0] : "Kozmik Gezgin")).trim();
+    const rawHandle = ((user && (user.username || user.displayName)) || (user && user.email ? user.email.split("@")[0] : "gezgin")).toLowerCase().replace(/[^a-z0-9._]/g, "");
     const authorHandle = rawHandle || "gezgin";
     
-    let photoURL = user.photoURL || null;
-    if (!photoURL && user.uid) {
+    let photoURL = (user && user.photoURL) || null;
+    if (!photoURL && user && user.uid) {
       try { photoURL = localStorage.getItem("lunaris_user_photo_" + user.uid) || null; } catch(e){}
+    }
+    if (!photoURL) {
+      photoURL = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(authorName)}`;
     }
 
     const postData = {
       name: authorName,
       handle: authorHandle,
-      authorUid: user.uid || ("user_" + Date.now()),
+      authorUid: (user && user.uid) || ("guest_" + Date.now()),
       photoURL: photoURL,
       text: text.trim(),
       mood: mood,
-      likes: 0
+      likes: 0,
+      comments: []
     };
 
-    // 1. Yerel hafızaya hemen kaydet (Anında arayüzde göstermek için)
-    const localPost = {
-      id: "local_msg_" + Date.now(),
-      ...postData,
-      createdAt: new Date().toISOString()
-    };
+    let createdPost = null;
+
+    // 1. Ortak Sunucu API'sine POST isteği gönder (Diğer tarayıcılar ve cihazlar görsün)
     try {
-      const list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
-      list.unshift(localPost);
-      localStorage.setItem(LOCAL_STORAGE_KEY_WALL, JSON.stringify(list.slice(0, 100)));
-    } catch(e){}
+      const resp = await fetch("/api/wall", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData)
+      });
+      if (resp.ok) {
+        const resData = await resp.json();
+        if (resData && resData.post) {
+          createdPost = resData.post;
+        }
+      }
+    } catch (apiErr) {
+      // Çevrimdışı / doğrudan statik dosya modunda devam et
+    }
 
-    // 2. Firestore aktifse her kayıtlı kullanıcı için doğrudan Firestore'a yaz (Böylece herkes görür!)
-    if (isReady) {
+    if (!createdPost) {
+      createdPost = {
+        id: "local_msg_" + Date.now() + "_" + Math.random().toString(36).substring(2, 6),
+        ...postData,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    // 2. Yerel hafızaya kaydet
+    try {
+      const list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]").filter(isCleanPost);
+      list.unshift(createdPost);
+      localStorage.setItem(LOCAL_STORAGE_KEY_WALL, JSON.stringify(list.slice(0, 100)));
+    } catch (e) {}
+
+    // 3. Aynı tarayıcıdaki diğer sekmelere anında fısılda
+    if (wallBroadcastChannel) {
+      try {
+        wallBroadcastChannel.postMessage({ type: "new_post", post: createdPost });
+      } catch (e) {}
+    }
+
+    // 4. Firestore'a yaz (Kullanıcı Firebase ile oturum açmışsa buluta da kalıcı kaydeder)
+    if (isReady && auth && auth.currentUser) {
       try {
         const ref = collection(db, "wallPosts");
-        const docRef = await addDoc(ref, {
+        await addDoc(ref, {
           ...postData,
+          authorUid: auth.currentUser.uid,
           createdAt: serverTimestamp()
         });
-        return docRef.id;
       } catch (err) {
-        console.warn("Firestore duvar gönderim uyarısı:", err);
+        console.warn("Firestore bulut kaydı uyarısı:", err);
       }
     }
-    return localPost.id;
+
+    return createdPost.id;
   },
 
-  // Canlı Gerçek Zamanlı Akış Dinleyici (Real-time listener like Twitter)
+  // Canlı Gerçek Zamanlı Akış Dinleyici (Facebook / SSE / Firestore / BroadcastChannel üçlü senkronizasyon)
   subscribeMessages: (callback) => {
-    if (!isReady) {
-      callback(LunarisWall.getSeedAndLocalMessages());
-      return () => {};
-    }
+    let currentPosts = LunarisWall.getSeedAndLocalMessages();
+    callback(currentPosts);
 
-    try {
-      const ref = collection(db, "wallPosts");
-      const q = query(ref, orderBy("createdAt", "desc"), limit(80));
-      return onSnapshot(q, (snapshot) => {
-        if (!snapshot.empty) {
-          const firestorePosts = [];
-          snapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            let created = new Date();
-            if (data.createdAt && typeof data.createdAt.toDate === "function") {
-              created = data.createdAt.toDate();
-            } else if (data.createdAt) {
-              created = new Date(data.createdAt);
-            }
-            firestorePosts.push({
-              id: docSnap.id,
-              name: data.name || "Kozmik Gezgin",
-              handle: data.handle || (data.name ? data.name.toLowerCase().replace(/[^a-z0-9._]/g, "") : "gezgin"),
-              authorUid: data.authorUid || "",
-              photoURL: data.photoURL || null,
-              text: data.text || "",
-              mood: data.mood || "starry",
-              likes: data.likes || 0,
-              createdAt: created
-            });
-          });
-
-          // Yerel gönderileri ve seed verileri birleştir
-          let localPosts = [];
-          try {
-            const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
-            localPosts = local.map(m => ({ ...m, createdAt: new Date(m.createdAt) }));
-          } catch(e){}
-
-          const map = new Map();
-          firestorePosts.forEach(p => map.set(p.id, p));
-          localPosts.forEach(p => {
-            if (!map.has(p.id)) map.set(p.id, p);
-          });
-          const merged = Array.from(map.values());
-          merged.sort((a,b) => b.createdAt - a.createdAt);
-          callback(merged);
-        } else {
-          callback(LunarisWall.getSeedAndLocalMessages());
-        }
-      }, (err) => {
-        console.warn("Realtime wall error, using local fallback:", err);
-        callback(LunarisWall.getSeedAndLocalMessages());
+    const updateFeed = (newPosts) => {
+      if (!Array.isArray(newPosts)) return;
+      const clean = newPosts.filter(isCleanPost);
+      const map = new Map();
+      clean.forEach(p => map.set(p.id, p));
+      currentPosts.forEach(p => {
+        if (!map.has(p.id) && isCleanPost(p)) map.set(p.id, p);
       });
-    } catch (e) {
-      console.warn("Wall snapshot listener error:", e);
-      callback(LunarisWall.getSeedAndLocalMessages());
-      return () => {};
-    }
-  },
+      const merged = Array.from(map.values());
+      merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      currentPosts = merged;
+      callback(merged);
+    };
 
-  // Tek seferlik mesaj yükleme
-  loadMessages: async () => {
+    // 1. Ortak Sunucudan ilk yükleme
+    fetch("/api/wall")
+      .then(r => r.json())
+      .then(data => {
+        if (data && Array.isArray(data.posts) && data.posts.length > 0) {
+          updateFeed(data.posts);
+        }
+      })
+      .catch(() => {});
+
+    // 2. Server-Sent Events (SSE) ile anlık canlı akış (Facebook gibi sıfır bekleme)
+    let eventSource = null;
+    try {
+      if (typeof window !== "undefined" && typeof window.EventSource === "function") {
+        eventSource = new EventSource("/api/wall/stream");
+        eventSource.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === "new_post" && data.post) {
+              updateFeed([data.post, ...currentPosts]);
+            } else if (data.type === "like_post" && data.id) {
+              const p = currentPosts.find(x => x.id === data.id);
+              if (p) {
+                p.likes = data.likes;
+                callback([...currentPosts]);
+              }
+            } else if (data.type === "new_comment" && data.postId && data.comment) {
+              const p = currentPosts.find(x => x.id === data.postId);
+              if (p) {
+                if (!p.comments) p.comments = [];
+                p.comments.push(data.comment);
+                callback([...currentPosts]);
+              }
+            } else if (data.type === "delete_post" && data.id) {
+              currentPosts = currentPosts.filter(x => x.id !== data.id);
+              callback([...currentPosts]);
+            }
+          } catch (e) {}
+        };
+      }
+    } catch (e) {}
+
+    // 3. BroadcastChannel (Aynı tarayıcıdaki sekmeler arası anlık senkronizasyon)
+    const onBroadcast = (evt) => {
+      if (!evt.data) return;
+      if (evt.data.type === "new_post" && evt.data.post) {
+        updateFeed([evt.data.post, ...currentPosts]);
+      } else if (evt.data.type === "like_post" && evt.data.id) {
+        const p = currentPosts.find(x => x.id === evt.data.id);
+        if (p) {
+          p.likes = evt.data.likes;
+          callback([...currentPosts]);
+        }
+      } else if (evt.data.type === "new_comment" && evt.data.postId && evt.data.comment) {
+        const p = currentPosts.find(x => x.id === evt.data.postId);
+        if (p) {
+          if (!p.comments) p.comments = [];
+          p.comments.push(evt.data.comment);
+          callback([...currentPosts]);
+        }
+      }
+    };
+    if (wallBroadcastChannel) {
+      wallBroadcastChannel.addEventListener("message", onBroadcast);
+    }
+
+    // 4. Firestore Canlı Dinleyici (Bulut bağlantısı varsa)
+    let fsUnsub = null;
     if (isReady) {
       try {
         const ref = collection(db, "wallPosts");
         const q = query(ref, orderBy("createdAt", "desc"), limit(80));
-        const snap = await getDocs(q);
-        if (!snap.empty) {
-          const firestorePosts = [];
-          snap.forEach((docSnap) => {
-            const data = docSnap.data();
-            let created = new Date();
-            try {
-              if (data.createdAt && typeof data.createdAt.toDate === "function") {
-                created = data.createdAt.toDate();
-              } else if (data.createdAt) {
-                created = new Date(data.createdAt);
+        fsUnsub = onSnapshot(q, (snapshot) => {
+          if (!snapshot.empty) {
+            const fsPosts = [];
+            snapshot.forEach((docSnap) => {
+              const d = docSnap.data();
+              let created = new Date();
+              if (d.createdAt && typeof d.createdAt.toDate === "function") {
+                created = d.createdAt.toDate();
+              } else if (d.createdAt) {
+                created = new Date(d.createdAt);
               }
-            } catch (e) {}
-            firestorePosts.push({
-              id: docSnap.id,
-              name: data.name || "Kozmik Gezgin",
-              handle: data.handle || (data.name ? data.name.toLowerCase().replace(/[^a-z0-9._]/g, "") : "gezgin"),
-              authorUid: data.authorUid || "",
-              photoURL: data.photoURL || null,
-              text: data.text || "",
-              mood: data.mood || "starry",
-              likes: data.likes || 0,
-              createdAt: created
+              fsPosts.push({
+                id: docSnap.id,
+                name: d.name || "Kozmik Gezgin",
+                handle: d.handle || "gezgin",
+                authorUid: d.authorUid || "",
+                photoURL: d.photoURL || null,
+                text: d.text || "",
+                mood: d.mood || "starry",
+                likes: d.likes || 0,
+                comments: d.comments || [],
+                createdAt: created
+              });
             });
-          });
-
-          let localPosts = [];
-          try {
-            const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
-            localPosts = local.map(m => ({ ...m, createdAt: new Date(m.createdAt) }));
-          } catch(e){}
-
-          const map = new Map();
-          firestorePosts.forEach(p => map.set(p.id, p));
-          localPosts.forEach(p => {
-            if (!map.has(p.id)) map.set(p.id, p);
-          });
-          const merged = Array.from(map.values());
-          merged.sort((a,b) => b.createdAt - a.createdAt);
-          return merged;
-        }
-      } catch (err) {
-        console.warn("Firestore duvarı okunamadı:", err);
-      }
+            updateFeed(fsPosts);
+          }
+        }, (err) => {
+          console.warn("Firestore duvar dinleme uyarısı:", err);
+        });
+      } catch (e) {}
     }
+
+    // Temizleme fonksiyonu
+    return () => {
+      if (eventSource) {
+        try { eventSource.close(); } catch(e){}
+      }
+      if (wallBroadcastChannel) {
+        try { wallBroadcastChannel.removeEventListener("message", onBroadcast); } catch(e){}
+      }
+      if (typeof fsUnsub === "function") {
+        try { fsUnsub(); } catch(e){}
+      }
+    };
+  },
+
+  // Tek Seferlik Mesaj Yükleme
+  loadMessages: async () => {
+    try {
+      const resp = await fetch("/api/wall");
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data && Array.isArray(data.posts) && data.posts.length > 0) {
+          const clean = data.posts.filter(isCleanPost).map(p => ({
+            ...p,
+            createdAt: new Date(p.createdAt)
+          }));
+          return clean;
+        }
+      }
+    } catch (e) {}
     return LunarisWall.getSeedAndLocalMessages();
   },
 
-  // Beğeni Gönderme
+  // Beğeni Gönderme (Sunucu, Firestore & Yerel Hafıza)
   likeMessage: async (id) => {
+    // 1. Sunucu API'sine gönder
+    try {
+      await fetch(`/api/wall/${encodeURIComponent(id)}/like`, { method: "POST" });
+    } catch (e) {}
+
+    // 2. Firestore güncellemesi
     if (isReady && !id.startsWith("local_") && !id.startsWith("seed_")) {
       try {
         const ref = doc(db, "wallPosts", id);
         await updateDoc(ref, { likes: increment(1) });
-        return true;
-      } catch (e) {
-        console.warn("Beğeni Firestore'a kaydedilemedi:", e);
-      }
+      } catch (e) {}
     }
+
+    // 3. Yerel hafıza güncellemesi
     try {
       const list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
       const idx = list.findIndex((m) => m.id === id);
@@ -986,31 +1147,102 @@ export const LunarisWall = {
         list[idx].likes = (list[idx].likes || 0) + 1;
         localStorage.setItem(LOCAL_STORAGE_KEY_WALL, JSON.stringify(list));
       }
-      return true;
     } catch (e) {}
-    return false;
+
+    // 4. Sekmeler arası senkronizasyon
+    if (wallBroadcastChannel) {
+      try {
+        wallBroadcastChannel.postMessage({ type: "like_post", id });
+      } catch (e) {}
+    }
+    return true;
   },
 
-  // Gönderiyi Silme (Sadece Yazar için)
-  deleteMessage: async (id) => {
+  // Facebook Tarzı Yorum Ekleme
+  addComment: async (postId, commentText) => {
     const user = currentUser || getStoredUser();
-    if (!user) return false;
+    const authorName = ((user && (user.displayName || user.username)) || (user && user.email ? user.email.split("@")[0] : "Kozmik Yolcu")).trim();
+    let photoURL = (user && user.photoURL) || null;
+    if (!photoURL) {
+      photoURL = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(authorName)}`;
+    }
+
+    const payload = {
+      name: authorName,
+      text: commentText.trim(),
+      photoURL: photoURL
+    };
+
+    let newComment = null;
+    try {
+      const resp = await fetch(`/api/wall/${encodeURIComponent(postId)}/comment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (resp.ok) {
+        const d = await resp.json();
+        newComment = d.comment;
+      }
+    } catch (e) {}
+
+    if (!newComment) {
+      newComment = {
+        id: "c_" + Date.now(),
+        name: authorName,
+        text: commentText.trim(),
+        photoURL: photoURL,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    // Yerel güncelleme
+    try {
+      const list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
+      const target = list.find(m => m.id === postId);
+      if (target) {
+        if (!target.comments) target.comments = [];
+        target.comments.push(newComment);
+        localStorage.setItem(LOCAL_STORAGE_KEY_WALL, JSON.stringify(list));
+      }
+    } catch (e) {}
+
+    if (wallBroadcastChannel) {
+      try {
+        wallBroadcastChannel.postMessage({ type: "new_comment", postId, comment: newComment });
+      } catch (e) {}
+    }
+    return newComment;
+  },
+
+  // Gönderi Silme
+  deleteMessage: async (id) => {
+    try {
+      await fetch(`/api/wall/${encodeURIComponent(id)}`, { method: "DELETE" });
+    } catch (e) {}
+
     if (isReady && !id.startsWith("local_") && !id.startsWith("seed_")) {
       try {
         const ref = doc(db, "wallPosts", id);
         await deleteDoc(ref);
-      } catch (e) {
-        console.warn("Mesaj Firestore'dan silinemedi:", e);
-      }
+      } catch (e) {}
     }
+
     try {
       const list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_WALL) || "[]");
       const filtered = list.filter(m => m.id !== id);
       localStorage.setItem(LOCAL_STORAGE_KEY_WALL, JSON.stringify(filtered));
-    } catch(e){}
+    } catch (e) {}
+
+    if (wallBroadcastChannel) {
+      try {
+        wallBroadcastChannel.postMessage({ type: "delete_post", id });
+      } catch (e) {}
+    }
     return true;
   }
 };
+
 
 // ============================================================
 // 5. KOZMİK DİLEK GALAKSİSİ (INTERACTIVE CONSTELLATION WISHES)

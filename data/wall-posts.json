@@ -1,0 +1,88 @@
+[
+  {
+    "id": "post_seed_1",
+    "name": "Aylin Yıldız",
+    "handle": "aylin.yildiz",
+    "authorUid": "seed_aylin",
+    "photoURL": "https://api.dicebear.com/7.x/bottts/svg?seed=Aylin",
+    "text": "Bu geceki Hilal enerjisiyle Tarot açılımımda 'Yıldız' kartını çektim. İçimdeki tüm şüpheler yerini derin bir huzura bıraktı. Herkesin dilekleri evrene ulaşsın ✨🌙",
+    "mood": "starry",
+    "likes": 234,
+    "comments": [
+      {
+        "id": "c_1_1",
+        "name": "Mert K.",
+        "text": "Yıldız kartı daima umudun ve yenilenmenin habercisidir, enerjin harika!",
+        "createdAt": "2026-09-07T21:43:25.186Z"
+      }
+    ],
+    "createdAt": "2026-09-07T21:28:25.187Z"
+  },
+  {
+    "id": "post_seed_2",
+    "name": "Mert K.",
+    "handle": "mert.astro",
+    "authorUid": "seed_mert",
+    "photoURL": "https://api.dicebear.com/7.x/bottts/svg?seed=Mert",
+    "text": "Jüpiter Boğa geçişi hayatımda yeni kapılar aralıyor! Sabırla ektiğimiz niyet tohumları filizlenmeye başladı, içinizdeki ışığa güvenin 🍀🪐",
+    "mood": "lucky",
+    "likes": 27,
+    "comments": [],
+    "createdAt": "2026-09-07T20:28:25.187Z"
+  },
+  {
+    "id": "post_seed_3",
+    "name": "Selin Doğan",
+    "handle": "selin.mistik",
+    "authorUid": "seed_selin",
+    "photoURL": "https://api.dicebear.com/7.x/bottts/svg?seed=Selin",
+    "text": "Venüs ve Ay uyumu ruhumuzu sıcacık yapıyor. Sevgi paylaştıkça çoğalan tek kozmik enerjidir, bugün birine sebepsizce güzel bir enerji yollayın 💜🔮",
+    "mood": "loved",
+    "likes": 42,
+    "comments": [
+      {
+        "id": "c_3_1",
+        "name": "Aylin Yıldız",
+        "text": "Tüm sevgimiz evrene yayılsın ✨",
+        "createdAt": "2026-09-07T20:03:25.187Z"
+      }
+    ],
+    "createdAt": "2026-09-07T19:03:25.187Z"
+  },
+  {
+    "id": "post_seed_4",
+    "name": "Kaan Çelik",
+    "handle": "kaan.kozmik",
+    "authorUid": "seed_kaan",
+    "photoURL": "https://api.dicebear.com/7.x/bottts/svg?seed=Kaan",
+    "text": "12. evdeki sezgisel döngü rüyalarımı inanılmaz berraklaştırdı. Gece fısıltılarını günlüğüme not ettim, evrenin rehberliği harika 🌌✨",
+    "mood": "dreamy",
+    "likes": 19,
+    "comments": [],
+    "createdAt": "2026-09-07T17:03:25.187Z"
+  },
+  {
+    "id": "post_seed_5",
+    "name": "Elif Nur",
+    "handle": "elif.tarot",
+    "authorUid": "seed_elif",
+    "photoURL": "https://api.dicebear.com/7.x/bottts/svg?seed=Elif",
+    "text": "Kupa Kraliçesi rehberliğinde şefkat ve dinginlik dolu bir gün. Kalbinizin sesini dinlediğinizde her yol aydınlanıyor 🕊️🕯️",
+    "mood": "starry",
+    "likes": 38,
+    "comments": [],
+    "createdAt": "2026-09-07T13:43:25.187Z"
+  },
+  {
+    "id": "post_seed_6",
+    "name": "Can Berk",
+    "handle": "can.orion",
+    "authorUid": "seed_can",
+    "photoURL": "https://api.dicebear.com/7.x/bottts/svg?seed=Can",
+    "text": "Bugün tüm kozmik yolculara bereket ve ilham diliyorum! Haritanızdaki potansiyeli keşfettikçe hayatın ritmi değişiyor ☀️⚡",
+    "mood": "lucky",
+    "likes": 25,
+    "comments": [],
+    "createdAt": "2026-09-07T09:33:25.187Z"
+  }
+]

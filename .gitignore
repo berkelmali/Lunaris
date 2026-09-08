@@ -50,3 +50,7 @@ ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
 
 # Yerel araç ayarları (makineye özel yollar içerir)
 .claude/
+
+# Derleme çıktısı APK/AAB dosyaları (kaynak değil, sürüm olarak dağıtılır)
+*.apk
+*.aab

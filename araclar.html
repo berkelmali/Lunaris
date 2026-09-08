@@ -254,13 +254,13 @@
 <div class="page-intro">
   <!-- Mobil Kategori / Araç Seçim Hapları -->
   <div class="mobile-section-chips" style="justify-content:flex-start; margin-bottom: 24px;">
-    <a href="#birthMatrixResults" class="sec-chip active" onclick="LunarisMobile.hapticImpact('LIGHT')">✦ Doğum Matrisi</a>
-    <a href="#aura" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🌈 Aura Kartı</a>
-    <a href="#pendulum" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🕰️ Kozmik Sarkaç</a>
-    <a href="#orbit" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🪐 Gezegen Saatleri</a>
-    <a href="#moonritual" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🕯️ Mistik Ritüel</a>
-    <a href="#cosmic" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">📅 Kozmik Takvim</a>
-    <a href="#mooncal" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')">🌙 Ay Takvimi</a>
+    <a href="#birthMatrixResults" class="sec-chip active" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipBirthMatrix">✦ Doğum Matrisi</a>
+    <a href="#aura" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipAura">🌈 Aura Kartı</a>
+    <a href="#pendulum" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipPendulum">🕰️ Kozmik Sarkaç</a>
+    <a href="#orbit" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipOrbit">🪐 Gezegen Yörüngesi</a>
+    <a href="#moonritual" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipMoonRitual">🕯️ Mistik Ritüel</a>
+    <a href="#cosmic" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipCosmicCal">📅 Kozmik Takvim</a>
+    <a href="#mooncal" class="sec-chip" onclick="LunarisMobile.hapticImpact('LIGHT')" data-i18n="chipMoonCal">🌙 Ay Takvimi</a>
   </div>
 
   <span class="section-eyebrow" data-i18n="toolsEyebrow">Kozmik Doğum Matrisi</span>
@@ -640,7 +640,10 @@
 <!-- Astronomy Engine (MIT, Don Cross) — gerçek efemeris; gezegen boylamları
      ve yıldız zamanı buradan geliyor. Yerel dosya, CDN yok. Bkz. vendor/astronomy-engine-LICENSE.txt -->
 <script src="vendor/astronomy.browser.min.js"></script>
+<script src="astro-db.js"></script>
+<script src="cosmic-audio.js"></script>
 <script src="main.js"></script>
+<script src="lunaris-ml.js"></script>
 <script src="mobile-bridge.js"></script>
 <script>
 /* ==========================================================

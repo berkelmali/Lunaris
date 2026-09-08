@@ -10,8 +10,8 @@ if (!fs.existsSync(destDir)) {
 
 // Copy web assets (html, css, js, icons, json)
 const allowedExtensions = ['.html', '.css', '.js', '.json', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.ico', '.txt'];
-const ignoredFiles = ['package.json', 'package-lock.json', 'capacitor.config.json', 'copy-web.js', 'firebase.json', '.firebaserc', 'firestore.rules'];
-const ignoredDirs = ['node_modules', '.git', '.firebase', 'android', 'ios', 'www', 'scripts'];
+const ignoredFiles = ['package.json', 'package-lock.json', 'capacitor.config.json', 'copy-web.js', 'firebase.json', '.firebaserc', 'firestore.rules', 'server.js'];
+const ignoredDirs = ['node_modules', '.git', '.firebase', 'android', 'ios', 'www', 'scripts', 'data'];
 
 function copyRecursive(src, dest) {
   const entries = fs.readdirSync(src, { withFileTypes: true });
