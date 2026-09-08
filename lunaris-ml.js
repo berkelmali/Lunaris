@@ -336,8 +336,11 @@
 
   function julianDay(date) {
     var d = parseDateSafe(date);
-    var Y = d.getFullYear(), M = d.getMonth() + 1, D = d.getDate();
-    var H = (d.getHours ? d.getHours() : 12) + (d.getMinutes ? d.getMinutes() : 0) / 60;
+    /* UTC bileşenleri: bu fonksiyona gerçek bir zaman anı geliyor.
+       Eskiden yerel bileşenler okunuyordu; bu, ziyaretçinin saat dilimi
+       kadar kayma üretiyordu (UTC+3'te Ay 1.77°, yani yarım burç). */
+    var Y = d.getUTCFullYear(), M = d.getUTCMonth() + 1, D = d.getUTCDate();
+    var H = d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600;
     if (M <= 2) { Y -= 1; M += 12; }
     var A = Math.floor(Y / 100);
     var B = 2 - A + Math.floor(A / 4);
@@ -391,10 +394,11 @@
   function toUTCInstant(date) {
     var d = (date instanceof Date) ? date : new Date(date);
     if (isNaN(d.getTime())) d = new Date();
-    return new Date(Date.UTC(
-      d.getFullYear(), d.getMonth(), d.getDate(),
-      d.getHours(), d.getMinutes(), d.getSeconds()
-    ));
+    /* Gelen değer zaten gerçek bir zaman anı; olduğu gibi döndürülür.
+       Eskiden yerel bileşenler alınıp UTC sanılıyordu — Astronomy Engine
+       gerçek an beklediği için bu, konumları ziyaretçinin saat dilimi
+       kadar kaydırıyordu. */
+    return d;
   }
 
   function ephemerisSource() {
@@ -1057,7 +1061,9 @@
 
     /* julianDay() bir Date'in YEREL bileşenlerini UT gibi okur; bu yüzden
        doğum anının UT duvar saatini yerel bileşenlere yazan bir Date kuruyoruz. */
-    var utInstant = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+    /* Doğum yerinin yerel saatinden gerçek UTC anına: Date.UTC ile
+       kuruluyor, böylece sonuç ziyaretçinin saat diliminden bağımsız. */
+    var utInstant = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0));
     utInstant.setTime(utInstant.getTime() + (h - tz) * 3600000);
 
     return lonToSign(calcPlanetPositions(utInstant).moon);

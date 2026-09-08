@@ -6187,3 +6187,26 @@ body {
 
 
 
+
+/* ── Derin Analiz mod seçici: dar ekranda taşıyordu ──
+   .deep-mode-switcher inline-flex ve içindeki iki sekme sabit
+   genişlikte; 375px ekranda bileşen 395px oluyor ve sayfayı
+   10px yatay kaydırılabilir hale getiriyordu. Telefonda tam
+   genişliğe yayılıp sekmeleri eşit bölüyoruz. */
+@media (max-width: 460px) {
+  .deep-mode-switcher {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .deep-mode-switcher > * {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .deep-mode-switcher-wrap { padding-inline: 12px; box-sizing: border-box; }
+}
