@@ -12,6 +12,21 @@
 <meta property="og:title" content="LUNARIS Araçlar — Numeroloji, Çin Burcu, Kozmik Takvim">
 <meta property="og:description" content="Numeroloji, Çin burcu, Merkür retrosu, tutulmalar ve aylık ay takvimi — LUNARIS'in mistik araçları bir arada.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://lunaris.web.app/araclar">
+<meta property="og:site_name" content="LUNARIS">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:image" content="https://lunaris.web.app/assets/brand/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LUNARIS — Tarot, Astroloji, Burç">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LUNARIS Araçlar — Numeroloji, Çin Burcu ve Kozmik Takvim">
+<meta name="twitter:image" content="https://lunaris.web.app/assets/brand/og-cover.png">
+<link rel="canonical" href="https://lunaris.web.app/araclar">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/brand/icon-180.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%99%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -224,12 +239,12 @@
       </div>
       <div style="font-size:0.75rem; color:var(--mist); margin-bottom:6px;" data-i18n="presetAvatarsLabel">Veya Mistik İkon Seç:</div>
       <div class="avatar-presets-row">
-        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Luna')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Luna" alt="Preset"></button>
-        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Orion')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Orion" alt="Preset"></button>
-        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Selena')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Selena" alt="Preset"></button>
-        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Astra')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Astra" alt="Preset"></button>
-        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos" alt="Preset"></button>
-        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Zenith')"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Zenith" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Luna')" aria-label="Hazır avatar 1"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Luna" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Orion')" aria-label="Hazır avatar 2"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Orion" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Selena')" aria-label="Hazır avatar 3"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Selena" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Astra')" aria-label="Hazır avatar 4"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Astra" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos')" aria-label="Hazır avatar 5"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cosmos" alt="Preset"></button>
+        <button type="button" class="preset-avatar-btn" onclick="setProfilePhoto('https://api.dicebear.com/7.x/bottts/svg?seed=Zenith')" aria-label="Hazır avatar 6"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Zenith" alt="Preset"></button>
       </div>
     </div>
     <div class="account-pref-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-4); padding-bottom:var(--sp-3); border-bottom:1px solid rgba(212,175,106,0.15);">
@@ -1284,5 +1299,25 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 
 <script type="module" src="firebase-config.js"></script>
+
+<script>
+/* Service Worker kaydı — yalnızca gerçek web'de.
+   Capacitor (APK/iOS) içinde kayıt YAPILMIYOR: uygulama varlıkları
+   zaten cihazda paketli, araya bir önbellek katmanı sokmak
+   güncellemeleri karmaşıklaştırmaktan başka bir işe yaramaz. */
+(function () {
+  var native = window.Capacitor &&
+               typeof window.Capacitor.isNativePlatform === 'function' &&
+               window.Capacitor.isNativePlatform();
+  if (native) return;
+  if (!('serviceWorker' in navigator)) return;
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function (e) {
+      console.warn('Service Worker kaydedilemedi:', e);
+    });
+  });
+})();
+</script>
 </body>
 </html>

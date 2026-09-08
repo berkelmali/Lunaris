@@ -1,0 +1,24 @@
+{
+  "name": "LUNARIS — Tarot, Astroloji & Burç",
+  "short_name": "Lunaris",
+  "description": "Tarot kartları, günlük burç yorumu, doğum haritası ve sinastri. Gezegen konumları cihazda hesaplanır — çevrimdışı da çalışır.",
+  "lang": "tr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B0714",
+  "theme_color": "#0B0714",
+  "categories": ["lifestyle", "entertainment"],
+  "icons": [
+    { "src": "/assets/brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/brand/icon-256.png", "sizes": "256x256", "type": "image/png" },
+    { "src": "/assets/brand/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/brand/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Tarot Aç", "url": "/#tarot" },
+    { "name": "Derin Analiz", "url": "/#deepreading" },
+    { "name": "Kozmik Araçlar", "url": "/araclar" }
+  ]
+}

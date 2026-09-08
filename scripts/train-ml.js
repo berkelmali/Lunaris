@@ -155,20 +155,35 @@ class MLPTrainer {
   }
 
   /* Doğruluk hesabı — yönelim doğru mu? */
+  /* Bu bir REGRESYON problemi: model her kategori için 0-1 arası
+     sürekli bir skor üretiyor. Eski accuracy() altı çıktının HEPSİNİN
+     aynı anda 0.5'in doğru tarafında olmasını şart koşuyordu; boyut
+     başına %57'lik bir model bile 0.57^6 ≈ %3 gösteriyordu. Nitekim
+     kayıp 0.015 iken "doğruluk %2.5" yazıyordu — metrik göreve
+     uymuyordu, model değil.
+
+     Artık üç ayrı sayı raporlanıyor:
+       perOutput  — boyut başına doğru taraf oranı (asıl gösterge)
+       exactMatch — altısı birden (eski, katı ölçüt; referans için)
+       mae        — ortalama mutlak hata (regresyonun doğal metriği) */
   accuracy(dataset) {
-    let correct = 0;
+    let boyutDogru = 0, boyutToplam = 0, tamEslesme = 0, mutlakHata = 0;
     dataset.forEach(sample => {
       const fwd = this.forward(sample.input);
-      // Her kategori için: tahmin yönü (yüksek/düşük) target ile uyuşuyor mu?
-      let match = true;
+      let hepsi = true;
       for (let i = 0; i < fwd.output.length; i++) {
-        const predHigh = fwd.output[i] >= 0.5;
-        const targetHigh = sample.target[i] >= 0.5;
-        if (predHigh !== targetHigh) { match = false; break; }
+        const p = fwd.output[i], t = sample.target[i];
+        mutlakHata += Math.abs(p - t);
+        boyutToplam++;
+        if ((p >= 0.5) === (t >= 0.5)) boyutDogru++; else hepsi = false;
       }
-      if (match) correct++;
+      if (hepsi) tamEslesme++;
     });
-    return correct / dataset.length;
+    return {
+      perOutput:  boyutDogru / Math.max(1, boyutToplam),
+      exactMatch: tamEslesme / Math.max(1, dataset.length),
+      mae:        mutlakHata / Math.max(1, boyutToplam)
+    };
   }
 
   /* Ağırlıkları export et */
@@ -401,8 +416,8 @@ async function main() {
   console.log('');
   console.log('📊 Eğitim Sonuçları:');
   console.log(`   Final Loss     : ${finalLoss.toFixed(6)}`);
-  console.log(`   Train Accuracy : ${(trainAcc * 100).toFixed(1)}%`);
-  console.log(`   Val Accuracy   : ${(valAcc * 100).toFixed(1)}%`);
+  console.log(`   Train (boyut başına) : ${(trainAcc.perOutput * 100).toFixed(1)}%  | tam eşleşme ${(trainAcc.exactMatch * 100).toFixed(1)}%  | MAE ${trainAcc.mae.toFixed(4)}`);
+  console.log(`   Val   (boyut başına) : ${(valAcc.perOutput * 100).toFixed(1)}%  | tam eşleşme ${(valAcc.exactMatch * 100).toFixed(1)}%  | MAE ${valAcc.mae.toFixed(4)}`);
 
   // Ağırlıkları kaydet
   const weights = mlp.exportWeights();
@@ -411,8 +426,10 @@ async function main() {
     trainedAt: new Date().toISOString(),
     sampleCount: dataset.length,
     finalLoss: parseFloat(finalLoss.toFixed(6)),
-    trainAccuracy: parseFloat((trainAcc * 100).toFixed(1)),
-    valAccuracy: parseFloat((valAcc * 100).toFixed(1)),
+    trainAccuracy: parseFloat((trainAcc.perOutput * 100).toFixed(1)),
+    valAccuracy: parseFloat((valAcc.perOutput * 100).toFixed(1)),
+    trainExactMatch: parseFloat((trainAcc.exactMatch * 100).toFixed(1)),
+    trainMae: parseFloat(trainAcc.mae.toFixed(4)),
     architecture: [16, 12, 8, 6],
     activations: ['leakyRelu', 'leakyRelu', 'sigmoid'],
     weights: weights

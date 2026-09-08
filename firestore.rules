@@ -41,11 +41,19 @@ service cloud.firestore {
     }
 
     // 3. Kozmik Dilek Galaksisi
-    match /wishes/{wishId} {
+    // Koleksiyon adı istemcide 'wishes' -> 'constellationWishes' olarak
+    // değişmişti ama kural adı eski kalmıştı. Tanımsız koleksiyon en alttaki
+    // catch-all 'if false' kuralına düşüyor; bu yüzden dilek galaksisi canlıda
+    // permission-denied alıp sessizce localStorage'a düşüyordu — kullanıcılar
+    // birbirinin dileklerini hiç görmüyordu.
+    match /constellationWishes/{wishId} {
       allow read: if true;
+      // Misafirler de dilek bırakabilir (ürün tasarımı böyle), ama giriş
+      // yapmış bir kullanıcı başkasının kimliğiyle yazamaz.
       allow create: if request.resource.data.text is string
                     && request.resource.data.text.size() > 0
-                    && request.resource.data.text.size() <= 280;
+                    && request.resource.data.text.size() <= 280
+                    && (!isAuthenticated() || request.resource.data.authorUid == request.auth.uid);
       allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lightCount']);
       allow delete: if isAuthenticated() && resource.data.authorUid == request.auth.uid;
     }
