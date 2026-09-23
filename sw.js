@@ -22,7 +22,7 @@
    alınmaz — kimlik doğrulama ve canlı veri önbelleğe girmemeli.
    ========================================================== */
 
-const SURUM = 'lunaris-v2.3.0';
+const SURUM = 'lunaris-v2.3.1';
 const KABUK = SURUM + '-kabuk';
 
 /* Çevrimdışı açılış için gereken asgari kabuk. Tarot görselleri
@@ -33,6 +33,7 @@ const KABUK_DOSYALARI = [
   '/style.css', '/main.js', '/lunaris-ml.js',
   '/vendor/astronomy.browser.min.js',
   '/ml-weights.json', '/manifest.webmanifest',
+  '/benim-alanim.html', '/benim-alanim', '/personal.css', '/personal-core.js', '/personal.js', '/journal-link.js',
   '/assets/brand/icon-192.png', '/assets/brand/icon-512.png'
 ];
 

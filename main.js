@@ -331,20 +331,20 @@ const UI = {
     modeMystic: "🔮 Mistik Fal Modu",
     modeTechnical: "📐 Bilimsel Harita Modu",
     modeMysticTag: "Kolay Anlatım",
-    modeTechnicalTag: "Uzman / Placidus",
+    modeTechnicalTag: "Uzman / Porphyry",
     mysticGreetingTitle: "Yıldızların Senin İçin Fısıltısı",
     fortuneLoveTitle: "Gönül & Aşk Falın",
     fortuneCareerTitle: "Kader, Para & Başarı Kapıların",
     fortuneSoulTitle: "Ruhunun Gizli Gücü & Karmik Sırrın",
     fortuneDailyTitle: "Günün Kozmik Fısıltısı",
     fortuneWarningTitle: "Kozmik Korunma & Nazar Notu",
-    btnOpenTechnical: "📐 Detaylı Placidus Haritasını ve Açıları İncele →",
+    btnOpenTechnical: "📐 Detaylı Porphyry Haritasını ve Açıları İncele →",
     btnBackToMystic: "← 🔮 Mistik Fal Moduna Dön",
     deepNatalTitle: "Natal Haritanın Üç Sütunu",
     deepAnglesTitle: "4 Köşe Noktası & Ana Eksenler (Dakika Hassasiyeti)",
     deepSunLabel: "Güneş (Öz)", deepMoonLabel: "Ay (Ruh)", deepAscLabel: "Yükselen (ASC)", deepMcLabel: "Tepe Noktası (MC)",
-    deepHousesTitle: "Placidus 12 Ev Sistemi & Gezegen Yerleşimleri",
-    deepHousesSubtitle: "Doğum saatine ve dakikana göre hesaplanan Placidus ev kaspları ve gök cisimlerinin dağılımı.",
+    deepHousesTitle: "Porphyry 12 Ev Sistemi & Gezegen Yerleşimleri",
+    deepHousesSubtitle: "Doğum saatine ve dakikana göre hesaplanan Porphyry ev kaspları ve gök cisimlerinin dağılımı.",
     tabPlacements: "Gezegen Yerleşimleri", tabHouses: "12 Ev Dağılımı",
     thPlanet: "Gezegen", thSign: "Burç", thDegree: "Kesin Derece", thHouse: "Yerleştiği Ev", thDomain: "Hayat Alanı & Anlamı",
     deepSynthesisTitle: "Kişisel Ev & Yaşam Amacı Sentezi",
@@ -517,20 +517,20 @@ const UI = {
     modeMystic: "🔮 Mystic Fortune Mode",
     modeTechnical: "📐 Scientific Chart Mode",
     modeMysticTag: "Easy Reading",
-    modeTechnicalTag: "Expert / Placidus",
+    modeTechnicalTag: "Expert / Porphyry",
     mysticGreetingTitle: "The Stars' Whisper For You",
     fortuneLoveTitle: "Love & Heart Fortune",
     fortuneCareerTitle: "Destiny, Wealth & Career",
     fortuneSoulTitle: "Your Soul's Secret Power & Karma",
     fortuneDailyTitle: "Today's Cosmic Whisper",
     fortuneWarningTitle: "Cosmic Protection & Watchout",
-    btnOpenTechnical: "📐 View Detailed Placidus Chart & Angles →",
+    btnOpenTechnical: "📐 View Detailed Porphyry Chart & Angles →",
     btnBackToMystic: "← 🔮 Back to Mystic Fortune Mode",
     deepNatalTitle: "Three Pillars of Your Natal Chart",
     deepAnglesTitle: "4 Cardinal Angles & Principal Axes (Minute Precision)",
     deepSunLabel: "Sun (Core)", deepMoonLabel: "Moon (Soul)", deepAscLabel: "Ascendant (ASC)", deepMcLabel: "Midheaven (MC)",
-    deepHousesTitle: "Placidus 12 Houses & Planetary Placements",
-    deepHousesSubtitle: "Placidus house cusps and celestial body positions calculated down to your exact birth minute.",
+    deepHousesTitle: "Porphyry 12 Houses & Planetary Placements",
+    deepHousesSubtitle: "Porphyry house cusps and celestial body positions calculated down to your exact birth minute.",
     tabPlacements: "Planetary Placements", tabHouses: "12 Houses Distribution",
     thPlanet: "Planet", thSign: "Sign", thDegree: "Exact Degree", thHouse: "House", thDomain: "Life Area & Meaning",
     deepSynthesisTitle: "Personal House & Life Purpose Synthesis",
@@ -1767,18 +1767,18 @@ async function refreshUserWishes() {
     wishes.forEach((w) => {
       const dateStr = formatHistoryDate(w.createdAt);
       const catText = catLabels[w.category] || "✨ Dilek";
-      const lightCount = w.lightCount || 1;
+      const lightCount = Number(w.lightCount) || 1;
       const lightBadgeText = (UI[lang].wishLightCountBadge || "{count} Işık / Enerji Verildi").replace("{count}", lightCount);
 
       html += `
-        <div class="history-item-card wish-history-card" style="border-left-color: ${w.color || '#FFD166'};">
+        <div class="history-item-card wish-history-card" style="border-left-color: ${wishSafeColor(w.color)};">
           <div class="history-card-header">
-            <div class="history-sign-badge" style="color: ${w.color || '#FFD166'};">🌟 <span>${catText}</span></div>
+            <div class="history-sign-badge" style="color: ${wishSafeColor(w.color)};">🌟 <span>${catText}</span></div>
             <div class="history-date-badge">${dateStr}</div>
           </div>
-          <p class="history-reading-text" style="font-size:1rem; color:var(--parchment); font-style:italic;">“${w.text || ""}”</p>
+          <p class="history-reading-text" style="font-size:1rem; color:var(--parchment); font-style:italic;">“${wishSafeText(w.text)}”</p>
           <div class="history-wish-footer">
-            <span class="history-wish-light-badge" style="border-color: ${w.color || '#FFD166'};">
+            <span class="history-wish-light-badge" style="border-color: ${wishSafeColor(w.color)};">
               ✨ <strong>${lightCount}</strong> ${UI[lang].wishLightsLabel || "Işık / Enerji"}
             </span>
           </div>
@@ -2530,29 +2530,26 @@ window.initConstellationWishes = function() {
   window._wishStarfield = { wishes: wishes, addWish: function(w) { wishes.push(w); } };
 };
 
+function wishSafeText(value) {
+  const el = document.createElement("span"); el.textContent = String(value == null ? "" : value); return el.innerHTML;
+}
+function wishSafeColor(value) { return /^#[0-9a-f]{6}$/i.test(String(value)) ? value : "#FFD166"; }
 function showWishModal(wish) {
   const lang = state.lang;
   let modal = document.getElementById("wishModal");
-  if (!modal) {
-    modal = document.createElement("div");
-    modal.id = "wishModal";
-    modal.className = "modal-overlay";
-    modal.style.display = "none";
-    modal.onclick = function(e) { if (e.target === modal) modal.style.display = "none"; };
-    document.body.appendChild(modal);
-  }
-  modal.innerHTML = `
-    <div class="modal-box wish-modal-box">
-      <button class="modal-close" onclick="document.getElementById('wishModal').style.display='none'">x</button>
-      <div class="wish-star-glow" style="color:${wish.color};">&#10022;</div>
-      <h3>${UI[lang].wishModalTitle}</h3>
-      <p class="wish-modal-text">"${wish.text}"</p>
-      <p class="wish-modal-author">${UI[lang].wishModalAuthor} ${wish.author}</p>
-      <div class="wish-light-count">${wish.lightCount || 1} &#10022;</div>
-      <button class="btn-primary" onclick="sendLightToWish('${wish.id}')">${UI[lang].wishModalLightBtn}</button>
-    </div>
-  `;
-  modal.style.display = "flex";
+  if (!modal) { modal = document.createElement("div"); modal.id = "wishModal"; modal.className = "modal-overlay"; document.body.appendChild(modal); }
+  modal.replaceChildren();
+  const box = document.createElement("div"); box.className = "modal-box wish-modal-box";
+  const add = (tag, cls, text) => { const el = document.createElement(tag); el.className = cls; el.textContent = text; box.appendChild(el); return el; };
+  add("button", "modal-close", "×").onclick = () => modal.style.display = "none";
+  const star = add("div", "wish-star-glow", "✦"); star.style.color = wishSafeColor(wish.color);
+  add("h3", "", UI[lang].wishModalTitle);
+  add("p", "wish-modal-text", String(wish.text || ""));
+  add("p", "wish-modal-author", UI[lang].wishModalAuthor + " " + String(wish.author || ""));
+  add("div", "wish-light-count", String(Number(wish.lightCount) || 1) + " ✦");
+  add("button", "btn-primary", UI[lang].wishModalLightBtn).onclick = () => sendLightToWish(wish.id);
+  modal.appendChild(box); modal.style.display = "flex";
+  modal.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 }
 
 window.sendLightToWish = function(wishId) {

@@ -1,0 +1,11 @@
+# Satır sonlarını depoda LF olarak sabitle. Bunun yokluğunda Windows'ta
+# çalışmak 16 dosyayı sahte 'değişmiş' gösteriyor ve gerçek diff'i gizliyordu.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.apk binary
+*.aab binary

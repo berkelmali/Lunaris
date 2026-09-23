@@ -20,8 +20,16 @@
       "OKU-BENI.txt",
       "BIRLESTIRME.md",
       "generate-assets.js",
+      "server.js",
+      "README.md",
+      "env.example.js",
+      "deploy.bat",
+      "SADECE-WEB-YAYINLA.bat",
+      "data/**",
       "**/*.apk",
-      "**/*.aab"
+      "**/*.aab",
+      "*.apk",
+      "*.aab"
     ],
     "cleanUrls": true,
     "headers": [
@@ -85,6 +93,15 @@
           {
             "key": "Cache-Control",
             "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/benim-alanim",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, must-revalidate"
           }
         ]
       }

@@ -1,37 +1,28 @@
 const fs = require('fs');
 const path = require('path');
 
-const srcDir = __dirname;
-const destDir = path.join(__dirname, 'www');
-
-if (!fs.existsSync(destDir)) {
-  fs.mkdirSync(destDir, { recursive: true });
+const root = fs.realpathSync(__dirname);
+const dest = path.join(root, 'www');
+const files = [
+  'index.html', 'araclar.html', 'blog.html', 'benim-alanim.html',
+  'style.css', 'main.js', 'lunaris-ml.js', 'astro-db.js', 'cosmic-audio.js',
+  'synastry-engine.js', 'mobile-bridge.js', 'firebase-config.js', 'env.js',
+  'sw.js', 'manifest.webmanifest', 'ml-weights.json', 'lunaris-benchmark.js',
+  'lunaris-scientific-ui.js', 'lunaris-stats.js', 'personal-core.js',
+  'personal.js', 'personal.css', 'journal-link.js'
+];
+const dirs = ['assets', 'vendor'];
+// Validate sources and the exact output path before replacing generated output.
+function validateSource(p) {
+  const stat = fs.lstatSync(p);
+  if (stat.isSymbolicLink()) throw new Error('Web assets must not contain symbolic links: ' + p);
+  if (stat.isDirectory()) for (const entry of fs.readdirSync(p)) validateSource(path.join(p, entry));
 }
-
-// Copy web assets (html, css, js, icons, json)
-const allowedExtensions = ['.html', '.css', '.js', '.json', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.ico', '.txt'];
-const ignoredFiles = ['package.json', 'package-lock.json', 'capacitor.config.json', 'copy-web.js', 'firebase.json', '.firebaserc', 'firestore.rules', 'server.js'];
-const ignoredDirs = ['node_modules', '.git', '.firebase', 'android', 'ios', 'www', 'scripts', 'data'];
-
-function copyRecursive(src, dest) {
-  const entries = fs.readdirSync(src, { withFileTypes: true });
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-
-    if (entry.isDirectory()) {
-      if (!ignoredDirs.includes(entry.name) && !entry.name.startsWith('.')) {
-        if (!fs.existsSync(destPath)) fs.mkdirSync(destPath, { recursive: true });
-        copyRecursive(srcPath, destPath);
-      }
-    } else {
-      const ext = path.extname(entry.name).toLowerCase();
-      if (allowedExtensions.includes(ext) && !ignoredFiles.includes(entry.name)) {
-        fs.copyFileSync(srcPath, destPath);
-      }
-    }
-  }
-}
-
-copyRecursive(srcDir, destDir);
-console.log('✓ Web assets successfully copied to www/');
+for (const name of [...files, ...dirs]) validateSource(path.join(root, name));
+if (path.dirname(dest) !== root || path.basename(dest) !== 'www') throw new Error('Invalid output path');
+if (fs.existsSync(dest) && (fs.lstatSync(dest).isSymbolicLink() || fs.realpathSync(dest) !== dest)) throw new Error('Output must be a real www directory inside the project');
+fs.rmSync(dest, { recursive: true, force: true });
+fs.mkdirSync(dest);
+for (const name of files) fs.copyFileSync(path.join(root, name), path.join(dest, name));
+for (const name of dirs) fs.cpSync(path.join(root, name), path.join(dest, name), { recursive: true });
+console.log('Web build ready: ' + files.length + ' application files + assets/vendor. No development files copied.');

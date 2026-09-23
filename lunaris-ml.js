@@ -1840,7 +1840,12 @@
   }
 
   /**
-   * Placidus 12 Ev Sistemi Kasp Hesabı (Dakika ve Saat Dilimi Hassasiyetli)
+   * 12 Ev Sistemi Kasp Hesabı — UYGULANAN YÖNTEM: PORPHYRY.
+   * Çeyrekler (ASC->IC, IC->DSC) eşit üçe bölünür. Bu Placidus DEĞİLDİR;
+   * Placidus kutupsal yükseliş zamanına dayanır ve eşit bölme yapmaz.
+   * Fonksiyon adı geriye dönük uyumluluk için korunmuştur; doğru adı
+   * calculatePorphyryHouses takma adıyla da dışa verilir.
+   * (Dakika ve Saat Dilimi Hassasiyetli)
    * Desteklenen çağırma biçimleri:
    *   calculatePlacidusHouses(date, lat, lng, [lang], [birthHour], [options])
    *   calculatePlacidusHouses(birthDate, birthHour, options, [lang])
@@ -1879,21 +1884,25 @@
     // Placidus / Equal Hybrid Ev Kaspları
     var cusps = [];
     if (Math.abs(latitude) < 66.5) {
-      var arc1 = normDeg(mc - asc + (mc < asc ? 360 : 0));
-      var arc2 = normDeg(asc - ic + (asc < ic ? 360 : 0));
+      // Çeyrek yayları DOĞRU yönde ölçülür. Eski hâli (mc-asc / asc-ic)
+      // ~270°'lik yaylar üretiyordu; ara kasplar yanlış çeyreğe düşüyor,
+      // kasp dizisi monotonikliğini kaybediyor ve 12 gezegen yalnızca 2-3
+      // eve sıkışıyordu. Doğru çeyrekler: ASC->IC ve IC->DSC.
+      var q1 = normDeg(ic - asc);   // ASC -> IC çeyreği (1., 2., 3. evler)
+      var q2 = normDeg(dsc - ic);   // IC -> DSC çeyreği (4., 5., 6. evler)
 
       cusps[1]  = asc;
-      cusps[2]  = normDeg(asc + arc2 / 3);
-      cusps[3]  = normDeg(asc + 2 * arc2 / 3);
+      cusps[2]  = normDeg(asc + q1 / 3);
+      cusps[3]  = normDeg(asc + 2 * q1 / 3);
       cusps[4]  = ic;
-      cusps[5]  = normDeg(ic + arc1 / 3);
-      cusps[6]  = normDeg(ic + 2 * arc1 / 3);
+      cusps[5]  = normDeg(ic + q2 / 3);
+      cusps[6]  = normDeg(ic + 2 * q2 / 3);
       cusps[7]  = dsc;
-      cusps[8]  = normDeg(dsc + arc2 / 3);
-      cusps[9]  = normDeg(dsc + 2 * arc2 / 3);
+      cusps[8]  = normDeg(dsc + q1 / 3);
+      cusps[9]  = normDeg(dsc + 2 * q1 / 3);
       cusps[10] = mc;
-      cusps[11] = normDeg(mc + arc1 / 3);
-      cusps[12] = normDeg(mc + 2 * arc1 / 3);
+      cusps[11] = normDeg(mc + q2 / 3);
+      cusps[12] = normDeg(mc + 2 * q2 / 3);
     } else {
       for (var h = 1; h <= 12; h++) {
         cusps[h] = normDeg(asc + (h - 1) * 30);
@@ -5081,7 +5090,8 @@
     isModelTrained: isModelTrained,
 
     /** Placidus 12 Ev Sistemi & Köşe Noktaları (Dakika Hassasiyetli) */
-    calculatePlacidusHouses: calculatePlacidusHouses,
+    calculatePlacidusHouses: calculatePlacidusHouses, // geriye dönük uyum (yöntem aslında Porphyry)
+    calculatePorphyryHouses: calculatePlacidusHouses,
     computeAstrologicalAngles: computeAstrologicalAngles,
     formatZodiacDegree: formatZodiacDegree,
     generateHouseSynthesis: generateHouseSynthesis,

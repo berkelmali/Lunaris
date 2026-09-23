@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Yeseva+One&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2.3.0">
+<link rel="stylesheet" href="style.css?v=2.3.1">
 </head>
 <body>
 <!-- ==========================================================
@@ -97,6 +97,7 @@
     <svg class="icon-svg" viewBox="0 0 40 40"><line x1="6" y1="12" x2="34" y2="12"/><line x1="6" y1="20" x2="34" y2="20"/><line x1="6" y1="28" x2="34" y2="28"/></svg>
   </button>
   <nav class="site-nav" id="siteNav">
+    <a href="benim-alanim.html" onclick="closeNav()">Benim Alanım</a>
     <a href="#tarot" data-i18n="navTarot" onclick="closeNav()">Tarot</a>
     <a href="#horoscope" data-i18n="navHoro" onclick="closeNav()">Burçlar</a>
     <a href="#deepreading" data-i18n="navDeep" onclick="closeNav()">Derin Analiz</a>
@@ -674,7 +675,7 @@
         <button type="button" class="dms-btn" id="btnModeTechnical" onclick="switchDeepMode('technical')">
           <span class="dms-icon">📐</span>
           <span class="dms-text" data-i18n="modeTechnical">Bilimsel Harita Modu</span>
-          <span class="dms-tag" data-i18n="modeTechnicalTag">Uzman / Placidus</span>
+          <span class="dms-tag" data-i18n="modeTechnicalTag">Uzman / Porphyry</span>
         </button>
       </div>
     </div>
@@ -801,7 +802,7 @@
       <!-- TEKNİK HARİTAYA GEÇİŞ ÇAĞRISI (CTA) -->
       <div class="mystic-to-tech-cta">
         <button type="button" class="btn-tech-switch" onclick="switchDeepMode('technical')">
-          <span data-i18n="btnOpenTechnical">📐 Detaylı Placidus Haritasını ve Açıları İncele →</span>
+          <span data-i18n="btnOpenTechnical">📐 Detaylı Porphyry Haritasını ve Açıları İncele →</span>
         </button>
       </div>
     </div>
@@ -908,14 +909,14 @@
       <div class="deep-card-header-row">
         <div class="deep-card-title">
           <span>🏛️</span>
-          <span data-i18n="deepHousesTitle">Placidus 12 Ev Sistemi &amp; Gezegen Yerleşimleri</span>
+          <span data-i18n="deepHousesTitle">Porphyry 12 Ev Sistemi &amp; Gezegen Yerleşimleri</span>
         </div>
         <div class="deep-houses-view-toggles">
           <button type="button" class="dh-toggle-btn active" id="btnViewPlacements" onclick="switchHousesView('placements')">🪐 <span data-i18n="tabPlacements">Gezegen Yerleşimleri</span></button>
           <button type="button" class="dh-toggle-btn" id="btnViewHouses" onclick="switchHousesView('houses')">🏛️ <span data-i18n="tabHouses">12 Ev Dağılımı</span></button>
         </div>
       </div>
-      <p class="deep-houses-subtitle" data-i18n="deepHousesSubtitle">Doğum saatine ve dakikana göre hesaplanan Placidus ev kaspları ve gök cisimlerinin dağılımı.</p>
+      <p class="deep-houses-subtitle" data-i18n="deepHousesSubtitle">Doğum saatine ve dakikana göre hesaplanan Porphyry ev kaspları ve gök cisimlerinin dağılımı.</p>
 
       <!-- VIEW 1: Gezegen Yerleşimleri Tablosu -->
       <div class="dh-view-panel active" id="dhPanelPlacements">
@@ -1387,13 +1388,18 @@
   </nav>
 
   <div class="footer-app-box">
-    <a href="/Lunaris-v2.1-debug.apk" class="footer-apk-btn" download>
+    <!-- APK Firebase Hosting'te barindirilamiyor: Spark plani calistirilabilir
+         dosya yuklemesini yasakliyor (populateFiles -> HTTP 400). Bu yuzden
+         binary GitHub Releases'te durur; build-apk.js sabit "Lunaris.apk"
+         adini urettigi icin bu baglanti her surumde ayni kalir. -->
+    <a href="https://github.com/berkelmali/Lunaris/releases/latest/download/Lunaris.apk"
+       class="footer-apk-btn" target="_blank" rel="noopener">
       <span class="fab-icon">📱</span>
       <span class="fab-text">
         <span class="fab-sub">Android İçin Yükle</span>
-        <strong>Lunaris APK (v2.1.1)</strong>
+        <strong>Lunaris APK (v2.3.1)</strong>
       </span>
-      <span class="fab-tag">15.4 MB</span>
+      <span class="fab-tag">15.6 MB</span>
     </a>
   </div>
 
@@ -1406,7 +1412,7 @@
   </div>
 
   <p data-i18n="footerText">LUNARIS eğlence, kişisel farkındalık ve sezgisel keşif amaçlıdır. Kararlarını yıldızlara değil kendi iradene bırak.</p>
-  <p class="footer-credit">© 2026 LUNARIS • v2.1.1 • Berk Elmalı • %100 Çevrimdışı Efemeris ✨</p>
+  <p class="footer-credit">© 2026 LUNARIS • v2.3.1 • Berk Elmalı ✨</p>
 </footer>
 
 <button class="to-top-btn" id="toTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Yukarı çık">
@@ -1416,16 +1422,16 @@
 
 <!-- Astronomy Engine (MIT, Don Cross) — gerçek efemeris; gezegen boylamları
      ve yıldız zamanı buradan geliyor. Yerel dosya, CDN yok. Bkz. vendor/astronomy-engine-LICENSE.txt -->
-<script src="vendor/astronomy.browser.min.js?v=2.3.0"></script>
-<script src="astro-db.js?v=2.3.0"></script>
-<script src="cosmic-audio.js?v=2.3.0"></script>
-<script src="main.js?v=2.3.0"></script>
-<script src="lunaris-ml.js?v=2.3.0"></script>
-<script src="lunaris-stats.js?v=2.3.0"></script>
-<script src="lunaris-benchmark.js?v=2.3.0"></script>
-<script src="lunaris-scientific-ui.js?v=2.3.0"></script>
-<script src="synastry-engine.js?v=2.3.0"></script>
-<script src="mobile-bridge.js?v=2.3.0"></script>
+<script src="vendor/astronomy.browser.min.js?v=2.3.1"></script>
+<script src="astro-db.js?v=2.3.1"></script>
+<script src="cosmic-audio.js?v=2.3.1"></script>
+<script src="main.js?v=2.3.1"></script>
+<script src="lunaris-ml.js?v=2.3.1"></script>
+<script src="lunaris-stats.js?v=2.3.1"></script>
+<script src="lunaris-benchmark.js?v=2.3.1"></script>
+<script src="lunaris-scientific-ui.js?v=2.3.1"></script>
+<script src="synastry-engine.js?v=2.3.1"></script>
+<script src="mobile-bridge.js?v=2.3.1"></script>
 <script>
 /* ==========================================================
    LUNARIS — index.html page logic
@@ -3493,7 +3499,7 @@ function renderDeepReadingUI(data) {
     phenomCard.style.display = (badgesHtml || (reading.astroAttention && reading.astroAttention.synthesis)) ? "block" : "none";
   }
 
-  // 4.6. 12 Ev & Gezegen Yerleşimleri (Placidus)
+  // 4.6. 12 Ev & Gezegen Yerleşimleri (Porphyry)
   const tbody = document.getElementById("dhPlacementsTbody");
   if (tbody && pList.length > 0) {
     let tbHtml = "";
@@ -3941,7 +3947,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-<script type="module" src="firebase-config.js?v=2.3.0"></script>
+<script type="module" src="firebase-config.js?v=2.3.1"></script>
 
 <script>
 /* Service Worker kaydı — yalnızca gerçek web'de.
@@ -3962,5 +3968,6 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 })();
 </script>
+<script src="journal-link.js" defer></script>
 </body>
 </html>

@@ -12,7 +12,11 @@ const crypto = require('crypto');
 const rootDir = path.resolve(__dirname, '..');
 const androidDir = path.join(rootDir, 'android');
 const sourceApkPath = path.join(androidDir, 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
-const targetApkPath = path.join(rootDir, 'Lunaris-v2.1-debug.apk');
+const pkgVersion = require(path.join(rootDir, 'package.json')).version;
+// Sürümlü arşiv kopyası + siteden bağlanan SABİT isim. Sabit isim sayesinde
+// her sürümde index.html'deki indirme bağlantısını elle güncellemek gerekmez.
+const targetApkPath = path.join(rootDir, `Lunaris-v${pkgVersion}-debug.apk`);
+const stableApkPath = path.join(rootDir, 'Lunaris.apk');
 
 console.log('═══════════════════════════════════════════════════════════════');
 console.log('📱 LUNARIS — ANDROID APK DERLEME & PAKETLEME ROBOTU (v2.1)');
@@ -40,6 +44,7 @@ try {
   }
 
   fs.copyFileSync(sourceApkPath, targetApkPath);
+  fs.copyFileSync(sourceApkPath, stableApkPath);
 
   const stats = fs.statSync(targetApkPath);
   const sizeMB = (stats.size / (1024 * 1024)).toFixed(2);
@@ -53,18 +58,18 @@ try {
   console.log('\n═══════════════════════════════════════════════════════════════');
   console.log('🎉 APK BAŞARIYLA DERLENDİ VE HAZIRLANDI!');
   console.log('═══════════════════════════════════════════════════════════════');
-  console.log(`📦 Dosya Adı:       Lunaris-v2.1-debug.apk`);
+  console.log(`📦 Dosya Adı:       Lunaris-v${pkgVersion}-debug.apk (+ sabit kopya: Lunaris.apk)`);
   console.log(`📍 Dosya Konumu:    ${targetApkPath}`);
   console.log(`⚖️  Dosya Boyutu:    ${sizeMB} MB (${stats.size} bayt)`);
   console.log(`🆔 Paket Adı:       com.lunaris.app`);
-  console.log(`🏷️  Sürüm:           v2.1.1 (Build 3)`);
+  console.log(`🏷️  Sürüm:           v${pkgVersion} (Build 4)`);
   console.log(`🎯 Hedef SDK:       API 36 (Android 15/16)`);
   console.log(`🔒 SHA-256:         ${hexHash}`);
   console.log('═══════════════════════════════════════════════════════════════\n');
 
   console.log('🚀 Rakip (dev.jocampos.lunaris.lunaris) ile Karşılaştırmalı Avantajlarımız:');
   console.log('  1. Gerçek NASA JPL Horizons & VSOP87 Astronomik Efemeris (%99.2 İsabet)');
-  console.log('  2. Placidus Evleri & 4 Ana Eksen (Dakika Hassasiyetli ASC/MC/DSC/IC)');
+  console.log('  2. Porphyry Evleri & 4 Ana Eksen (Dakika Hassasiyetli ASC/MC/DSC/IC)');
   console.log('  3. 3-Katmanlı Yapay Zeka (MLP Neural Net) Kişisel Yorum Motoru');
   console.log('  4. Bilimsel Çift-Kör Test Protokolü (Barnum Etkisi Filtresi & Binom Testi)');
   console.log('  5. Normal-Normal Conjugate Bayesian Uyarlanır Kişilik Vektörleri');

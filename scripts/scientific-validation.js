@@ -243,6 +243,25 @@ testDates.forEach(td => {
   
   // 10. Ev kaspı = MC olmalı
   assert(Math.abs(houses.cusps[10] - houses.mc) < 0.001, `${td.label}: 10. Ev Kaspı = MC (${houses.cusps[10].toFixed(2)}° = ${houses.mc.toFixed(2)}°)`);
+  // KRİTİK INVARIANT: kasplar zodyak sırasında monotonik ilerlemeli.
+  // Bu iddia eksikti; ara kaspların yanlış çeyreğe düştüğü hata (arc1/arc2
+  // yön hatası) bu takımdan sızmıştı. Her adım 0° < adım < 180° olmalı.
+  let monotonOk = true, badStep = '';
+  for (let h = 1; h <= 12; h++) {
+    const next = h === 12 ? 1 : h + 1;
+    const step = ((houses.cusps[next] - houses.cusps[h]) % 360 + 360) % 360;
+    if (!(step > 0.001 && step < 180)) {
+      monotonOk = false;
+      badStep = `${h}. ev (${houses.cusps[h].toFixed(2)}°) -> ${next}. ev (${houses.cusps[next].toFixed(2)}°), adım ${step.toFixed(2)}°`;
+      break;
+    }
+  }
+  assert(monotonOk, `${td.label}: 12 kasp zodyak sırasında monotonik${monotonOk ? '' : ' — KIRIK: ' + badStep}`);
+
+  // Duman testi: 12 gezegen tek bir çeyreğe sıkışmamalı.
+  const reading = LunarisML.generateDeepReading('gemini', 'tr', td.date, 12, { lat: td.lat, lon: td.lng, timezoneOffset: 0 });
+  const usedHouses = new Set(reading.natal.planetaryHouses.map(p => p.house));
+  assert(usedHouses.size >= 5, `${td.label}: 12 gök cismi en az 5 farklı eve dağılmalı (bulunan: ${usedHouses.size})`);
 });
 
 

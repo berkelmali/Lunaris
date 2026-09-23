@@ -54,3 +54,6 @@ ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
 # Derleme çıktısı APK/AAB dosyaları (kaynak değil, sürüm olarak dağıtılır)
 *.apk
 *.aab
+
+# deploy.bat calisma kayitlari
+.deploy-logs/
