@@ -22,7 +22,7 @@
    alınmaz — kimlik doğrulama ve canlı veri önbelleğe girmemeli.
    ========================================================== */
 
-const SURUM = 'lunaris-v2.3.1';
+const SURUM = 'lunaris-v2.3.2';
 const KABUK = SURUM + '-kabuk';
 
 /* Çevrimdışı açılış için gereken asgari kabuk. Tarot görselleri

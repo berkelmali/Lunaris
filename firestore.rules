@@ -32,11 +32,43 @@ service cloud.firestore {
                     && request.resource.data.text.size() > 0
                     && request.resource.data.text.size() <= 500
                     && request.resource.data.authorUid == request.auth.uid;
-      // Beğeni dışında hiçbir alan sonradan değiştirilemez.
-      // Eskiden "allow update: if isAuthenticated()" idi — giriş yapan HERKES
-      // başkasının gönderisinin metnini, adını ve yazar kimliğini değiştirebiliyordu.
+      // Güncellemede yalnızca iki şeye izin var: beğeni sayısı ya da TEK bir
+      // yorum eklemek. Metin, yazar ve mevcut yorumlar değiştirilemez.
+      // (Eskiden "allow update: if isAuthenticated()" idi — giriş yapan HERKES
+      // başkasının gönderisinin metnini ve yazar kimliğini değiştirebiliyordu.)
       allow update: if isAuthenticated()
-                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']);
+                    && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+                        || yorumEkleme());
+
+      // Yorumlar gönderinin 'comments' dizisinde tutuluyor; böylece duvarın
+      // mevcut canlı dinleyicisi onları ek bir sorgu olmadan taşıyor.
+      // Bu kural diziyi yalnızca-ekleme (append-only) yapıyor:
+      //  - dizi tam olarak bir eleman büyümeli
+      //  - mevcut elemanlar birebir aynı kalmalı (silme/düzenleme yok)
+      //  - yeni yorumun yazarı isteği yapan kullanıcı olmalı
+      //  - alanlar ve uzunluklar sınırlı; görsel yalnızca https
+      function yorumEkleme() {
+        let eski = resource.data.get('comments', []);
+        let yeni = request.resource.data.comments;
+        let c = yeni[eski.size()];
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['comments'])
+          && yeni is list
+          && yeni.size() == eski.size() + 1
+          && yeni.size() <= 200
+          // Boş aralık dilimi (yeni[0:0]) kurallarda değerlendirme hatası
+          // veriyor; önceki yorum yoksa korunacak bir şey de yok.
+          && (eski.size() == 0 || yeni[0:eski.size()] == eski)
+          && c is map
+          && c.keys().hasOnly(['id', 'name', 'text', 'photoURL', 'createdAt', 'authorUid'])
+          && c.keys().hasAll(['id', 'name', 'text', 'createdAt', 'authorUid'])
+          && c.authorUid == request.auth.uid
+          && c.id is string && c.id.size() <= 64
+          && c.name is string && c.name.size() <= 60
+          && c.text is string && c.text.size() > 0 && c.text.size() <= 280
+          && c.createdAt is string && c.createdAt.size() <= 40
+          && (!('photoURL' in c) || c.photoURL == null
+              || (c.photoURL is string && c.photoURL.size() <= 500 && c.photoURL.matches('https://.*')));
+      }
       allow delete: if isAuthenticated() && (resource.data.authorUid == request.auth.uid || resource.data.authorUid == "user_" + request.auth.uid);
     }
 
