@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Yeseva+One&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2.3.1">
+<link rel="stylesheet" href="style.css?v=2.3.2">
 </head>
 <body>
 <!-- ==========================================================
@@ -1397,7 +1397,7 @@
       <span class="fab-icon">📱</span>
       <span class="fab-text">
         <span class="fab-sub">Android İçin Yükle</span>
-        <strong>Lunaris APK (v2.3.1)</strong>
+        <strong>Lunaris APK (v2.3.2)</strong>
       </span>
       <span class="fab-tag">15.6 MB</span>
     </a>
@@ -1412,7 +1412,7 @@
   </div>
 
   <p data-i18n="footerText">LUNARIS eğlence, kişisel farkındalık ve sezgisel keşif amaçlıdır. Kararlarını yıldızlara değil kendi iradene bırak.</p>
-  <p class="footer-credit">© 2026 LUNARIS • v2.3.1 • Berk Elmalı ✨</p>
+  <p class="footer-credit">© 2026 LUNARIS • v2.3.2 • Berk Elmalı ✨</p>
 </footer>
 
 <button class="to-top-btn" id="toTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Yukarı çık">
@@ -1422,16 +1422,16 @@
 
 <!-- Astronomy Engine (MIT, Don Cross) — gerçek efemeris; gezegen boylamları
      ve yıldız zamanı buradan geliyor. Yerel dosya, CDN yok. Bkz. vendor/astronomy-engine-LICENSE.txt -->
-<script src="vendor/astronomy.browser.min.js?v=2.3.1"></script>
-<script src="astro-db.js?v=2.3.1"></script>
-<script src="cosmic-audio.js?v=2.3.1"></script>
-<script src="main.js?v=2.3.1"></script>
-<script src="lunaris-ml.js?v=2.3.1"></script>
-<script src="lunaris-stats.js?v=2.3.1"></script>
-<script src="lunaris-benchmark.js?v=2.3.1"></script>
-<script src="lunaris-scientific-ui.js?v=2.3.1"></script>
-<script src="synastry-engine.js?v=2.3.1"></script>
-<script src="mobile-bridge.js?v=2.3.1"></script>
+<script src="vendor/astronomy.browser.min.js?v=2.3.2"></script>
+<script src="astro-db.js?v=2.3.2"></script>
+<script src="cosmic-audio.js?v=2.3.2"></script>
+<script src="main.js?v=2.3.2"></script>
+<script src="lunaris-ml.js?v=2.3.2"></script>
+<script src="lunaris-stats.js?v=2.3.2"></script>
+<script src="lunaris-benchmark.js?v=2.3.2"></script>
+<script src="lunaris-scientific-ui.js?v=2.3.2"></script>
+<script src="synastry-engine.js?v=2.3.2"></script>
+<script src="mobile-bridge.js?v=2.3.2"></script>
 <script>
 /* ==========================================================
    LUNARIS — index.html page logic
@@ -2960,8 +2960,17 @@ function submitWallComment(postId) {
 
   input.value = "";
   if (window.LunarisWall && typeof window.LunarisWall.addComment === "function") {
-    window.LunarisWall.addComment(postId, text).then(function() {
-      showToast(UI[state.lang].toastCommentAdded || "Yorumun paylaşıldı ✨");
+    window.LunarisWall.addComment(postId, text).then(function(sonuc) {
+      /* Yorum gerçekten herkese ulaştıysa "paylaşıldı" de; yalnızca bu
+         cihazda kaldıysa (misafir oturumu, çevrimdışı, yerel gönderi)
+         bunu açıkça söyle. Eskiden her durumda "paylaşıldı" yazıyordu. */
+      const L = UI[state.lang];
+      const neden = sonuc && sonuc.reason;
+      showToast(
+        sonuc && sonuc.shared ? (L.toastCommentAdded  || "Yorumun paylaşıldı ✨")
+        : neden === "yerel"    ? (L.toastCommentSample || "Bu örnek bir gönderi; yorumun yalnızca bu cihazda kaldı")
+        : neden === "hata"     ? (L.toastCommentFailed || "Yorum şu an gönderilemedi — bu cihazda saklandı")
+        :                        (L.toastCommentLocal  || "Yorumun bu cihazda kaydedildi — herkesle paylaşmak için giriş yap"));
       loadWallPosts(false);
     });
   }
@@ -3947,7 +3956,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-<script type="module" src="firebase-config.js?v=2.3.1"></script>
+<script type="module" src="firebase-config.js?v=2.3.2"></script>
 
 <script>
 /* Service Worker kaydı — yalnızca gerçek web'de.

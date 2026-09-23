@@ -40,7 +40,8 @@ import {
   getDoc,
   setDoc,
   updateDoc, 
-  increment 
+  increment,
+  arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 // ============================================================
@@ -84,6 +85,26 @@ const LOCAL_STORAGE_ACTIVE_USER = "lunaris_active_user";
 const LOCAL_STORAGE_KEY_READINGS = "lunaris_local_readings";
 const LOCAL_STORAGE_KEY_HOROSCOPES = "lunaris_local_horoscopes";
 const LOCAL_STORAGE_KEY_WALL = "lunaris_local_wall";
+
+/* ── Topluluk sunucusu (server.js) kapısı ──
+   /api/wall ve /api/wall/stream yalnızca "npm start" ile server.js
+   çalışırken var. Firebase Hosting statik dosya sunar, Node çalıştırmaz;
+   canlıda bu uçlar 404 döner. Kapı olmadan her ziyaretçi her sayfa
+   yüklemesinde iki boşa istek atıp konsola iki hata basıyordu.
+   Canlıda duvar zaten Firestore üzerinden çalışıyor (onSnapshot ile canlı).
+   Sunucuyu başka bir ortamda çalıştırırsan: window.LUNARIS_WALL_API = true */
+const WALL_API = (() => {
+  try {
+    if (window.LUNARIS_WALL_API === true) return true;
+    if (window.LUNARIS_WALL_API === false) return false;
+    const h = location.hostname;
+    return h === "localhost" || h === "127.0.0.1";
+  } catch (e) { return false; }
+})();
+function wallApi(url, opts) {
+  if (!WALL_API) return Promise.reject(new Error("wall-api-disabled"));
+  return fetch(url, opts);
+}
 const PREFERRED_LANG_KEY = "lunaris_preferred_lang";
 
 // Güvenli yerel kullanıcı oturumu okuma & yazma
@@ -915,7 +936,7 @@ export const LunarisWall = {
 
     // 1. Ortak Sunucu API'sine POST isteği gönder (Diğer tarayıcılar ve cihazlar görsün)
     try {
-      const resp = await fetch("/api/wall", {
+      const resp = await wallApi("/api/wall", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(postData)
@@ -989,7 +1010,7 @@ export const LunarisWall = {
     };
 
     // 1. Ortak Sunucudan ilk yükleme
-    fetch("/api/wall")
+    wallApi("/api/wall")
       .then(r => r.json())
       .then(data => {
         if (data && Array.isArray(data.posts) && data.posts.length > 0) {
@@ -1001,7 +1022,7 @@ export const LunarisWall = {
     // 2. Server-Sent Events (SSE) ile anlık canlı akış (Facebook gibi sıfır bekleme)
     let eventSource = null;
     try {
-      if (typeof window !== "undefined" && typeof window.EventSource === "function") {
+      if (WALL_API && typeof window !== "undefined" && typeof window.EventSource === "function") {
         eventSource = new EventSource("/api/wall/stream");
         eventSource.onmessage = (event) => {
           try {
@@ -1109,7 +1130,7 @@ export const LunarisWall = {
   // Tek Seferlik Mesaj Yükleme
   loadMessages: async () => {
     try {
-      const resp = await fetch("/api/wall");
+      const resp = await wallApi("/api/wall");
       if (resp.ok) {
         const data = await resp.json();
         if (data && Array.isArray(data.posts) && data.posts.length > 0) {
@@ -1128,7 +1149,7 @@ export const LunarisWall = {
   likeMessage: async (id) => {
     // 1. Sunucu API'sine gönder
     try {
-      await fetch(`/api/wall/${encodeURIComponent(id)}/like`, { method: "POST" });
+      await wallApi(`/api/wall/${encodeURIComponent(id)}/like`, { method: "POST" });
     } catch (e) {}
 
     // 2. Firestore güncellemesi
@@ -1175,7 +1196,7 @@ export const LunarisWall = {
 
     let newComment = null;
     try {
-      const resp = await fetch(`/api/wall/${encodeURIComponent(postId)}/comment`, {
+      const resp = await wallApi(`/api/wall/${encodeURIComponent(postId)}/comment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -1188,12 +1209,54 @@ export const LunarisWall = {
 
     if (!newComment) {
       newComment = {
-        id: "c_" + Date.now(),
+        id: "c_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
         name: authorName,
         text: commentText.trim(),
         photoURL: photoURL,
         createdAt: new Date().toISOString()
       };
+    }
+
+    /* Firestore'a yaz. Bu yol eskiden YOKTU: sunucu API'si canlıda 404
+       verdiği için yorum yalnızca localStorage'a gidiyor, başka hiçbir
+       kullanıcı onu görmüyordu. Yorum gönderi belgesinin "comments"
+       dizisine ekleniyor; duvarın mevcut onSnapshot dinleyicisi bu alanı
+       zaten okuduğu için yorum herkese canlı ulaşıyor.
+       firestore.rules yalnızca TEK yorum EKLEMEYE izin veriyor: mevcut
+       yorumlar değiştirilemez, yazar kimliği taklit edilemez.
+       serverTimestamp dizi elemanında kullanılamadığı için createdAt
+       istemci saatidir (yalnızca "x dk önce" gösterimi için). */
+    let shared = false;
+    /* Paylaşılamadıysa NEDENİ: arayüz kullanıcıya doğru şeyi söylesin.
+       Giriş yapmış birine "paylaşmak için giriş yap" demek yanlış olurdu.
+         "giris" — Firebase oturumu yok (misafir/demo)
+         "yerel" — örnek ya da yalnızca bu cihazdaki gönderi, Firestore'da yok
+         "hata"  — yazma denendi ama başarısız (ağ, izin) */
+    let reason = null;
+    const fsUser = auth && auth.currentUser;
+    const yerelGonderi = String(postId).startsWith("local_") || String(postId).startsWith("seed_");
+    // Önce gönderi kısıtı: örnek gönderide giriş yapmak da işe yaramaz,
+    // o yüzden "giriş yap" demek yanıltıcı olur.
+    if (yerelGonderi) reason = "yerel";
+    else if (!isReady || !fsUser) reason = "giris";
+    if (!reason) {
+      try {
+        const kayit = {
+          id: newComment.id,
+          name: String(newComment.name || "").slice(0, 60),
+          text: newComment.text.slice(0, 280),
+          photoURL: (typeof newComment.photoURL === "string" && newComment.photoURL.indexOf("https://") === 0)
+            ? newComment.photoURL.slice(0, 500) : null,
+          createdAt: newComment.createdAt,
+          authorUid: fsUser.uid
+        };
+        await updateDoc(doc(db, "wallPosts", postId), { comments: arrayUnion(kayit) });
+        newComment = kayit;
+        shared = true;
+      } catch (e) {
+        reason = "hata";
+        console.warn("Yorum Firestore'a yazılamadı:", e && e.code ? e.code : e);
+      }
     }
 
     // Yerel güncelleme
@@ -1212,13 +1275,14 @@ export const LunarisWall = {
         wallBroadcastChannel.postMessage({ type: "new_comment", postId, comment: newComment });
       } catch (e) {}
     }
-    return newComment;
+    // Kopya döndür: "shared" bayrağı saklanan nesneye girmesin (kural ek alanı reddeder)
+    return Object.assign({}, newComment, { shared: shared, reason: reason });
   },
 
   // Gönderi Silme
   deleteMessage: async (id) => {
     try {
-      await fetch(`/api/wall/${encodeURIComponent(id)}`, { method: "DELETE" });
+      await wallApi(`/api/wall/${encodeURIComponent(id)}`, { method: "DELETE" });
     } catch (e) {}
 
     if (isReady && !id.startsWith("local_") && !id.startsWith("seed_")) {
