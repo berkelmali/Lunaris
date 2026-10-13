@@ -4,16 +4,21 @@ service cloud.firestore {
 
     // Yardımcı Doğrulama Fonksiyonları
     function isAuthenticated() {
-      return request.auth != null;
+      return request.auth != null && request.auth.token.firebase.sign_in_provider != 'anonymous';
     }
     
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // 1. Kullanıcı Profilleri & Kişisel Fallar
+    function isSessionParticipant(sessionData) {
+      return isAuthenticated() && 
+        (request.auth.uid == sessionData.initiatorUid || request.auth.uid == sessionData.recipientUid);
+    }
+
+    // 1. Kullanıcı Profilleri & Kişisel Veriler
     match /users/{userId} {
-      allow read: if isOwner(userId);
+      allow read: if isAuthenticated();
       allow write: if isOwner(userId);
 
       match /readings/{readingId} {
@@ -22,9 +27,80 @@ service cloud.firestore {
       match /horoscopes/{horoId} {
         allow read, write: if isOwner(userId);
       }
+      match /cosmic_journal/{entryId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /ml_intelligence/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /fcm_tokens/{tokenId} {
+        allow read, write: if isOwner(userId);
+      }
+      match /cooldowns/{cooldownId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
-    // 2. Topluluk Duvarı
+    // 2. Co-Op Tarot Seansları (100% Free / Sunucusuz Mimari)
+    match /coop_sessions/{sessionId} {
+      allow read: if isSessionParticipant(resource.data);
+
+      allow create: if isAuthenticated() 
+        && request.resource.data.initiatorUid == request.auth.uid
+        && request.resource.data.status == "PENDING_RECIPIENT"
+        && request.resource.data.initiatorHasDrawn == false
+        && request.resource.data.recipientHasDrawn == false
+        && request.resource.data.expiresAt > request.time;
+
+      allow update: if isSessionParticipant(resource.data)
+        && request.resource.data.initiatorUid == resource.data.initiatorUid
+        && request.resource.data.recipientUid == resource.data.recipientUid;
+
+      allow delete: if false;
+
+      // Özel Çekimler Alt Koleksiyonu:
+      // Kullanıcı B ancak KENDİSİ DE kart çektikten sonra Kullanıcı A'nın kartını okuyabilir (Anti-Cheat)
+      match /draws/{userId} {
+        allow read: if isAuthenticated() && (
+          request.auth.uid == userId ||
+          get(/databases/$(database)/documents/coop_sessions/$(sessionId)).data.recipientHasDrawn == true
+        );
+        allow create: if isAuthenticated() 
+          && request.auth.uid == userId
+          && request.resource.data.uid == userId
+          && request.resource.data.card.cardId >= 0 
+          && request.resource.data.card.cardId <= 21;
+        allow update, delete: if false;
+      }
+    }
+
+    // 3. Bildirimler Koleksiyonu (In-App Bildirim Çanı & Sosyal Tetikleyiciler)
+    match /notifications/{notificationId} {
+      allow read, update, delete: if isAuthenticated() && resource.data.recipientUid == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.recipientUid is string;
+    }
+
+    // 4. Günlük Tarot Çekimleri (Senkron Eko Tespiti İçin)
+    match /tarot_pulls/{pullId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // 5. Arkadaşlık / Sosyal Bağlantılar
+    match /connections/{connectionId} {
+      allow read: if isAuthenticated() && request.auth.uid in resource.data.participants;
+      allow create: if isAuthenticated() && request.auth.uid in request.resource.data.participants;
+      allow update: if isAuthenticated() && request.auth.uid in resource.data.participants;
+      allow delete: if isAuthenticated() && request.auth.uid in resource.data.participants;
+    }
+
+    // 6. Arcana Eko Eşleşme Kilidi (İstemci Tarafı Kontroller İçin)
+    match /arcana_echo_cooldowns/{pairKey} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 7. Topluluk Duvarı
     match /wallPosts/{postId} {
       allow read: if true;
       allow create: if isAuthenticated()
@@ -32,21 +108,10 @@ service cloud.firestore {
                     && request.resource.data.text.size() > 0
                     && request.resource.data.text.size() <= 500
                     && request.resource.data.authorUid == request.auth.uid;
-      // Güncellemede yalnızca iki şeye izin var: beğeni sayısı ya da TEK bir
-      // yorum eklemek. Metin, yazar ve mevcut yorumlar değiştirilemez.
-      // (Eskiden "allow update: if isAuthenticated()" idi — giriş yapan HERKES
-      // başkasının gönderisinin metnini ve yazar kimliğini değiştirebiliyordu.)
       allow update: if isAuthenticated()
                     && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
                         || yorumEkleme());
 
-      // Yorumlar gönderinin 'comments' dizisinde tutuluyor; böylece duvarın
-      // mevcut canlı dinleyicisi onları ek bir sorgu olmadan taşıyor.
-      // Bu kural diziyi yalnızca-ekleme (append-only) yapıyor:
-      //  - dizi tam olarak bir eleman büyümeli
-      //  - mevcut elemanlar birebir aynı kalmalı (silme/düzenleme yok)
-      //  - yeni yorumun yazarı isteği yapan kullanıcı olmalı
-      //  - alanlar ve uzunluklar sınırlı; görsel yalnızca https
       function yorumEkleme() {
         let eski = resource.data.get('comments', []);
         let yeni = request.resource.data.comments;
@@ -55,8 +120,6 @@ service cloud.firestore {
           && yeni is list
           && yeni.size() == eski.size() + 1
           && yeni.size() <= 200
-          // Boş aralık dilimi (yeni[0:0]) kurallarda değerlendirme hatası
-          // veriyor; önceki yorum yoksa korunacak bir şey de yok.
           && (eski.size() == 0 || yeni[0:eski.size()] == eski)
           && c is map
           && c.keys().hasOnly(['id', 'name', 'text', 'photoURL', 'createdAt', 'authorUid'])
@@ -72,16 +135,9 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && (resource.data.authorUid == request.auth.uid || resource.data.authorUid == "user_" + request.auth.uid);
     }
 
-    // 3. Kozmik Dilek Galaksisi
-    // Koleksiyon adı istemcide 'wishes' -> 'constellationWishes' olarak
-    // değişmişti ama kural adı eski kalmıştı. Tanımsız koleksiyon en alttaki
-    // catch-all 'if false' kuralına düşüyor; bu yüzden dilek galaksisi canlıda
-    // permission-denied alıp sessizce localStorage'a düşüyordu — kullanıcılar
-    // birbirinin dileklerini hiç görmüyordu.
+    // 8. Kozmik Dilek Galaksisi
     match /constellationWishes/{wishId} {
       allow read: if true;
-      // Misafirler de dilek bırakabilir (ürün tasarımı böyle), ama giriş
-      // yapmış bir kullanıcı başkasının kimliğiyle yazamaz.
       allow create: if request.resource.data.text is string
                     && request.resource.data.text.size() > 0
                     && request.resource.data.text.size() <= 280
@@ -90,7 +146,7 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && resource.data.authorUid == request.auth.uid;
     }
 
-    // 4. ML Geri Bildirim Koleksiyonu (Sıkı Şema Doğrulaması)
+    // 9. ML Geri Bildirim Koleksiyonu
     match /ml_feedback/{feedbackId} {
       allow create: if request.resource.data.keys().hasAll(['signKey', 'category', 'rating', 'score', 'signVector', 'temporalVector'])
                     && request.resource.data.rating is int
@@ -104,7 +160,7 @@ service cloud.firestore {
       allow read, update, delete: if false;
     }
 
-    // 5. Varsayılan: Tanımlanmamış tüm yollara erişimi tamamen engelle
+    // 10. Varsayılan Catch-All
     match /{document=**} {
       allow read, write: if false;
     }

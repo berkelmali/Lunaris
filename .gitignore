@@ -57,3 +57,6 @@ ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
 
 # deploy.bat calisma kayitlari
 .deploy-logs/
+
+# Cloud Functions build
+functions/lib/

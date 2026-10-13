@@ -270,13 +270,13 @@ const UI = {
     feat2Title: "Her Gün Yenilenen Burç Yorumu", feat2Desc: "12 burç için aşk, şans, günlük hayat ve para yorumları her gün değişiyor, hep taze hep senin için.",
     feat3Title: "3 Dilde Kesintisiz Deneyim", feat3Desc: "Türkçe, İngilizce ve Rusça arasında tek tıkla geç, hangi dilde rahatsan o dilde fal baktır.",
     feat4Title: "Sıkıcı Değil, Esprili", feat4Desc: "Klasik kehanet dilinden sıkıldıysan doğru yerdesin, her burç için özgün ve gülümseten yorumlar burada.",
-    tarotTitle: "Kartlarını Çek", tarotText: "Zihnini boşalt, aklındaki soruyu düşün ve üç kartlık açılımını gör: geçmişin, şimdin ve geleceğin.",
+    tarotTitle: "Kartlarını Çek", tarotText: "Zihnini boşalt, aklındaki soruyu düşün ve üç kartlık açılımını gör: geçmişin, şimdin ve seni bekleyen yol.",
     drawBtn: "Kartları Çek", redrawBtn: "Yeniden Çek", comboTitle: "Kartlarının Birleşik Yorumu",
-    tarotMlTitle: "✦ ML Nöral Tarot Sentezi & Kozmik Rezonans",
-    tarotResonanceLabel: "Kozmik Rezonans Skoru",
-    tarotPlanetaryImpact: "Gezegen Saati & Ay Fazı Rezonansı",
-    tarotAlchemyTitle: "Elementel Simya Dağılımı",
-    tarotAdviceTitle: "🎯 ML Nöral Eylem Rehberi",
+    tarotMlTitle: "✦ Günün Kozmik Tarot Açılımı",
+    tarotResonanceLabel: "Kozmik Uyum & Akış",
+    tarotPlanetaryImpact: "Günün Gökyüzü Havası",
+    tarotAlchemyTitle: "✨ Element Dengen (Bugünkü Ruh Halin)",
+    tarotAdviceTitle: "💡 Kozmik Rehberlik",
     tarotMantraTitle: "🔮 Günün Kozmik Mantrası",
     tarotEnergyLove: "Aşk", tarotEnergyCareer: "Kariyer", tarotEnergyLuck: "Şans", tarotEnergyHealth: "Şifa & Ruh", tarotEnergyMoney: "Maddiyat",
     elemFire: "Ateş", elemWater: "Su", elemAir: "Hava", elemEarth: "Toprak",
@@ -299,15 +299,25 @@ const UI = {
     wallGateTitle: "Topluluk Duvarına Katıl",
     wallGateText: "Duvarda fısıltı paylaşmak ve topluluk enerjisine katılmak için lütfen giriş yapın veya ücretsiz hesap oluşturun.",
     wallGateBtn: "Giriş Yap / Kayıt Ol",
-    wallGuestBtn: "✨ Gezgin Olarak Katıl",
     wallAuthorTag: "Kozmik Gezgin",
-    wallMessagePh: "Bugün evren sana ne fısıldıyor?", wallSubmitBtn: "Paylaş", wallRefreshBtn: "Duvarı Yenile", wallLoading: "Fısıltılar yükleniyor...", wallEmpty: "Henüz kimse yazmamış, ilk fısıltıyı sen bırak.", wallLocalNote: "Mesajlar anında diğer tüm kullanıcılarla paylaşılıyor ✦", wallSyncedNote: "Mesajın tüm ziyaretçilerle paylaşılıyor ✦", wallTextRequired: "Mesajın boş olamaz.", wallLoginRequired: "Duvarda paylaşım yapmak için lütfen önce giriş yapın.", wallCooldown: "Biraz nefes al, birazdan tekrar paylaşabilirsin.", wallJustNow: "az önce", wallMinAgo: "dk önce", wallHourAgo: "sa önce", wallDayAgo: "gün önce",
+    wallMessagePh: "Bugün evren sana ne fısıldıyor?", wallSubmitBtn: "Paylaş", wallRefreshBtn: "Duvarı Yenile", wallLoading: "Fısıltılar yükleniyor...", wallEmpty: "Henüz kimse yazmamış, ilk fısıltıyı sen bırak.", wallLocalNote: "Mesajlar anında diğer tüm kullanıcılarla paylaşılıyor ✦", wallSyncedNote: "Mesajın tüm ziyaretçilerle paylaşılıyor ✦", wallTextRequired: "Mesajın boş olamaz.", wallLoginRequired: "Topluluk duvarında fısıltı paylaşmak için lütfen hesabına giriş yap ✨", wallCooldown: "Biraz nefes al, birazdan tekrar paylaşabilirsin.", wallJustNow: "az önce", wallMinAgo: "dk önce", wallHourAgo: "sa önce", wallDayAgo: "gün önce",
+    shareHoroWallBtn: "✨ Bugünkü Enerjimi Duvara Paylaş",
+    shareTarotWallBtn: "✨ Bugünkü Falımı Duvara Paylaş",
+    coopTarotBtn: "✦ Ortak (Co-Op) Fal",
+    coopModalTitle: "İki Kişilik (Co-Op) Tarot",
+    coopModalSub: "Bir dostunla birlikte kart çek, kozmik rezonansınızı keşfedin.",
+    coopModalDesc: "Kendi kartını seç ve davet linkini arkadaşına yolla. O da kendi kartını seçtiğinde, ortak kozmik yorum ikinize de aynı anda açılacak.",
+    coopStartBtn: "✦ Yeni Ortak Seans Başlat",
+    coopOrCode: "veya sana gelen bir davet kodun varsa:",
+    coopCodePh: "Seans Kodu (örn: abc123xyz)",
+    coopJoinBtn: "Katıl",
+    coopPullCardBtn: "🔮 Kartımı Çek",
     wallComments: "Yorumlar", wallCommentBtn: "Yorum Yap", wallAddCommentPh: "Bir fısıltı da sen bırak...", wallSendCommentBtn: "Gönder", wallLiveBadge: "Canlı Topluluk Akışı", toastCommentAdded: "Yorumun paylaşıldı ✨", toastCommentLocal: "Yorumun bu cihazda kaydedildi — herkesle paylaşmak için giriş yap", toastCommentSample: "Bu örnek bir gönderi; yorumun yalnızca bu cihazda kaldı", toastCommentFailed: "Yorum şu an gönderilemedi — bu cihazda saklandı, bağlantını kontrol et",
     moodStarry: "Işıltılı", moodLoved: "Aşk Dolu", moodLucky: "Şanslı", moodDreamy: "Hayalperest", blogAccountNote: "Geçmiş fallarını görmek için ana sayfaya dön.",
     navTools: "Araçlar", toolsEyebrow: "Kozmik Doğum Matrisi", toolsTitle: "Astrolojik Doğum Haritan", toolsText: "Doğum tarihini gir; kutsal numeroloji sayını, Doğu astrolojisi 5 element mührünü ve Güneş burcunun kozmik güç dengesini keşfet.",
     toolsDateLabel: "Doğum Tarihin", toolsCalcBtn: "✦ Kozmik İmzamı Çöz", toolsDateRequired: "Lütfen doğum tarihini seç.",
     bioEyebrow: "Kronobiyoloji & Biyoritim", bioTitle: "Biyo-Enerji & Zihinsel Döngüler", bioBadgePending: "✦ 4 Boyutlu Sinüs", bioEmptyTitle: "Biyoritim & Sirkadiyen Denge", bioEmpty: "Doğum tarihine göre 23 günlük Fiziksel, 28 günlük Duygusal, 33 günlük Zihinsel ve 38 günlük Sezgisel dalgalarını hesapla.", bioEmptyChip: "✦ Matematiksel Sinüs Modeli", bioCompositeLabel: "Bileşik Vitalite İndeksi", bioPhys: "Fiziksel (23g)", bioEmot: "Duygusal (28g)", bioIntel: "Zihinsel (33g)", bioIntuit: "Sezgisel (38g)",
-    tarotTitle: "Arketipsel Projeksiyon & Senkronisite", tarotText: "Carl Jung'un arketip ve senkronisite kuramıyla zihnini odakla; 3 kartlık açılımla bilinçdışı şemalarını ve bireyleşme yolunu keşfet.", tarotMlTitle: "✦ Carl Jung Analitik Psikolojisi & Kozmik Senkronisite", tarotAdviceTitle: "💡 Jungian Bilişsel Eylem Protokolü",
+    tarotTitle: "Kartlarını Çek", tarotText: "Zihnini boşalt, kalbindeki niyeti tut ve üç kartlık açılımını gör: geçmişin, şimdin ve seni bekleyen yol.", tarotMlTitle: "✦ Günün Kozmik Tarot Açılımı", tarotAdviceTitle: "💡 Kozmik Rehberlik",
     numeroEyebrow: "Kutsal Numeroloji", numeroTitle: "Yaşam Yolu Sayın", numeroBadgePending: "✦ Yaşam Yolu", numeroEmptyTitle: "Kutsal Sayı Frekansı", numeroEmpty: "Doğum tarihini girerek yaşam yolu sayını, gezegensel titreşimini ve solfeggio frekansını keşfet.", numeroEmptyChip: "✦ 1 - 9 & Usta Sayılar (11, 22, 33)", numeroNote: "Numeroloji ve doğum analizi kadim ezoterik sistemlere ve astronomik takvim hesaplamalarına dayanır.",
     chineseEyebrow: "Doğu Astrolojisi & Çin Burcu", chineseTitle: "Çin Burcun & Element Mührü", chineseBadgePending: "✦ 5 Element Mührü", chineseEmptyTitle: "Doğu Mührü & 5 Element", chineseEmpty: "12 Göksel Hayvan totemini, Yin/Yang polariteni ve Ahşap, Ateş, Toprak, Metal, Su element dengeni mühürle.", chineseEmptyChip: "✦ 12 Yıllık Ay Takvimi Döngüsü", chineseNote: "Çin burcu Ay takvimine göre Ocak/Şubat civarında değişir; sınır tarihlerde doğduysan gerçek yılın bir öncekiyle aynı olabilir.",
     westernEyebrow: "Güneş Burcu & Element Dengesi", westernTitle: "Kozmik Doğum İmzası", westernBadgePending: "✦ Güneş Haritası", westernEmptyTitle: "Güneş İmzası & Enerji Radarı", westernEmpty: "Güneş burcunun dekansal arketiplerini, sezgisel derinliğini ve manyetik aura güç dengesini ortaya çıkar.", westernEmptyChip: "✦ Zodyak Dekanı & 3 Boyutlu Güç Dengesi",
@@ -320,12 +330,12 @@ const UI = {
     wdMon: "Pt", wdTue: "Sa", wdWed: "Ça", wdThu: "Pe", wdFri: "Cu", wdSat: "Ct", wdSun: "Pz",
 
     // ML Derin Astroloji Bölümü TR
-    deepEyebrow: "ML Astroloji Motoru", deepTitle: "Derin Astroloji & Doğum Haritası",
-    deepText: "Doğum tarihinle astrolojik DNA'nı çöz. Makine öğrenmesi algoritması güneş burcu, ay burcu, yükselen burç, gezegen saati ve ay fazını birleştirerek sana özgü derin bir yorum üretiyor.",
+    deepEyebrow: "Kişisel Doğum Haritası", deepTitle: "Doğum Haritası & Kozmik Rehberlik",
+    deepText: "Doğum tarihinle astrolojik DNA'nı çöz. Güneş, Ay ve Yükselen burcunun enerjilerini bir araya getirerek sana özel, anlaşılır ve sıcak bir rehberlik sunuyoruz.",
     deepBirthLabel: "Doğum Tarihin", deepHourLabel: "Doğum Saatin ve Dakikan",
     deepHourPh: "ör. 14:30", deepCalcBtn: "✦ Kozmik DNA'mı Çöz",
-    deepHourNotice: "⏱️ Dakika hassasiyeti: Her 4 dakikada Yükselen (ASC) ve 12 Ev kaspı ~1° kayar.",
-    deepUnknownTime: "Doğum saatimi bilmiyorum",
+    deepHourNotice: "✨ Tam doğum saatini bilmiyorsan hiç dert etme; kutucuğu işaretle, senin için Güneş tabanlı huzurlu bir harita oluşturalım.",
+    deepUnknownTime: "Doğum saatimi tam bilmiyorum (Güneş Haritası)",
     deepCityLabel: "Doğum Yerin (Yükselen burç için)", deepCityNone: "Seçilmedi",
     deepCityNoteText: "Şehrini seçmezsen Yükselen Burç dürüstçe Güneş burcuna eşitlenir — yükselen, doğum yeri bilinmeden doğru hesaplanamaz.",
     modeMystic: "🔮 Mistik Fal Modu",
@@ -342,14 +352,18 @@ const UI = {
     btnBackToMystic: "← 🔮 Mistik Fal Moduna Dön",
     deepNatalTitle: "Natal Haritanın Üç Sütunu",
     deepAnglesTitle: "4 Köşe Noktası & Ana Eksenler (Dakika Hassasiyeti)",
-    deepSunLabel: "Güneş (Öz)", deepMoonLabel: "Ay (Ruh)", deepAscLabel: "Yükselen (ASC)", deepMcLabel: "Tepe Noktası (MC)",
+    deepSunLabel: "☉ Güneş (Öz Kimliğin)", deepMoonLabel: "☽ Ay (Duygusal Dünyan)", deepAscLabel: "↑ Yükselen (Dışa Enerjin)", deepMcLabel: "Tepe Noktası (MC)",
+    deepSunExplain: "Öz Kimliğin — Hayat enerjin, karakterinin kalbi ve gerçek benliğin.",
+    deepMoonExplain: "Duygusal Dünyan — İç huzurun, hislerin ve bilinçaltındaki gerçek arzuların.",
+    deepAscExplain: "Dışarıya Yansıttığın Enerji — İlk izlenimin, auran ve dünyayla kurduğun bağ.",
+    deepRetroExplain: "🪐 Retro (Geri Hareket) Nedir? Gezegenin gökyüzünde geriye gidiyor gibi göründüğü, hayatın bize 'dur, nefes al ve geçmişi gözden geçir' dediği bir içsel olgunlaşma vaktidir.",
     deepHousesTitle: "Porphyry 12 Ev Sistemi & Gezegen Yerleşimleri",
     deepHousesSubtitle: "Doğum saatine ve dakikana göre hesaplanan Porphyry ev kaspları ve gök cisimlerinin dağılımı.",
     tabPlacements: "Gezegen Yerleşimleri", tabHouses: "12 Ev Dağılımı",
     thPlanet: "Gezegen", thSign: "Burç", thDegree: "Kesin Derece", thHouse: "Yerleştiği Ev", thDomain: "Hayat Alanı & Anlamı",
     deepSynthesisTitle: "Kişisel Ev & Yaşam Amacı Sentezi",
     deepProfileTitle: "Kişilik Profil Radarı",
-    deepReadingTitle: "ML ile Üretilmiş Günlük Derin Yorum",
+    deepReadingTitle: "Günün Derin Doğum Haritası Rehberliği",
     deepCatLove: "Aşk", deepCatLuck: "Şans", deepCatCareer: "Kariyer", deepCatHealth: "Sağlık", deepCatMoney: "Para",
     deepStatsTitle: "Kozmik Anlık Durum",
     deepPlanetHourLabel: "Şu Anki Gezegen Saati",
@@ -380,12 +394,12 @@ const UI = {
     
     moonRitualEyebrow: "Ay Döngüsü & Ritüel", moonRitualTitle: "Canlı Ay Evresi & Ritüel Rehberi", moonRitualText: "Ayın anlık göksel evresini, bulunduğu burcu ve titreşimini yükseltecek ruhsal ritüelleri keşfet.",
     moonPhaseCurrent: "Şu Anki Ay Fazı", moonIlluminationLabel: "Aydınlanma", moonZodiacSignLabel: "Ay Burcu", moonRitualTitleLabel: "Günün Ritüeli & Meditasyonu", moonCrystalsLabel: "Enerji Taşları", moonIncenseLabel: "Aromaterapi & Tütsü", moonNextFullLabel: "Sonraki Dolunaya Kalan",
-    mlFeedbackPrompt: "Bu yorum sana isabetli geldi mi?", mlFeedbackUp: "İsabetli", mlFeedbackDown: "Yetersiz", mlFeedbackThanks: "Geri bildirimin kaydedildi! Model öğreniyor ✨", mlBadgeLabel: "ML Nöral Model",
+    mlFeedbackPrompt: "Bu yorum senin hislerinle örtüştü mü?", mlFeedbackUp: "Tam Bana Göre ✨", mlFeedbackDown: "Pek Değil", mlFeedbackThanks: "Geri bildirimin kaydedildi! Kozmik uyum güçleniyor ✨", mlBadgeLabel: "Kozmik Uyum",
 
     // Deep Astro-Attention & Fenomenler TR
     deepAstroAttentionTitle: "Yapay Zeka Astro-Attention & Astronomik Fenomenler",
     badgeCazimi: "Güneş'in Kalbinde", badgeCombust: "Yanık Gezegen", badgeOob: "Sınır Dışı", badgeNorthNode: "Kuzey Düğüm", badgeChiron: "Chiron",
-    bannerAiFocus: "Yapay Zeka Kozmik Odak:", tarotJungBadge: "🧠 Carl Jung Analitik Psikolojisi & Bireyleşme Sentezi",
+    bannerAiFocus: "Yapay Zeka Kozmik Odak:", tarotJungBadge: "🛤️ Kozmik Yolculuğun (Üç Kartın Hikayesi)",
 
     // Sinastri Haritası & İkili Uyum TR
     tabQuickCompat: "⚡ Hızlı Zodyak Uyumu", tabDeepSynastry: "🪐 Derin Sinastri Haritası (AI)",
@@ -460,11 +474,11 @@ const UI = {
     feat4Title: "Playful, Never Predictable", feat4Desc: "Tired of stiff fortune-telling clichés? Every sign gets its own witty, one-of-a-kind commentary here.",
     tarotTitle: "Draw Your Cards", tarotText: "Clear your mind, hold your question, and reveal your three-card spread: your past, present and future.",
     drawBtn: "Draw the Cards", redrawBtn: "Draw Again", comboTitle: "Your Combined Reading",
-    tarotMlTitle: "✦ ML Neural Tarot Synthesis & Cosmic Resonance",
-    tarotResonanceLabel: "Cosmic Resonance Score",
-    tarotPlanetaryImpact: "Planetary Hour & Moon Phase Alignment",
-    tarotAlchemyTitle: "Elemental Alchemy Distribution",
-    tarotAdviceTitle: "🎯 ML Neural Action Directive",
+    tarotMlTitle: "✦ Cosmic Tarot Spread & Daily Guidance",
+    tarotResonanceLabel: "Cosmic Flow & Alignment",
+    tarotPlanetaryImpact: "Celestial Atmosphere",
+    tarotAlchemyTitle: "✨ Elemental Balance (Today's Mood)",
+    tarotAdviceTitle: "💡 Cosmic Guidance",
     tarotMantraTitle: "🔮 Cosmic Daily Mantra",
     tarotEnergyLove: "Love", tarotEnergyCareer: "Career", tarotEnergyLuck: "Luck", tarotEnergyHealth: "Health & Spirit", tarotEnergyMoney: "Wealth",
     elemFire: "Fire", elemWater: "Water", elemAir: "Air", elemEarth: "Earth",
@@ -487,9 +501,19 @@ const UI = {
     wallGateTitle: "Join the Community Wall",
     wallGateText: "Log in or create a free account to share whispers and connect with the community.",
     wallGateBtn: "Log In / Sign Up",
-    wallGuestBtn: "✨ Join as Traveler",
     wallAuthorTag: "Cosmic Wanderer",
-    wallMessagePh: "What is the universe whispering to you today?", wallSubmitBtn: "Share", wallRefreshBtn: "Refresh Wall", wallLoading: "Loading whispers...", wallEmpty: "No one has written yet, be the first to leave a whisper.", wallLocalNote: "Messages are shared live with all visitors ✦", wallSyncedNote: "Your message is shared with every visitor ✦", wallTextRequired: "Your message can't be empty.", wallLoginRequired: "Please log in to share on the community wall.", wallCooldown: "Take a breath, you can share again in a moment.", wallJustNow: "just now", wallMinAgo: "m ago", wallHourAgo: "h ago", wallDayAgo: "d ago",
+    wallMessagePh: "What is the universe whispering to you today?", wallSubmitBtn: "Share", wallRefreshBtn: "Refresh Wall", wallLoading: "Loading whispers...", wallEmpty: "No one has written yet, be the first to leave a whisper.", wallLocalNote: "Messages are shared live with all visitors ✦", wallSyncedNote: "Your message is shared with every visitor ✦", wallTextRequired: "Your message can't be empty.", wallLoginRequired: "Please sign in to share on the community wall ✨", wallCooldown: "Take a breath, you can share again in a moment.", wallJustNow: "just now", wallMinAgo: "m ago", wallHourAgo: "h ago", wallDayAgo: "d ago",
+    shareHoroWallBtn: "✨ Share Today's Vibe to Wall",
+    shareTarotWallBtn: "✨ Share Today's Reading to Wall",
+    coopTarotBtn: "✦ Co-Op Reading (Dual Tarot)",
+    coopModalTitle: "Two-Player (Co-Op) Tarot",
+    coopModalSub: "Draw cards together with a companion and reveal your cosmic synergy.",
+    coopModalDesc: "Select your card and share the invitation link. Once your friend draws their card, the shared cosmic synthesis unlocks instantly for both.",
+    coopStartBtn: "✦ Start New Shared Session",
+    coopOrCode: "or enter an invite code you received:",
+    coopCodePh: "Session Code (e.g. abc123xyz)",
+    coopJoinBtn: "Join",
+    coopPullCardBtn: "🔮 Draw My Card",
     wallComments: "Comments", wallCommentBtn: "Comment", wallAddCommentPh: "Leave a whisper of your own...", wallSendCommentBtn: "Send", wallLiveBadge: "Live Social Feed", toastCommentAdded: "Your comment was shared ✨", toastCommentLocal: "Your comment was saved on this device — sign in to share it with everyone", toastCommentSample: "This is a sample post; your comment stays on this device only", toastCommentFailed: "Your comment could not be sent right now — it was kept on this device, check your connection",
     moodStarry: "Starry", moodLoved: "In Love", moodLucky: "Lucky", moodDreamy: "Dreamy", blogAccountNote: "Head back to the main site to see your past readings.",
     navTools: "Tools", toolsEyebrow: "Cosmic Birth Matrix", toolsTitle: "Astrological Birth Chart", toolsText: "Enter your birth date to decode your sacred numerology number, Eastern 5-element seal, and Western Sun sign energy balance.",
@@ -506,12 +530,12 @@ const UI = {
     wdMon: "Mo", wdTue: "Tu", wdWed: "We", wdThu: "Th", wdFri: "Fr", wdSat: "Sa", wdSun: "Su",
 
     // ML Deep Astrology Section EN
-    deepEyebrow: "ML Astrology Engine", deepTitle: "Deep Astrology & Birth Chart",
-    deepText: "Decode your astrological DNA from your birth date. The machine learning algorithm combines your sun sign, moon sign, rising sign, planetary hour and moon phase to produce a reading uniquely tailored to you.",
+    deepEyebrow: "Personal Birth Chart", deepTitle: "Birth Chart & Cosmic Guidance",
+    deepText: "Discover your astrological essence from your birth date. We weave together your Sun, Moon, and Rising sign energies into warm, clear, and inspiring guidance tailored just for you.",
     deepBirthLabel: "Your Birth Date", deepHourLabel: "Birth Time & Minute",
     deepHourPh: "e.g. 14:30", deepCalcBtn: "✦ Decode My Cosmic DNA",
-    deepHourNotice: "⏱️ Minute precision: Every 4 minutes shifts the Ascendant (ASC) and 12 House cusps by ~1°.",
-    deepUnknownTime: "I don't know my birth time",
+    deepHourNotice: "✨ If you don't know your exact birth time, no worries; check the box and we will craft a calm, Solar-based chart for you.",
+    deepUnknownTime: "I don't know my exact birth time (Solar Chart)",
     deepCityLabel: "Your Birth Place (for rising sign)", deepCityNone: "Not selected",
     deepCityNoteText: "Without a city, the Rising Sign honestly falls back to your Sun sign — a true ascendant cannot be computed without a birth place.",
     modeMystic: "🔮 Mystic Fortune Mode",
@@ -528,14 +552,18 @@ const UI = {
     btnBackToMystic: "← 🔮 Back to Mystic Fortune Mode",
     deepNatalTitle: "Three Pillars of Your Natal Chart",
     deepAnglesTitle: "4 Cardinal Angles & Principal Axes (Minute Precision)",
-    deepSunLabel: "Sun (Core)", deepMoonLabel: "Moon (Soul)", deepAscLabel: "Ascendant (ASC)", deepMcLabel: "Midheaven (MC)",
+    deepSunLabel: "☉ Sun (Your Core Self)", deepMoonLabel: "☽ Moon (Your Inner World)", deepAscLabel: "↑ Rising (The Energy You Project)", deepMcLabel: "Midheaven (MC)",
+    deepSunExplain: "Your Core Identity — Your vital life force, conscious character, and true self.",
+    deepMoonExplain: "Your Inner World — Your emotions, intuition, and deepest emotional needs.",
+    deepAscExplain: "The Energy You Project — Your aura, first impression, and how the world meets you.",
+    deepRetroExplain: "🪐 What is a Retrograde? A cosmic pause where a planet appears to move backward, inviting you to slow down, breathe, and lovingly reflect on the past.",
     deepHousesTitle: "Porphyry 12 Houses & Planetary Placements",
     deepHousesSubtitle: "Porphyry house cusps and celestial body positions calculated down to your exact birth minute.",
     tabPlacements: "Planetary Placements", tabHouses: "12 Houses Distribution",
     thPlanet: "Planet", thSign: "Sign", thDegree: "Exact Degree", thHouse: "House", thDomain: "Life Area & Meaning",
     deepSynthesisTitle: "Personal House & Life Purpose Synthesis",
     deepProfileTitle: "Personality Profile Radar",
-    deepReadingTitle: "ML-Generated Deep Daily Reading",
+    deepReadingTitle: "Today's Deep Birth Chart Guidance",
     deepCatLove: "Love", deepCatLuck: "Luck", deepCatCareer: "Career", deepCatHealth: "Health", deepCatMoney: "Money",
     deepStatsTitle: "Cosmic Status Right Now",
     deepPlanetHourLabel: "Current Planetary Hour",
@@ -561,7 +589,7 @@ const UI = {
     orbitEyebrow: "Cosmic Synergy", orbitTitle: "Orbit Radar & Chemistry", orbitText: "Explore the magnetic chemistry, elemental harmony, and 4D synergy radar between two souls.", orbitSign1: "1st Person's Sign", orbitSign2: "2nd Person's Sign", orbitCalcBtn: "Calculate Orbit", orbitResonance: "Emotional Resonance", orbitMind: "Mind & Communication", orbitPassion: "Passion & Chemistry", orbitDestiny: "Destiny & Karmic Bond", orbitElementTitle: "Elemental Alchemy", orbitAdviceTitle: "Cosmic Advice",
     pendulumEyebrow: "Mystic Pendulum", pendulumTitle: "Yes / No Oracle", pendulumText: "Focus your mind, hold your question, and release the amethyst pendulum.", pendulumInputPh: "Whisper your question here...", pendulumSwingBtn: "Swing Pendulum", pendulumSwinging: "Crystal is gathering celestial vibration...", pendulumYes: "DEFINITE YES — The cosmos is with you!", pendulumNo: "NO — The energies do not align.", pendulumWait: "BE PATIENT — The timing is ripening.", pendulumAdvicePrefix: "Guidance:",
     moonRitualEyebrow: "Lunar Cycle & Ritual", moonRitualTitle: "Live Moon Phase & Ritual Guide", moonRitualText: "Explore the live Moon phase, its zodiac sign and spiritual rituals to elevate your vibration.", moonPhaseCurrent: "Current Moon Phase", moonIlluminationLabel: "Illumination", moonZodiacSignLabel: "Moon in Sign", moonRitualTitleLabel: "Daily Ritual & Meditation", moonCrystalsLabel: "Crystals & Gems", moonIncenseLabel: "Aromatherapy & Incense", moonNextFullLabel: "Next Full Moon",
-    mlFeedbackPrompt: "Was this reading accurate for you?", mlFeedbackUp: "Accurate", mlFeedbackDown: "Inaccurate", mlFeedbackThanks: "Feedback recorded! Model is learning ✨", mlBadgeLabel: "ML Neural Model",
+    mlFeedbackPrompt: "Does this reading resonate with you?", mlFeedbackUp: "Resonates ✨", mlFeedbackDown: "Not quite", mlFeedbackThanks: "Feedback saved! Cosmic alignment strengthens ✨", mlBadgeLabel: "Cosmic Alignment",
 
     // Biorhythm EN
     bioEyebrow: "Chronobiology & Biorhythms", bioTitle: "Bio-Energy & Mental Cycles", bioBadgePending: "✦ 4D Sinusoidal Flow", bioEmptyTitle: "Biorhythm & Circadian Balance", bioEmpty: "Calculate your 23-day Physical, 28-day Emotional, 33-day Intellectual, and 38-day Intuitive wave curves based on your birth date.", bioEmptyChip: "✦ Mathematical Sinusoidal Model", bioCompositeLabel: "Composite Vitality Index", bioPhys: "Physical (23d)", bioEmot: "Emotional (28d)", bioIntel: "Intellectual (33d)", bioIntuit: "Intuitive (38d)",
@@ -569,7 +597,7 @@ const UI = {
     // Deep Astro-Attention & Phenomena EN
     deepAstroAttentionTitle: "AI Astro-Attention & Astronomical Phenomena",
     badgeCazimi: "in Heart of the Sun", badgeCombust: "Combust Planet", badgeOob: "Out-of-Bounds", badgeNorthNode: "North Node", badgeChiron: "Chiron",
-    bannerAiFocus: "AI Cosmic Focus:", tarotJungBadge: "🧠 Carl Jung Analytical Psychology & Individuation Synthesis",
+    bannerAiFocus: "AI Cosmic Focus:", tarotJungBadge: "🛤️ Your Cosmic Journey (Story of 3 Cards)",
 
     // Synastry & Compatibility EN
     tabQuickCompat: "⚡ Quick Zodiac Harmony", tabDeepSynastry: "🪐 Deep Synastry Chart (AI)",
@@ -643,11 +671,11 @@ const UI = {
     feat4Title: "С юмором, а не по шаблону", feat4Desc: "Надоели скучные предсказания? Здесь у каждого знака свой характер и шутки в тему.",
     tarotTitle: "Вытяни карты", tarotText: "Успокой мысли, задай вопрос в уме — и открой расклад из трёх карт: прошлое, настоящее и будущее.",
     drawBtn: "Вытянуть карты", redrawBtn: "Вытянуть снова", comboTitle: "Совместное толкование карт",
-    tarotMlTitle: "✦ Нейросетевой синтез Таро & Космический резонанс",
-    tarotResonanceLabel: "Космический резонанс",
-    tarotPlanetaryImpact: "Резонанс планетарного часа и фазы Луны",
-    tarotAlchemyTitle: "Элементальное распределение алхимии",
-    tarotAdviceTitle: "🎯 Нейросетевое руководство к действию",
+    tarotMlTitle: "✦ Космический расклад Таро и послание дня",
+    tarotResonanceLabel: "Космическая гармония и поток",
+    tarotPlanetaryImpact: "Небесная атмосфера дня",
+    tarotAlchemyTitle: "✨ Баланс стихий (Твоё настроение сегодня)",
+    tarotAdviceTitle: "💡 Космическое руководство",
     tarotMantraTitle: "🔮 Космическая мантра дня",
     tarotEnergyLove: "Любовь", tarotEnergyCareer: "Карьера", tarotEnergyLuck: "Удача", tarotEnergyHealth: "Исцеление и Дух", tarotEnergyMoney: "Изобилие",
     elemFire: "Огонь", elemWater: "Вода", elemAir: "Воздух", elemEarth: "Земля",
@@ -670,9 +698,19 @@ const UI = {
     wallGateTitle: "Присоединяйтесь к Стене",
     wallGateText: "Войдите или зарегистрируйтесь бесплатно, чтобы оставлять послания на стене.",
     wallGateBtn: "Войти / Регистрация",
-    wallGuestBtn: "✨ Войти как странник",
     wallAuthorTag: "Космический странник",
-    wallMessagePh: "Что вселенная шепчет тебе сегодня?", wallSubmitBtn: "Поделиться", wallRefreshBtn: "Обновить ленту", wallLoading: "Загружаем послания...", wallEmpty: "Пока никто не написал — оставь первое послание.", wallLocalNote: "Сообщения видны всем пользователям в реальном времени ✦", wallSyncedNote: "Твоё сообщение видно всем посетителям ✦", wallTextRequired: "Сообщение не может быть пустым.", wallLoginRequired: "Пожалуйста, войдите, чтобы писать на стене.", wallCooldown: "Переведи дух — сможешь написать снова через пару минут.", wallJustNow: "только что", wallMinAgo: "мин назад", wallHourAgo: "ч назад", wallDayAgo: "дн назад",
+    wallMessagePh: "Что вселенная шепчет тебе сегодня?", wallSubmitBtn: "Поделиться", wallRefreshBtn: "Обновить ленту", wallLoading: "Загружаем послания...", wallEmpty: "Пока никто не написал — оставь первое послание.", wallLocalNote: "Сообщения видны всем пользователям в реальном времени ✦", wallSyncedNote: "Твоё сообщение видно всем посетителям ✦", wallTextRequired: "Сообщение не может быть пустым.", wallLoginRequired: "Пожалуйста, войдите в аккаунт, чтобы писать на стене ✨", wallCooldown: "Переведи дух — сможешь написать снова через пару минут.", wallJustNow: "только что", wallMinAgo: "мин назад", wallHourAgo: "ч назад", wallDayAgo: "дн назад",
+    shareHoroWallBtn: "✨ Поделиться энергией на стене",
+    shareTarotWallBtn: "✨ Поделиться раскладом на стене",
+    coopTarotBtn: "✦ Совместный расклад (Co-Op)",
+    coopModalTitle: "Парное (Co-Op) Таро",
+    coopModalSub: "Вытяните карты вместе с другом и откройте взаимную гармонию.",
+    coopModalDesc: "Выберите свою карту и отправьте ссылку другу. Как только он сделает выбор, общий синтез откроется вам обоим.",
+    coopStartBtn: "✦ Начать совместный сеанс",
+    coopOrCode: "или введите полученный код:",
+    coopCodePh: "Код сеанса (напр. abc123xyz)",
+    coopJoinBtn: "Войти",
+    coopPullCardBtn: "🔮 Вытянуть карту",
     wallComments: "Комментарии", wallCommentBtn: "Комментировать", wallAddCommentPh: "Оставьте свой шепот...", wallSendCommentBtn: "Отправить", wallLiveBadge: "Живая лента", toastCommentAdded: "Ваш комментарий опубликован ✨", toastCommentLocal: "Комментарий сохранён на этом устройстве — войдите, чтобы поделиться им со всеми", toastCommentSample: "Это пример публикации; комментарий остался только на этом устройстве", toastCommentFailed: "Не удалось отправить комментарий — он сохранён на устройстве, проверьте подключение",
     moodStarry: "Звёздное", moodLoved: "Влюблённое", moodLucky: "Удачное", moodDreamy: "Мечтательное", blogAccountNote: "Вернись на главный сайт, чтобы увидеть свои прошлые расклады.",
     navTools: "Инструменты", toolsEyebrow: "Космическая матрица", toolsTitle: "Астрологическая карта рождения", toolsText: "Введи дату рождения, чтобы узнать число сакральной нумерологии, печать 5 стихий восточного зодиака и баланс солнечного знака.",
@@ -689,12 +727,12 @@ const UI = {
     wdMon: "Пн", wdTue: "Вт", wdWed: "Ср", wdThu: "Чт", wdFri: "Пт", wdSat: "Сб", wdSun: "Вс",
 
     // ML Раздел глубокой астрологии RU
-    deepEyebrow: "ML Движок Астрологии", deepTitle: "Глубокая Астрология и Натальная Карта",
-    deepText: "Расшифруй свою астрологическую ДНК по дате рождения. ML-алгоритм объединяет солнечный знак, лунный знак, асцендент, планетарный час и фазу Луны, создавая уникальный прогноз именно для тебя.",
+    deepEyebrow: "Натальная Карта", deepTitle: "Глубокая Астрология и Карта Рождения",
+    deepText: "Откройте свою астрологическую суть по дате рождения. Мы гармонично соединяем энергии Солнца, Луны и Асцендента в тёплое и ясное руководство.",
     deepBirthLabel: "Дата рождения", deepHourLabel: "Время и минута рождения",
     deepHourPh: "напр. 14:30", deepCalcBtn: "✦ Расшифровать мою космическую ДНК",
-    deepHourNotice: "⏱️ Точность до минуты: Каждые 4 минуты Асцендент (ASC) и куспиды 12 Домов сдвигаются на ~1°.",
-    deepUnknownTime: "Я не знаю точное время",
+    deepHourNotice: "✨ Если вы не знаете точного времени рождения — ничего страшного; отметьте галочку, и мы составим ясную карту по положению Солнца.",
+    deepUnknownTime: "Не знаю точного времени рождения (Солнечная карта)",
     deepCityLabel: "Место рождения (для асцендента)", deepCityNone: "Не выбрано",
     deepCityNoteText: "Если не выбрать город, асцендент честно приравнивается к солнечному знаку — без места рождения его нельзя рассчитать верно.",
     modeMystic: "🔮 Режим мистического гадания",
@@ -711,14 +749,18 @@ const UI = {
     btnBackToMystic: "← 🔮 Назад к мистическому гаданию",
     deepNatalTitle: "Три опоры натальной карты",
     deepAnglesTitle: "4 Угловые Точки и Оси Гороскопа (Точность до минуты)",
-    deepSunLabel: "Солнце (Суть)", deepMoonLabel: "Луна (Душа)", deepAscLabel: "Асцендент (ASC)", deepMcLabel: "Середина Неба (MC)",
+    deepSunLabel: "☉ Солнце (Суть вашего Я)", deepMoonLabel: "☽ Луна (Душевный мир)", deepAscLabel: "↑ Асцендент (Внешняя энергия)", deepMcLabel: "Середина Неба (MC)",
+    deepSunExplain: "Суть вашего Я — жизненная энергия, характер и подлинное начало.",
+    deepMoonExplain: "Душевный мир — эмоции, интуиция и внутренний покой.",
+    deepAscExplain: "Внешняя энергия — первое впечатление, аура и восприятие мира.",
+    deepRetroExplain: "🪐 Что такое ретроград? Период замедления, когда планета словно движется назад, призывая выдохнуть и пересмотреть прошлое.",
     deepHousesTitle: "12 Домов Плацидуса и Положения Планет",
     deepHousesSubtitle: "Куспиды домов Плацидуса и распределение планет, рассчитанные с точностью до минуты вашего рождения.",
     tabPlacements: "Положения планет", tabHouses: "Распределение 12 Домов",
     thPlanet: "Планета", thSign: "Знак", thDegree: "Точный градус", thHouse: "Дом", thDomain: "Сфера жизни",
     deepSynthesisTitle: "Синтез Домов и Жизненного Предназначения",
     deepProfileTitle: "Радар личностного профиля",
-    deepReadingTitle: "Глубокий прогноз на основе ML",
+    deepReadingTitle: "Глубокий прогноз и руководство",
     deepCatLove: "Любовь", deepCatLuck: "Удача", deepCatCareer: "Карьера", deepCatHealth: "Здоровье", deepCatMoney: "Деньги",
     deepStatsTitle: "Текущий космический статус",
     deepPlanetHourLabel: "Планетарный час",
@@ -744,7 +786,7 @@ const UI = {
     orbitEyebrow: "Космическая синергия", orbitTitle: "Орбитальный радар", orbitText: "Исследуй притяжение, баланс стихий и 4D-радар совместимости двух душ.", orbitSign1: "Знак 1-го", orbitSign2: "Знак 2-го", orbitCalcBtn: "Рассчитать орбиту", orbitResonance: "Эмоциональный резонанс", orbitMind: "Мысли и общение", orbitPassion: "Страсть и химия", orbitDestiny: "Судьба и карма", orbitElementTitle: "Алхимия стихий", orbitAdviceTitle: "Совет звёзд",
     pendulumEyebrow: "Мистический маятник", pendulumTitle: "Оракул Да / Нет", pendulumText: "Сконцентрируйся, задай вопрос и отпусти маятник.", pendulumInputPh: "Напиши вопрос...", pendulumSwingBtn: "Качнуть маятник", pendulumSwinging: "Кристалл собирает энергию...", pendulumYes: "ОДНОЗНАЧНО ДА — Вселенная с тобой!", pendulumNo: "НЕТ — Энергии не благоволят.", pendulumWait: "ПОДОЖДИ — Время ещё не пришло.", pendulumAdvicePrefix: "Наставление:",
     moonRitualEyebrow: "Лунный цикл и ритуалы", moonRitualTitle: "Фаза Луны и ритуалы дня", moonRitualText: "Узнай текущую фазу Луны, её знак зодиака и ритуалы дня.", moonPhaseCurrent: "Текущая фаза Луны", moonIlluminationLabel: "Освещённость", moonZodiacSignLabel: "Луна в знаке", moonRitualTitleLabel: "Ритуалы и медитация дня", moonCrystalsLabel: "Камни и кристаллы", moonIncenseLabel: "Ароматерапия и благовония", moonNextFullLabel: "До следующего полнолуния",
-    mlFeedbackPrompt: "Был ли этот прогноз точным для вас?", mlFeedbackUp: "Точно", mlFeedbackDown: "Неточно", mlFeedbackThanks: "Отзыв сохранён! Модель обучается ✨", mlBadgeLabel: "Нейросеть ML",
+    mlFeedbackPrompt: "Откликается ли это послание в душе?", mlFeedbackUp: "Откликается ✨", mlFeedbackDown: "Не совсем", mlFeedbackThanks: "Отзыв сохранён! Космическая связь крепнет ✨", mlBadgeLabel: "Космическая гармония",
 
     // Biorhythm RU
     bioEyebrow: "Хронобиология и биоритмы", bioTitle: "Биоэнергия и ментальные циклы", bioBadgePending: "✦ 4D Синусоида", bioEmptyTitle: "Биоритмы и циркадный баланс", bioEmpty: "Рассчитайте 23-дневный Физический, 28-дневный Эмоциональный, 33-дневный Интеллектуальный и 38-дневный Интуитивный ритмы по дате рождения.", bioEmptyChip: "✦ Математическая синусоидальная модель", bioCompositeLabel: "Индекс витальности", bioPhys: "Физический (23д)", bioEmot: "Эмоциональный (28д)", bioIntel: "Интеллектуальный (33д)", bioIntuit: "Интуитивный (38д)",
@@ -752,7 +794,7 @@ const UI = {
     // Deep Astro-Attention & Phenomena RU
     deepAstroAttentionTitle: "ИИ Астро-внимание и астрономические явления",
     badgeCazimi: "в сердце Солнца", badgeCombust: "Сожжённая планета", badgeOob: "За границами", badgeNorthNode: "Северный Узел", badgeChiron: "Хирон",
-    bannerAiFocus: "ИИ Космический Фокус:", tarotJungBadge: "🧠 Аналитическая психология Карла Юнга и синтез индивидуации",
+    bannerAiFocus: "ИИ Космический Фокус:", tarotJungBadge: "🛤️ Твоё Космическое Путешествие (История 3 Карт)",
 
     // Synastry & Compatibility RU
     tabQuickCompat: "⚡ Быстрая совместимость", tabDeepSynastry: "🪐 Глубокая синастрия (ИИ)",
@@ -1655,19 +1697,21 @@ async function refreshUserReadings() {
 
       let directiveHtml = "";
       if (mlInfo) {
-        if (mlInfo.shadowWarning) {
+        if (mlInfo.doThis || mlInfo.cognitiveAdvice || mlInfo.actionDirective) {
+          const doTitle = lang === "tr" ? "✨ Bugün Bunu Yap (Öneri)" : (lang === "ru" ? "✨ Совет на Сегодня" : "✨ Do This Today (Guidance)");
           directiveHtml += `
-            <div class="history-directive-box history-shadow-box">
-              <span class="hdb-tag">🌑 ${lang === "tr" ? "Bilinçdışı Gölge Uyarısı" : (lang === "ru" ? "Предупреждение о Тени" : "Unconscious Shadow Alert")}:</span>
-              <span class="hdb-text">${mlInfo.shadowWarning}</span>
+            <div class="history-directive-box">
+              <span class="hdb-tag">${doTitle}:</span>
+              <span class="hdb-text">${mlInfo.doThis || mlInfo.cognitiveAdvice || mlInfo.actionDirective}</span>
             </div>
           `;
         }
-        if (mlInfo.cognitiveAdvice || mlInfo.actionDirective) {
+        if (mlInfo.avoidThis || mlInfo.shadowWarning) {
+          const avoidTitle = lang === "tr" ? "🌑 Bundan Kaçın (Tatlı Uyarı)" : (lang === "ru" ? "🌑 Предостережение (Чего Избегать)" : "🌑 Gentle Warning (Avoid This)");
           directiveHtml += `
-            <div class="history-directive-box">
-              <span class="hdb-tag">💡 ${UI[lang].tarotAdviceTitle || "Eylem Protokolü"}:</span>
-              <span class="hdb-text">${mlInfo.cognitiveAdvice ? (mlInfo.cognitiveAdvice + " (" + mlInfo.actionDirective + ")") : mlInfo.actionDirective}</span>
+            <div class="history-directive-box history-shadow-box">
+              <span class="hdb-tag">${avoidTitle}:</span>
+              <span class="hdb-text">${mlInfo.avoidThis || mlInfo.shadowWarning}</span>
             </div>
           `;
         }

@@ -1609,9 +1609,10 @@ section { padding: var(--sp-7) var(--sp-5); max-width: 1100px; margin:0 auto; }
 .wall-char-count { color: var(--mist); font-size:0.75rem; }
 .wall-composer-note { color: var(--mist); font-size:0.75rem; margin-top: var(--sp-3); opacity:0.8; text-align:center; }
 
-.horo-save-wrap { margin-top: var(--sp-4); padding-top: var(--sp-3); border-top:1px solid rgba(212,175,106,0.15); display:flex; justify-content:flex-end; }
-.horo-save-btn { display:inline-flex; align-items:center; gap:8px; background: linear-gradient(135deg, rgba(212,175,106,0.18), rgba(139,95,191,0.2)); border:1px solid rgba(212,175,106,0.4); color:var(--gold-bright); font-family:var(--font-body); font-size:0.86rem; font-weight:700; padding:8px 18px; border-radius:var(--radius-full); cursor:pointer; transition:all 0.25s ease; }
-.horo-save-btn:hover { background: linear-gradient(135deg, var(--gold), var(--gold-bright)); color:var(--void); box-shadow:0 4px 15px rgba(212,175,106,0.35); transform:translateY(-1px); }
+.horo-save-wrap { margin-top: var(--sp-4); padding-top: var(--sp-3); border-top:1px solid rgba(212,175,106,0.15); display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
+.horo-save-btn, .horo-share-wall-btn, .horo-deep-jump-btn { display:inline-flex; align-items:center; gap:8px; background: linear-gradient(135deg, rgba(212,175,106,0.18), rgba(139,95,191,0.2)); border:1px solid rgba(212,175,106,0.4); color:var(--gold-bright); font-family:var(--font-body); font-size:0.86rem; font-weight:700; padding:8px 18px; border-radius:var(--radius-full); cursor:pointer; transition:all 0.25s ease; text-decoration:none; }
+.horo-share-wall-btn { background: linear-gradient(135deg, rgba(123,79,166,0.35), rgba(212,175,106,0.35)); border-color: var(--gold); }
+.horo-save-btn:hover, .horo-share-wall-btn:hover, .horo-deep-jump-btn:hover { background: linear-gradient(135deg, var(--gold), var(--gold-bright)); color:var(--void); box-shadow:0 4px 15px rgba(212,175,106,0.35); transform:translateY(-1px); }
 .horo-save-btn.saved { background:rgba(95,168,138,0.2); border-color:var(--jade); color:var(--jade); pointer-events:none; }
 
 /* Account / Profile Redesign & Avatar Upload */

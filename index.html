@@ -164,9 +164,6 @@
       <button class="btn-auth-google" onclick="doGoogleLogin()">
         <svg class="google-icon-svg" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
         <span data-i18n="authGoogleBtn">Google ile Devam Et</span>
-      </button>
-
-      <button class="btn-auth-demo" onclick="doDemoLogin()" data-i18n="authDemoBtn">✨ Demo / Misafir Moduyla Giriş Yap</button>
     </div>
 
     <!-- Kayıt Formu -->
@@ -299,7 +296,7 @@
 
     <div class="legal-content-body" id="legalBodyTerms" style="display:none;">
       <h4>1. Hizmetin Kapsamı</h4>
-      <p>LUNARIS, kadim sembolizm, arketipsel psikoloji (Carl Jung senkronisitesi) ve modern efemeris hesaplamalarını harmanlayan kültürel, sanatsal ve kişisel gelişim aracıdır.</p>
+      <p>LUNARIS, kadim sembolizm, gökyüzü ilhamı ve modern efemeris hesaplamalarını harmanlayan kültürel, sanatsal ve kişisel gelişim aracıdır.</p>
 
       <h4>2. Kullanım Kuralları</h4>
       <ul>
@@ -397,23 +394,24 @@
   <p class="section-text" data-i18n="tarotText">Zihnini boşalt, aklındaki soruyu düşün ve üç kartlık açılımını gör: geçmişin, şimdin ve geleceğin.</p>
   <div class="tarot-controls">
     <button class="btn-primary" id="drawBtn" onclick="drawSpread()" data-i18n="drawBtn">Kartları Çek</button>
+    <button type="button" class="btn-primary" id="coopTarotBtn" onclick="openCoopModal()" style="margin-left:8px; background:linear-gradient(135deg, rgba(123,79,166,0.55), rgba(212,175,106,0.35)); border:1px solid var(--gold);" data-i18n="coopTarotBtn">✦ Ortak (Co-Op) Fal</button>
   </div>
   <div class="tarot-spread" id="tarotSpread"></div>
   <div class="combo-reading tarot-ml-card" id="comboReading" style="display:none;">
     <div class="tarot-ml-header">
       <div class="tarot-ml-badge">
         <span class="tml-pulse"></span>
-        <span data-i18n="tarotMlTitle">✦ ML Nöral Tarot Sentezi & Kozmik Rezonans</span>
+        <span data-i18n="tarotMlTitle">✦ Günün Kozmik Tarot Açılımı</span>
       </div>
-      <div class="tarot-ml-version">v2.5 Neural Engine</div>
+      <div class="tarot-ml-version">Kozmik Rehberlik</div>
     </div>
 
     <!-- Rezonans ve Kozmik Çevre -->
     <div class="tarot-ml-meta-grid">
       <div class="tml-meta-box">
         <div class="tml-meta-head-row">
-          <div class="tml-meta-label" data-i18n="tarotResonanceLabel">Kozmik Rezonans Skoru</div>
-          <span class="tml-info-pill" title="Gökyüzü gezegen saatleri ve Ay fazı ile arketipsel uyum derecesi">✦ Senkronizasyon</span>
+          <div class="tml-meta-label" data-i18n="tarotResonanceLabel">Kozmik Uyum & Akış</div>
+          <span class="tml-info-pill" title="Gökyüzü gezegen saatleri ve Ay fazı ile uyum derecesi">✦ Göksel Uyum</span>
         </div>
         <div class="tml-meta-val" id="tarotMlResonance"><span class="tml-score-num">--</span>%</div>
         <div class="tml-score-bar-wrap">
@@ -422,7 +420,7 @@
         <div class="tml-res-explanation" id="tarotMlResExplanation">--</div>
       </div>
       <div class="tml-meta-box">
-        <div class="tml-meta-label" data-i18n="tarotPlanetaryImpact">Gezegen Saati & Ay Fazı Rezonansı</div>
+        <div class="tml-meta-label" data-i18n="tarotPlanetaryImpact">Günün Gökyüzü Havası</div>
         <div class="tml-meta-sub" id="tarotMlCelestial">--</div>
       </div>
     </div>
@@ -430,7 +428,7 @@
     <!-- Element Simyası Çubukları -->
     <div class="tarot-alchemy-box">
       <div class="tml-alchemy-head">
-        <span class="tml-alchemy-title" data-i18n="tarotAlchemyTitle">Elementel Simya Dağılımı</span>
+        <span class="tml-alchemy-title" data-i18n="tarotAlchemyTitle">✨ Element Dengen (Bugünkü Ruh Halin)</span>
         <span class="tml-alchemy-desc" id="tarotMlAlchemyDesc">--</span>
       </div>
       <div class="tml-elements-grid">
@@ -461,12 +459,12 @@
       </div>
     </div>
 
-    <!-- Nöral Sentez Hikayesi & Jungian Analiz -->
+    <!-- 4-Parçalı Kozmik Yolculuk Hikayesi & Rehberlik -->
     <div class="tarot-synthesis-body">
-      <div class="tml-jung-badge" data-i18n="tarotJungBadge">🧠 Carl Jung Analitik Psikolojisi & Bireyleşme Sentezi</div>
+      <div class="tml-jung-badge" data-i18n="tarotJungBadge">🛤️ Kozmik Yolculuğun (Üç Kartın Hikayesi)</div>
       <p class="combo-text" id="comboText"></p>
-      <div class="tarot-shadow-box" id="tarotShadowBox" style="display:none;"></div>
       <div class="tarot-cognitive-box" id="tarotCognitiveBox" style="display:none;"></div>
+      <div class="tarot-shadow-box" id="tarotShadowBox" style="display:none;"></div>
     </div>
 
     <!-- Kategori Enerji Dağılım Hapları -->
@@ -481,7 +479,7 @@
     <!-- ML Eylem Direktifi & Günün Mantrası -->
     <div class="tarot-footer-grid">
       <div class="tml-advice-card">
-        <div class="tml-card-tag" data-i18n="tarotAdviceTitle">🎯 ML Nöral Eylem Rehberi</div>
+        <div class="tml-card-tag" data-i18n="tarotAdviceTitle">💡 Kozmik Rehberlik</div>
         <p id="tarotMlAdvice" class="tml-advice-text">--</p>
       </div>
       <div class="tml-mantra-card">
@@ -490,10 +488,83 @@
       </div>
     </div>
 
+    <!-- 1-Tap Duvara Paylaşım Köprüsü -->
+    <div class="tarot-share-actions" style="margin-top:16px; text-align:center;">
+      <button type="button" class="btn-primary tarot-share-wall-btn" id="tarotShareWallBtn" onclick="shareTarotReadingToWall()" style="background:linear-gradient(135deg, rgba(212,175,106,0.4), rgba(123,79,166,0.6)); border:1px solid var(--gold); padding:10px 22px; font-weight:600; font-size:0.92rem; display:inline-flex; align-items:center; gap:8px;">
+        <span>✨</span> <span data-i18n="shareTarotWallBtn">Bugünkü Falımı Duvara Paylaş</span>
+      </button>
+    </div>
+
     <!-- ML Geri Bildirim Satırı -->
     <div id="tarotMlFeedbackWrap"></div>
   </div>
 </section>
+
+<!-- ==========================================================
+     CO-OP İKİ KİŞİLİK TAROT MODALI (100% Free / Serverless)
+     ========================================================== -->
+<div class="modal-overlay" id="coopModalOverlay" style="display:none;" onclick="if(event.target===this) closeCoopModal();">
+  <div class="modal-box" style="max-width:480px; text-align:center;">
+    <button class="modal-close" onclick="closeCoopModal()" aria-label="Kapat">×</button>
+    <div class="auth-modal-header">
+      <div class="auth-modal-icon" style="font-size:24px; color:var(--gold-bright);">✦</div>
+      <h3 class="auth-modal-title" data-i18n="coopModalTitle">İki Kişilik (Co-Op) Tarot</h3>
+      <p class="auth-modal-sub" data-i18n="coopModalSub">Bir dostunla birlikte kart çek, kozmik rezonansınızı keşfedin.</p>
+    </div>
+
+    <!-- 1. Durum: Seans Başlat veya Katıl -->
+    <div id="coopStepInit">
+      <p style="font-size:0.9rem; color:var(--mist); margin-bottom:16px; line-height:1.5;" data-i18n="coopModalDesc">
+        Kendi kartını seç ve davet linkini arkadaşına yolla. O da kendi kartını seçtiğinde, hilesiz ortak kozmik sentez ikinize de aynı anda açılacak.
+      </p>
+      <button class="btn-primary" style="width:100%; margin-bottom:12px;" onclick="startCoopSession()" data-i18n="coopStartBtn">✦ Yeni Ortak Seans Başlat</button>
+      <div style="font-size:0.8rem; color:var(--mist); margin: 8px 0;" data-i18n="coopOrCode">veya sana gelen bir davet kodun varsa:</div>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <input type="text" id="coopJoinIdInput" class="auth-input" data-i18n-ph="coopCodePh" placeholder="Seans Kodu (örn: abc123xyz)" style="flex:1;">
+        <button class="btn-primary" onclick="joinCoopSessionFromInput()" style="padding:0 16px;" data-i18n="coopJoinBtn">Katıl</button>
+      </div>
+    </div>
+
+    <!-- 2. Durum: Kart Çekme & Davet Paylaşımı -->
+    <div id="coopStepActive" style="display:none;">
+      <div id="coopInviteShareBox" style="margin-bottom:16px; padding:12px; border:1px dashed var(--gold); border-radius:10px; background:rgba(212,175,106,0.06); text-align:left;">
+        <p style="font-size:0.85rem; color:var(--gold-bright); margin-bottom:4px; font-weight:600;">✦ Davet Bağlantın Hazır</p>
+        <p style="font-size:0.75rem; color:var(--mist); margin-bottom:8px;">Bu linki arkadaşına gönder, aynı anda falınıza bakın:</p>
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="coopShareLinkInput" class="auth-input" readonly style="font-size:0.8rem; flex:1;">
+          <button class="btn-primary" onclick="copyCoopLink()" style="padding:0 12px; font-size:0.8rem;">Kopyala</button>
+        </div>
+      </div>
+
+      <div id="coopDrawActionArea">
+        <p id="coopPromptText" style="font-size:0.92rem; color:var(--light); margin-bottom:12px;">Kartını seçmek için tıkla:</p>
+        <button class="btn-primary" id="coopPullCardBtn" onclick="doCoopCardDraw()" style="width:100%;" data-i18n="coopPullCardBtn">🔮 Kartımı Çek</button>
+      </div>
+
+      <div id="coopWaitingNotice" style="display:none; padding:16px; text-align:center;">
+        <div class="tml-pulse" style="margin: 0 auto 10px;"></div>
+        <p style="font-size:0.92rem; color:var(--gold); font-weight:600;">Kartın kilitlendi! Karşı tarafın kartını çekmesi bekleniyor...</p>
+        <span style="font-size:0.78rem; color:var(--mist); display:block; margin-top:6px;">Anti-cheat koruması devrede. İki kart da çekildiğinde ortak sentez anında açılacak.</span>
+      </div>
+    </div>
+
+    <!-- 3. Durum: Canlı Sentez Sonucu (Resolved) -->
+    <div id="coopStepResolved" style="display:none; text-align:left;">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="font-size:2rem; font-weight:700; color:var(--gold-bright);" id="coopResScore">--%</div>
+        <div style="font-size:0.85rem; color:var(--mist);" id="coopAlchemyTitle">Elementel Simya</div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:14px;" id="coopRevealedCardsRow">
+        <!-- Kartlar dinamik yüklenir -->
+      </div>
+      <div style="background:rgba(255,255,255,0.04); padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+        <strong style="color:var(--gold); font-size:0.88rem;" id="coopThemeTitle">Ortak Yorum</strong>
+        <p style="font-size:0.85rem; color:var(--light); line-height:1.5; margin-top:4px;" id="coopInsightText"></p>
+      </div>
+      <button class="btn-primary" style="width:100%; margin-top:14px;" onclick="closeCoopModal()">Kapat</button>
+    </div>
+  </div>
+</div>
 
 <div class="divider"><span>✦</span></div>
 
@@ -574,10 +645,10 @@
         <label class="deep-label" for="deepBirthHour" data-i18n="deepHourLabel">Doğum Saatin ve Dakikan</label>
         <input type="time" id="deepBirthHour" class="deep-input" data-i18n-ph="deepHourPh" placeholder="ör. 14:30">
         <div class="deep-time-precision-row">
-          <span class="deep-precision-tip" data-i18n="deepHourNotice">⏱️ Dakika hassasiyeti: Her 4 dakikada Yükselen (ASC) ve 12 Ev kaspı ~1° kayar.</span>
+          <span class="deep-precision-tip" data-i18n="deepHourNotice">✨ Tam doğum saatini bilmiyorsan hiç dert etme; kutucuğu işaretle, senin için Güneş tabanlı huzurlu bir harita oluşturalım.</span>
           <label class="deep-unknown-time-label">
             <input type="checkbox" id="deepUnknownTime" onchange="toggleUnknownTime(this.checked)">
-            <span data-i18n="deepUnknownTime">Doğum saatimi bilmiyorum</span>
+            <span data-i18n="deepUnknownTime">Doğum saatimi tam bilmiyorum (Güneş Haritası)</span>
           </label>
         </div>
       </div>
@@ -693,22 +764,25 @@
           <div class="mhc-pill" id="mfPillSun">
             <span class="mhc-pill-icon">☉</span>
             <div class="mhc-pill-info">
-              <span class="mhc-pill-label" id="mfSunLabel">Öz Benliğin</span>
+              <span class="mhc-pill-label" id="mfSunLabel">Öz Kimliğin</span>
               <strong class="mhc-pill-val" id="mfSunVal"></strong>
+              <small class="mhc-pill-desc" id="mfSunDesc" data-i18n="deepSunExplain" style="font-size:0.75rem; color:var(--mist); display:block; margin-top:2px; font-weight:normal;">Öz Kimliğin — Hayat enerjin ve gerçek benliğin</small>
             </div>
           </div>
           <div class="mhc-pill" id="mfPillMoon">
             <span class="mhc-pill-icon">☽</span>
             <div class="mhc-pill-info">
-              <span class="mhc-pill-label" id="mfMoonLabel">Duygu Dünyan</span>
+              <span class="mhc-pill-label" id="mfMoonLabel">Duygusal Dünyan</span>
               <strong class="mhc-pill-val" id="mfMoonVal"></strong>
+              <small class="mhc-pill-desc" id="mfMoonDesc" data-i18n="deepMoonExplain" style="font-size:0.75rem; color:var(--mist); display:block; margin-top:2px; font-weight:normal;">Duygusal Dünyan — İç huzurun ve hislerin</small>
             </div>
           </div>
           <div class="mhc-pill" id="mfPillAsc">
             <span class="mhc-pill-icon">↑</span>
             <div class="mhc-pill-info">
-              <span class="mhc-pill-label" id="mfAscLabel">Dışarıya Işığın</span>
+              <span class="mhc-pill-label" id="mfAscLabel">Dışarıya Yansıttığın Enerji</span>
               <strong class="mhc-pill-val" id="mfAscVal"></strong>
+              <small class="mhc-pill-desc" id="mfAscDesc" data-i18n="deepAscExplain" style="font-size:0.75rem; color:var(--mist); display:block; margin-top:2px; font-weight:normal;">Dışarıya Yansıttığın Enerji — İlk izlenimin ve auran</small>
             </div>
           </div>
         </div>
@@ -878,6 +952,7 @@
           <div class="dsi-body">
             <span class="dsi-label" data-i18n="deepRetrogradLabel">Retrograd Durumu</span>
             <span class="dsi-val" id="deepRetrograd"></span>
+            <small class="dsi-explain" data-i18n="deepRetroExplain" style="font-size:0.75rem; color:var(--mist); display:block; margin-top:3px; line-height:1.35;">🪐 Retro (Geri Hareket) Nedir? Gezegenin gökyüzünde geriye gidiyor gibi göründüğü, hayatın bize 'dur, nefes al ve geçmişi gözden geçir' dediği bir içsel olgunlaşma vaktidir.</small>
           </div>
         </div>
         <div class="deep-energy-ring">
@@ -1331,7 +1406,6 @@
         <p class="wall-auth-gate-text" data-i18n="wallGateText">Duvarda fısıltı paylaşmak ve topluluk enerjisine katılmak için lütfen giriş yapın veya ücretsiz hesap oluşturun.</p>
         <div class="wall-gate-buttons">
           <button class="btn-primary" onclick="openAuthModal('signup')" data-i18n="wallGateBtn">Giriş Yap / Kayıt Ol</button>
-          <button class="btn-ghost" onclick="quickGuestJoinWall()" data-i18n="wallGuestBtn">✨ Gezgin Olarak Katıl</button>
         </div>
       </div>
 
@@ -2342,8 +2416,9 @@ function renderHoroPanel() {
     const mlScores = window.LunarisML.getCategoryScores(sign.key, new Date());
     mlScoresArr = [mlScores.love, mlScores.luck, mlScores.career, mlScores.health, mlScores.money, mlScores.daily];
     const avgScore = Math.round(((mlScores.love + mlScores.luck + mlScores.career + mlScores.health) / 4) * 100);
-    const trainedBadge = window.LunarisML.isModelTrained() ? ' <span class="ml-badge-indicator trained">Trained</span>' : '';
-    mlScoreBadge = '<div class="hp-ml-badge" title="Algoritmik Ağırlıklı Gün Skoru"><span class="hp-ml-spark">✦</span> ML Kozmik Titreşim: <strong>'+avgScore+'%</strong>' + trainedBadge + '</div>';
+    const badgeTitle = lang === 'tr' ? 'Günlük Kozmik Uyum Skoru' : (lang === 'ru' ? 'Ежедневная космическая гармония' : 'Daily Cosmic Alignment Score');
+    const badgeText = lang === 'tr' ? '✨ Günlük Kozmik Uyum: ' : (lang === 'ru' ? '✨ Космическая гармония: ' : '✨ Daily Cosmic Alignment: ');
+    mlScoreBadge = '<div class="hp-ml-badge" title="'+badgeTitle+'"><span class="hp-ml-spark">✦</span> '+badgeText+'<strong>'+avgScore+'%</strong></div>';
   }
 
   const signVec = (window.LunarisML && typeof window.LunarisML.getSignVector === "function") ? window.LunarisML.getSignVector(sign.key) : [];
@@ -2370,20 +2445,23 @@ function renderHoroPanel() {
     '</div>'+
     fbHtml +
     '<div class="horo-save-wrap">'+
+      '<button class="horo-share-wall-btn" id="horoShareWallBtn" onclick="shareHoroscopeToWall()">'+
+        '<span>✨</span> <span>'+(UI[lang].shareHoroWallBtn || "Bugünkü Enerjimi Duvara Paylaş")+'</span>'+
+      '</button>'+
       '<button class="horo-save-btn" id="horoSaveBtn" onclick="saveActiveHoroscope()">'+
         '<span>✦</span> <span>'+UI[lang].saveHoroBtn+'</span>'+
       '</button>'+
       '<button class="horo-deep-jump-btn" onclick="quickFillDeepSign(\''+sign.key+'\')">'+
-        '<span>🧠</span> <span>'+(lang==="tr" ? "Kişisel Doğum Haritası & Derin Yorum" : (lang==="ru" ? "Глубокий ML-анализ по карте" : "Deep Birth Chart & ML Analysis"))+'</span>'+
+        '<span>✨</span> <span>'+(lang==="tr" ? "Kişisel Doğum Haritası & Derin Yorum" : (lang==="ru" ? "Личная натальная карта и толкование" : "Personal Birth Chart & Deep Reading"))+'</span>'+
       '</button>'+
     '</div>';
 }
 
 function saveActiveHoroscope() {
   const lang = state.lang;
-  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn()) {
-    openAuthModal("login");
-    triggerAuthError(UI[lang].wallLoginRequired);
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn() || (window.LunarisAuth.currentUser && window.LunarisAuth.currentUser.isDemo)) {
+    openAuthModal("signup");
+    showToast(UI[lang].wallLoginRequired || "Yorumu kaydetmek için lütfen hesabına giriş yap ✨");
     return;
   }
   if (!state.selectedSign) return;
@@ -2425,6 +2503,92 @@ function saveActiveHoroscope() {
     const signNameStr = sign.name[lang] || sign.name.tr;
     showToast(UI[lang].horoSavedToast.replace("{sign}", signNameStr));
   });
+}
+
+function shareHoroscopeToWall() {
+  const lang = state.lang;
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn() || (window.LunarisAuth.currentUser && window.LunarisAuth.currentUser.isDemo)) {
+    openAuthModal("signup");
+    showToast(UI[lang].wallLoginRequired || "Topluluk duvarında paylaşmak için lütfen hesabına giriş yap ✨");
+    return;
+  }
+  if (!state.selectedSign) return;
+  const sign = ZODIAC.find(function(z){ return z.key===state.selectedSign; });
+  if (!sign) return;
+  const tk = todayKey();
+  const energy = (hashStr(tk+"-"+sign.key+"-energy") % 41) + 60;
+  const color = pick(LUCKY_COLORS, tk+"-"+sign.key+"-color")[lang];
+  const luckyNum = (hashStr(tk+"-"+sign.key+"-num") % 99) + 1;
+
+  let excerpt = "";
+  if (typeof HORO !== "undefined" && HORO[sign.key] && HORO[sign.key].daily && HORO[sign.key].daily[lang]) {
+    excerpt = pick(HORO[sign.key].daily[lang], tk + "-" + sign.key + "-daily");
+  }
+
+  let shareText = "";
+  if (lang === "tr") {
+    shareText = "⭐ " + sign.name.tr + " Burcu Bugünkü Enerjim: %" + energy + " ✦ Şanslı Rengim: " + color + " | Uğurlu Sayım: " + luckyNum + " ✦ " + (excerpt ? "Bugünün fısıltısı: \"" + excerpt + "\"" : "Günün kozmik akışı benimle ✨");
+  } else if (lang === "ru") {
+    shareText = "⭐ " + sign.name.ru + " — Моя энергия сегодня: " + energy + "% ✦ Цвет: " + color + " | Число: " + luckyNum + " ✦ " + (excerpt ? "Шёпот дня: \"" + excerpt + "\"" : "Космическая энергия со мной ✨");
+  } else {
+    shareText = "⭐ " + sign.name.en + " — Today's Cosmic Vibe: " + energy + "% ✦ Lucky Color: " + color + " | Lucky Number: " + luckyNum + " ✦ " + (excerpt ? "Today's whisper: \"" + excerpt + "\"" : "Cosmic flow is with me ✨");
+  }
+
+  const wallSection = document.getElementById("wall");
+  const wallInput = document.getElementById("wallText");
+  if (wallSection) {
+    wallSection.scrollIntoView({ behavior: "smooth" });
+  }
+  if (wallInput) {
+    wallInput.value = shareText;
+    if (typeof updateWallCharCount === "function") updateWallCharCount();
+    wallInput.focus();
+  }
+  showToast(lang === "tr" ? "Burç enerjin duvara aktarıldı! 'Paylaş' butonuna basarak topluluğa duyurabilirsin ✨" : (lang === "ru" ? "Гороскоп скопирован на стену! Нажмите 'Опубликовать' ✨" : "Horoscope vibe copied to wall! Click 'Share' to post ✨"));
+}
+
+function shareTarotReadingToWall() {
+  const lang = state.lang;
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn() || (window.LunarisAuth.currentUser && window.LunarisAuth.currentUser.isDemo)) {
+    openAuthModal("signup");
+    showToast(UI[lang].wallLoginRequired || "Topluluk duvarında paylaşmak için lütfen hesabına giriş yap ✨");
+    return;
+  }
+  if (!state.spread || state.spread.length === 0) {
+    showToast(lang === "tr" ? "Önce lütfen üç kartını çek ✨" : "Please draw your three cards first ✨");
+    return;
+  }
+  const cardNames = state.spread.map(function(c){ return (c.icon || "✦") + " " + (c.name[lang] || c.name.tr); }).join(" • ");
+
+  let whisper = "";
+  const comboEl = document.getElementById("comboText");
+  if (comboEl && comboEl.textContent) {
+    const text = comboEl.textContent.trim();
+    const m = text.match(/Günün Fısıltısı[^:]*:\s*"?([^"*\n]+)"?/i) || text.match(/Today's Whisper[^:]*:\s*"?([^"*\n]+)"?/i);
+    if (m && m[1]) whisper = m[1].trim();
+    else whisper = text.slice(0, 95) + "...";
+  }
+
+  let shareText = "";
+  if (lang === "tr") {
+    shareText = "🃏 Günün Üç Kartı: " + cardNames + (whisper ? " ✦ Fısıltı: \"" + whisper + "\"" : " ✦ Kozmik akış benimle ✨");
+  } else if (lang === "ru") {
+    shareText = "🃏 Мои три карты дня: " + cardNames + (whisper ? " ✦ Послание: \"" + whisper + "\"" : " ✦ Поток вселенной со мной ✨");
+  } else {
+    shareText = "🃏 Today's Three Cards: " + cardNames + (whisper ? " ✦ Whisper: \"" + whisper + "\"" : " ✦ The universe is speaking ✨");
+  }
+
+  const wallSection = document.getElementById("wall");
+  const wallInput = document.getElementById("wallText");
+  if (wallSection) {
+    wallSection.scrollIntoView({ behavior: "smooth" });
+  }
+  if (wallInput) {
+    wallInput.value = shareText;
+    if (typeof updateWallCharCount === "function") updateWallCharCount();
+    wallInput.focus();
+  }
+  showToast(lang === "tr" ? "Tarot falın duvara aktarıldı! 'Paylaş' butonuna basarak fısıltını duyurabilirsin ✨" : (lang === "ru" ? "Расклад скопирован на стену! Нажмите 'Опубликовать' ✨" : "Tarot reading copied to wall! Click 'Share' to post ✨"));
 }
 
 function drawSpread() {
@@ -2532,26 +2696,28 @@ function renderSpread(animate) {
       const mtrEl = document.getElementById("tarotMlMantra");
       if (mtrEl) mtrEl.textContent = mlResult.mantra;
 
-      // Gölge Benlik Uyarısı & Bilişsel Protokol
-      const shadowBox = document.getElementById("tarotShadowBox");
-      if (shadowBox) {
-        if (mlResult.shadowWarning) {
-          const shadowTitle = lang === "tr" ? "🌑 Bilinçdışı Gölge (Shadow) Uyarısı" : (lang === "ru" ? "🌑 Предупреждение о Тени" : "🌑 Unconscious Shadow Alert");
-          shadowBox.innerHTML = `<strong class="tsb-title">${shadowTitle}:</strong> <span class="tsb-text">${mlResult.shadowWarning}</span>`;
-          shadowBox.style.display = "block";
-        } else {
-          shadowBox.style.display = "none";
-        }
-      }
-
+      // Kozmik Rehberlik: Bugün Bunu Yap (Öneri) & Bundan Kaçın (Tatlı Uyarı)
       const cogBox = document.getElementById("tarotCognitiveBox");
       if (cogBox) {
-        if (mlResult.cognitiveAdvice) {
-          const cogTitle = lang === "tr" ? "💡 Jungian Bilişsel Entegrasyon Protokolü" : (lang === "ru" ? "💡 Протокол Когнитивной Интеграции" : "💡 Cognitive Integration Protocol");
-          cogBox.innerHTML = `<strong class="tcb-title">${cogTitle}:</strong> <span class="tcb-text">${mlResult.cognitiveAdvice}</span>`;
+        const doText = mlResult.doThis || mlResult.cognitiveAdvice;
+        if (doText) {
+          const cogTitle = lang === "tr" ? "✨ Bugün Bunu Yap (Öneri)" : (lang === "ru" ? "✨ Совет на Сегодня" : "✨ Do This Today (Guidance)");
+          cogBox.innerHTML = `<strong class="tcb-title">${cogTitle}:</strong> <span class="tcb-text">${doText}</span>`;
           cogBox.style.display = "block";
         } else {
           cogBox.style.display = "none";
+        }
+      }
+
+      const shadowBox = document.getElementById("tarotShadowBox");
+      if (shadowBox) {
+        const avoidText = mlResult.avoidThis || mlResult.shadowWarning;
+        if (avoidText) {
+          const shadowTitle = lang === "tr" ? "🌑 Bundan Kaçın (Tatlı Uyarı)" : (lang === "ru" ? "🌑 Предостережение (Чего Избегать)" : "🌑 Gentle Warning (Avoid This)");
+          shadowBox.innerHTML = `<strong class="tsb-title">${shadowTitle}:</strong> <span class="tsb-text">${avoidText}</span>`;
+          shadowBox.style.display = "block";
+        } else {
+          shadowBox.style.display = "none";
         }
       }
 
@@ -2614,6 +2780,199 @@ function renderSpread(animate) {
     });
   }
 }
+
+/* ============================================================
+   CO-OP TAROT ETKİLEŞİM YÖNETİCİSİ (İstemci)
+   ============================================================ */
+let currentCoopSessionId = null;
+let currentCoopIsInitiator = false;
+
+window.openCoopModal = function(joinSessionId) {
+  const modal = document.getElementById("coopModalOverlay");
+  if (!modal) return;
+  modal.style.display = "flex";
+
+  if (joinSessionId) {
+    joinCoopSession(joinSessionId);
+  } else {
+    document.getElementById("coopStepInit").style.display = "block";
+    document.getElementById("coopStepActive").style.display = "none";
+    document.getElementById("coopStepResolved").style.display = "none";
+  }
+};
+
+window.closeCoopModal = function() {
+  const modal = document.getElementById("coopModalOverlay");
+  if (modal) modal.style.display = "none";
+  if (window.LunarisCoop) window.LunarisCoop.unsubscribe();
+};
+
+window.startCoopSession = async function() {
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn()) {
+    if (typeof handleAccountClick === "function") handleAccountClick();
+    if (typeof showToast === "function") showToast("Co-Op fal için lütfen önce giriş yapın.");
+    return;
+  }
+  const user = window.LunarisAuth.getUser();
+  if (!window.LunarisCoop) return;
+
+  try {
+    currentCoopIsInitiator = true;
+    currentCoopSessionId = await window.LunarisCoop.createSession(user.uid);
+    const link = window.LunarisCoop.getShareableLink(currentCoopSessionId);
+    
+    document.getElementById("coopStepInit").style.display = "none";
+    document.getElementById("coopStepActive").style.display = "block";
+    document.getElementById("coopShareLinkInput").value = link;
+    document.getElementById("coopPromptText").textContent = "İlk kartı (Kök Düğüm) sen çekiyorsun:";
+
+    setupCoopSubscription(currentCoopSessionId);
+  } catch(e) {
+    console.error("Coop session başlatılamadı:", e);
+    if (typeof showToast === "function") showToast("Oturum başlatılamadı.");
+  }
+};
+
+window.copyCoopLink = function() {
+  const input = document.getElementById("coopShareLinkInput");
+  if (input) {
+    input.select();
+    navigator.clipboard.writeText(input.value).then(() => {
+      if (typeof showToast === "function") showToast("Davet bağlantısı panoya kopyalandı!");
+    });
+  }
+};
+
+window.joinCoopSessionFromInput = function() {
+  const input = document.getElementById("coopJoinIdInput");
+  if (input && input.value.trim()) {
+    joinCoopSession(input.value.trim());
+  }
+};
+
+async function joinCoopSession(sessionId) {
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn()) {
+    if (typeof handleAccountClick === "function") handleAccountClick();
+    if (typeof showToast === "function") showToast("Co-Op fala katılmak için lütfen önce giriş yapın.");
+    return;
+  }
+  const user = window.LunarisAuth.getUser();
+  if (!window.LunarisCoop) return;
+
+  try {
+    const session = await window.LunarisCoop.getSession(sessionId);
+    if (!session) {
+      if (typeof showToast === "function") showToast("Geçersiz veya süresi dolmuş seans.");
+      return;
+    }
+    currentCoopSessionId = sessionId;
+    currentCoopIsInitiator = (session.initiatorUid === user.uid);
+
+    document.getElementById("coopStepInit").style.display = "none";
+    document.getElementById("coopStepActive").style.display = "block";
+    document.getElementById("coopShareLinkInput").value = window.LunarisCoop.getShareableLink(sessionId);
+
+    if (session.status === "RESOLVED") {
+      renderCoopResolved(session);
+    } else if (!currentCoopIsInitiator && session.recipientHasDrawn) {
+      document.getElementById("coopDrawActionArea").style.display = "none";
+      document.getElementById("coopWaitingNotice").style.display = "block";
+    } else {
+      document.getElementById("coopPromptText").textContent = currentCoopIsInitiator ? 
+        "İlk kartı (Kök Düğüm) sen çekiyorsun:" : "İkinci kartı (Katalizör Düğüm) sen çekiyorsun:";
+    }
+
+    setupCoopSubscription(sessionId);
+  } catch(e) {
+    console.error("Coop seansına katılınamadı:", e);
+  }
+}
+
+function setupCoopSubscription(sessionId) {
+  window.LunarisCoop.subscribe(sessionId, {
+    onResolved: (data) => {
+      renderCoopResolved(data);
+    },
+    onInitiatorDrawn: () => {
+      if (!currentCoopIsInitiator) {
+        if (typeof showToast === "function") showToast("✦ İlk kart çekildi! Şimdi senin sıran.");
+      }
+    }
+  });
+}
+
+window.doCoopCardDraw = async function() {
+  if (!currentCoopSessionId || !window.LunarisCoop) return;
+  const user = window.LunarisAuth.getUser();
+  if (!user) return;
+
+  const cardObj = TAROT[Math.floor(Math.random() * TAROT.length)];
+  const isReversed = Math.random() < 0.25;
+
+  const cardPayload = {
+    cardId: TAROT.indexOf(cardObj),
+    name: cardObj.name,
+    element: ["FIRE", "WATER", "AIR", "EARTH"][Math.floor(Math.random() * 4)],
+    isReversed
+  };
+
+  try {
+    document.getElementById("coopDrawActionArea").style.display = "none";
+    document.getElementById("coopWaitingNotice").style.display = "block";
+
+    await window.LunarisCoop.commitDraw(
+      currentCoopSessionId,
+      user.uid,
+      cardPayload,
+      currentCoopIsInitiator
+    );
+  } catch(e) {
+    console.error("Kart çekilemedi:", e);
+    document.getElementById("coopDrawActionArea").style.display = "block";
+    document.getElementById("coopWaitingNotice").style.display = "none";
+  }
+};
+
+function renderCoopResolved(data) {
+  document.getElementById("coopStepActive").style.display = "none";
+  document.getElementById("coopStepResolved").style.display = "block";
+
+  const synth = data.synthesisPayload || {};
+  document.getElementById("coopResScore").textContent = (synth.compositeResonanceScore || 85) + "%";
+  document.getElementById("coopAlchemyTitle").textContent = synth.elementalAlchemy || "Ortak Rezonans";
+  document.getElementById("coopThemeTitle").textContent = synth.relationalTheme || "Ortak Fal";
+  document.getElementById("coopInsightText").textContent = synth.actionableInsight || "";
+
+  const container = document.getElementById("coopRevealedCardsRow");
+  if (container && data.revealedCards) {
+    const cA = data.revealedCards.initiatorCard;
+    const cB = data.revealedCards.recipientCard;
+    const nameA = cA?.name?.tr || cA?.name || "Kök Kart";
+    const nameB = cB?.name?.tr || cB?.name || "Katalizör Kart";
+    container.innerHTML = `
+      <div style="background:rgba(212,175,106,0.1); border:1px solid var(--gold); border-radius:8px; padding:10px; text-align:center;">
+        <span style="font-size:0.75rem; color:var(--mist);">Kök (1. Kişi)</span>
+        <div style="font-weight:bold; color:var(--gold-bright); margin-top:4px;">${nameA}</div>
+      </div>
+      <div style="background:rgba(123,79,166,0.15); border:1px solid var(--amethyst); border-radius:8px; padding:10px; text-align:center;">
+        <span style="font-size:0.75rem; color:var(--mist);">Katalizör (2. Kişi)</span>
+        <div style="font-weight:bold; color:#d8b4fe; margin-top:4px;">${nameB}</div>
+      </div>
+    `;
+  }
+
+  if (typeof showToast === "function") showToast("✦ Ortak Co-Op fal sentezi tamamlandı!");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const coopId = params.get("coop");
+  if (coopId) {
+    setTimeout(() => {
+      window.openCoopModal(coopId);
+    }, 800);
+  }
+});
 
 function updateMoonDisplay(){
   const lang = state.lang;
@@ -2953,6 +3312,12 @@ function toggleWallComments(id) {
 }
 
 function submitWallComment(postId) {
+  const lang = state.lang || "tr";
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn() || (window.LunarisAuth.currentUser && window.LunarisAuth.currentUser.isDemo)) {
+    openAuthModal("signup");
+    showToast(UI[lang].wallLoginRequired || "Yorum yapabilmek için lütfen hesabına giriş yap ✨");
+    return;
+  }
   const input = document.getElementById("comment_input_" + postId);
   if (!input) return;
   const text = input.value.trim();
@@ -3049,8 +3414,10 @@ function loadWallPosts(showLoading){
 
 function submitWallPost(){
   const lang = state.lang;
-  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn()) {
-    quickGuestJoinWall();
+  if (!window.LunarisAuth || !window.LunarisAuth.isLoggedIn() || (window.LunarisAuth.currentUser && window.LunarisAuth.currentUser.isDemo)) {
+    openAuthModal("signup");
+    showToast(UI[lang].wallLoginRequired || "Topluluk duvarında paylaşmak için lütfen hesabına giriş yap ✨");
+    return;
   }
   const textInput = document.getElementById("wallText");
   const btn = document.getElementById("wallSubmitBtn");
@@ -3190,6 +3557,20 @@ function runDeepReading() {
     insight: insight
   };
 
+  // Kozmik İkizleri Tara (Sosyal Eşleşme Motoru)
+  if (reading && reading.natal && window.LunarisAuth && window.LunarisAuth.isLoggedIn() && window.LunarisSocial) {
+    const usr = window.LunarisAuth.getUser();
+    if (usr && !usr.isDemo) {
+      window.LunarisSocial.saveNatalBigThreeAndCheckTwins(
+        usr.uid,
+        reading.natal.sunSign,
+        reading.natal.moonSign,
+        reading.natal.ascSign,
+        usr.displayName || usr.username
+      );
+    }
+  }
+
   renderDeepReadingUI(lastDeepReadingData);
   switchDeepMode('mystic');
 
@@ -3298,18 +3679,24 @@ function renderDeepReadingUI(data) {
 
     const mfSunLabel = document.getElementById("mfSunLabel");
     const mfSunVal = document.getElementById("mfSunVal");
+    const mfSunDesc = document.getElementById("mfSunDesc");
     if (mfSunLabel && mf.sunMeta) mfSunLabel.textContent = mf.sunMeta.label;
     if (mfSunVal && mf.sunMeta) mfSunVal.textContent = (mf.sunMeta.glyph || '☉') + " " + mf.sunMeta.sign;
+    if (mfSunDesc && mf.sunMeta && mf.sunMeta.desc) mfSunDesc.textContent = mf.sunMeta.desc;
 
     const mfMoonLabel = document.getElementById("mfMoonLabel");
     const mfMoonVal = document.getElementById("mfMoonVal");
+    const mfMoonDesc = document.getElementById("mfMoonDesc");
     if (mfMoonLabel && mf.moonMeta) mfMoonLabel.textContent = mf.moonMeta.label;
     if (mfMoonVal && mf.moonMeta) mfMoonVal.textContent = (mf.moonMeta.glyph || '☽') + " " + mf.moonMeta.sign;
+    if (mfMoonDesc && mf.moonMeta && mf.moonMeta.desc) mfMoonDesc.textContent = mf.moonMeta.desc;
 
     const mfAscLabel = document.getElementById("mfAscLabel");
     const mfAscVal = document.getElementById("mfAscVal");
+    const mfAscDesc = document.getElementById("mfAscDesc");
     if (mfAscLabel && mf.ascMeta) mfAscLabel.textContent = mf.ascMeta.label;
     if (mfAscVal && mf.ascMeta) mfAscVal.textContent = (mf.ascMeta.glyph || '↑') + " " + mf.ascMeta.sign;
+    if (mfAscDesc && mf.ascMeta && mf.ascMeta.desc) mfAscDesc.textContent = mf.ascMeta.desc;
 
     const mfLoveSub = document.getElementById("mfLoveSub");
     const mfLoveDesc = document.getElementById("mfLoveDesc");
