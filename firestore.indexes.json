@@ -7,6 +7,24 @@
         { "fieldPath": "authorUid", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "sunSign", "order": "ASCENDING" },
+        { "fieldPath": "moonSign", "order": "ASCENDING" },
+        { "fieldPath": "risingSign", "order": "ASCENDING" },
+        { "fieldPath": "lastActiveAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "tarot_pulls",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cardId", "order": "ASCENDING" },
+        { "fieldPath": "pulledAt", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

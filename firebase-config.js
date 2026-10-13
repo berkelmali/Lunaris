@@ -48,6 +48,8 @@ import {
 // 1. FIREBASE PROJE BİLGİLERİ (env.js dosyasından yüklenir)
 // ============================================================
 import ENV from "./env.js";
+import { cosmicSocialService } from "./cosmic-social-client.js";
+import { coopTarotService } from "./coop-tarot-client.js";
 
 export const firebaseConfig = {
   apiKey: ENV.FIREBASE_API_KEY,
@@ -209,6 +211,10 @@ if (isFirebaseConfigured()) {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
+    window.LunarisApp = app;
+    window.LunarisDB = db;
+    window.LunarisSocial = cosmicSocialService;
+    window.LunarisCoop = coopTarotService;
     googleProvider = new GoogleAuthProvider();
     googleProvider.setCustomParameters({ prompt: 'select_account' });
     isReady = true;
@@ -249,6 +255,22 @@ if (isFirebaseConfigured()) {
         }
         if (typeof window.refreshUserHoroscopes === "function") {
           window.refreshUserHoroscopes();
+        }
+
+        // Kozmik Bildirimleri Canlı Dinle (In-App Bildirim Çanı / Toast)
+        if (window.LunarisSocial) {
+          window.LunarisSocial.subscribeToNotifications(user.uid, (notifs) => {
+            if (notifs && notifs.length > 0) {
+              const latest = notifs[0];
+              // Yalnızca son 5 dakika içinde üretilmiş okunmamış bildirimse toast patlat
+              const createdMs = latest.createdAt?.toMillis ? latest.createdAt.toMillis() : Date.now();
+              if (Date.now() - createdMs < 5 * 60 * 1000) {
+                if (typeof window.showToast === "function") {
+                  window.showToast("🔔 " + latest.title + ": " + latest.body, 6000);
+                }
+              }
+            }
+          });
         }
       } else {
         // Firebase kullanıcısı o an null gelse bile (ağ gecikmesi / yerel hesap):
@@ -633,6 +655,18 @@ export const LunarisAuth = {
           ...readingData,
           createdAt: serverTimestamp()
         });
+
+        // Sosyal Senkron Eko (Arcana Echo) Kontrolü
+        if (cardKeys && cardKeys.length > 0 && window.LunarisSocial) {
+          const firstKey = cardKeys[0];
+          window.LunarisSocial.checkArcanaEcho(
+            currentUser.uid,
+            firstKey,
+            firstKey,
+            currentUser.displayName || currentUser.username
+          );
+        }
+
         return docRef.id;
       } catch (e) {
         console.warn("Firestore fal kaydı uyarısı (Firestore kurallarınızı kontrol edin):", e);
